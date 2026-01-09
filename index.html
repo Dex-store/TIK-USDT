@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>TIK-USDT</title>
+  <link rel="stylesheet" href="./styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+  <div class="wrap">
+    <header class="top">
+      <div>
+        <h1>TIK-USDT</h1>
+        <p class="sub" id="subtitle">اشتراك شهري للوصول إلى الموقع + قناة تلجرام</p>
+      </div>
+      <div class="row">
+        <button class="btn" id="langBtn">English</button>
+        <a class="btn" id="supportBtn" target="_blank" rel="noopener">الدعم</a>
+        <a class="btn" id="channelBtn" target="_blank" rel="noopener">القناة</a>
+      </div>
+    </header>
+
+    <section class="card">
+      <h2 id="pricingTitle">الخطط الشهرية</h2>
+      <div class="row" id="plans"></div>
+      <p class="note" id="legalNote">
+        هذا اشتراك رقمي لخدمة/محتوى. لا توجد أرباح مضمونة. العمولات هي عمولات إحالة من المبيعات فقط.
+      </p>
+    </section>
+
+    <section class="card">
+      <h2 id="authTitle">تسجيل الدخول / إنشاء حساب</h2>
+      <div class="grid2">
+        <div>
+          <h3 id="signupTitle">إنشاء حساب</h3>
+          <input id="suEmail" type="email" placeholder="Email" />
+          <input id="suPass" type="password" placeholder="Password" />
+          <button class="btn dark" id="signupBtn">إنشاء + إرسال كود تأكيد</button>
+          <p class="small" id="refInfo"></p>
+        </div>
+        <div>
+          <h3 id="signinTitle">تسجيل الدخول</h3>
+          <input id="siEmail" type="email" placeholder="Email" />
+          <input id="siPass" type="password" placeholder="Password" />
+          <button class="btn dark" id="signinBtn">دخول</button>
+          <button class="btn" id="googleBtn">Google</button>
+          <button class="btn" id="signoutBtn" style="display:none;">خروج</button>
+        </div>
+      </div>
+      <p class="msg" id="authMsg"></p>
+    </section>
+
+    <section class="card" id="dash" style="display:none;">
+      <h2 id="dashTitle">لوحة المستخدم</h2>
+
+      <div class="kv">
+        <div><b id="planLabel">الخطة:</b> <span id="myPlan">-</span></div>
+        <div><b id="untilLabel">ينتهي:</b> <span id="myUntil">-</span></div>
+        <div><b id="refLabel">رابط الإحالة:</b> <code id="refLink"></code></div>
+      </div>
+
+      <div class="wallet">
+        <h3 id="walletTitle">المحفظة الافتراضية</h3>
+        <div class="row">
+          <div class="box"><b id="availLabel">متاح للسحب:</b> <span id="availBal">0</span> USDT</div>
+          <div class="box"><b id="lockedLabel">مقفول:</b> <span id="lockedBal">0</span> USDT</div>
+        </div>
+        <p class="small" id="walletHint">
+          يمكن أن تربح عمولات حتى لو غير مشترك (تُحفظ كمقفولة). لا تستطيع السحب حتى تشترك. ويمكنك الاشتراك من رصيدك.
+        </p>
+      </div>
+
+      <hr />
+
+      <div class="pay">
+        <h3 id="payTitle">تفعيل/تجديد الاشتراك بالدفع (USDT ERC-20)</h3>
+        <p class="small" id="payWarn">⚠️ شبكة Ethereum Mainnet فقط (USDT ERC-20).</p>
+
+        <div class="row">
+          <div class="box"><b id="toLabel">إلى:</b> <code id="receiver"></code></div>
+        </div>
+
+        <div class="row">
+          <select id="planSelect"></select>
+          <input id="txHash" placeholder="Tx Hash (0x...)" />
+          <button class="btn dark" id="verifyBtn">تحقق + تفعيل تلقائي</button>
+        </div>
+        <p class="msg" id="payMsg"></p>
+      </div>
+
+      <div class="row">
+        <button class="btn" id="subWithBalBtn">اشترك من الرصيد</button>
+      </div>
+      <p class="msg" id="subMsg"></p>
+
+      <hr />
+
+      <div class="withdraw">
+        <h3 id="wdTitle">السحب (مرة واحدة أسبوعيًا)</h3>
+        <div class="row">
+          <input id="wdAddress" placeholder="عنوان محفظتك (ERC-20)" />
+          <input id="wdAmount" placeholder="المبلغ USDT" />
+          <button class="btn dark" id="wdBtn">طلب سحب</button>
+        </div>
+        <p class="small" id="wdHint">سيتم التحويل يدويًا خلال 3–24 ساعة بعد طلب السحب.</p>
+        <p class="msg" id="wdMsg"></p>
+      </div>
+    </section>
+  </div>
+
+  <script src="./app.js"></script>
+</body>
+               </html>
