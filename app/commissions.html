@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>عمولاتي • TIK-USDT</title>
+  <style>
+    body{margin:0;font-family:system-ui;background:radial-gradient(1200px 600px at 50% -10%, #1b255a, #060913);color:#eaf0ff}
+    .wrap{max-width:1050px;margin:0 auto;padding:18px}
+    .topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;
+      background:rgba(12,18,45,.75);border:1px solid rgba(255,255,255,.08);border-radius:22px;padding:14px 16px;
+      box-shadow:0 20px 60px rgba(0,0,0,.35);backdrop-filter:blur(10px)}
+    .btn{padding:11px 14px;border-radius:16px;border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.04);color:#eaf0ff;font-weight:800;cursor:pointer;text-decoration:none;display:inline-block}
+    .btn.primary{background:linear-gradient(135deg,#5b8cff,#7c5cff);border-color:transparent}
+    .grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:14px}
+    @media(max-width:900px){.grid{grid-template-columns:1fr}}
+    .card{background:rgba(12,18,45,.75);border:1px solid rgba(255,255,255,.08);border-radius:22px;
+      padding:16px;box-shadow:0 20px 60px rgba(0,0,0,.25);backdrop-filter:blur(10px)}
+    .h{font-weight:900;font-size:16px}
+    .v{font-weight:900;font-size:22px;margin-top:6px}
+    .muted{color:#a8b3cf;font-size:13px;line-height:1.7}
+    .list{margin-top:12px}
+    .item{border:1px solid rgba(255,255,255,.10);border-radius:18px;padding:12px;background:rgba(255,255,255,.03);margin-top:10px}
+    .mono{font-family:ui-monospace,Menlo,Consolas,monospace;word-break:break-all}
+    .tag{display:inline-block;padding:4px 10px;border-radius:999px;font-weight:900;font-size:12px;border:1px solid rgba(255,255,255,.16);color:#cfe0ff}
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <div>
+      <div style="font-weight:900">عمولاتي</div>
+      <div class="muted">الرصيد وسجل العمولات</div>
+    </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <a class="btn" href="./dashboard.html">لوحة التحكم</a>
+      <a class="btn" href="./referrals.html">إحالاتي</a>
+      <button class="btn primary" id="refreshBtn">تحديث</button>
+    </div>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <div class="h">الرصيد المتاح</div>
+      <div class="v" id="avail">0.00</div>
+      <div class="muted">USDT (رصيد افتراضي)</div>
+    </div>
+    <div class="card">
+      <div class="h">الرصيد المعلق</div>
+      <div class="v" id="locked">0.00</div>
+      <div class="muted">USDT</div>
+    </div>
+    <div class="card">
+      <div class="h">ملخص</div>
+      <div class="muted" id="sum">—</div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px">
+        <a class="btn" href="./plans.html">الاشتراكات</a>
+        <a class="btn" href="./withdraw-request.html">طلب سحب</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:14px">
+    <div class="h">سجل العمولات (آخر 100)</div>
+    <div class="muted" id="msg">—</div>
+    <div class="list" id="list"></div>
+  </div>
+</div>
+
+<script src="https://unpkg.com/parse/dist/parse.min.js"></script>
+<script src="./config.js"></script>
+<script>
+  Parse.initialize(window.TIK.PARSE_APP_ID, window.TIK.PARSE_JS_KEY);
+  Parse.serverURL = window.TIK.PARSE_SERVER_URL;
+
+  const user = Parse.User.current();
+  if(!user) location.href = "../auth/login.html";
+
+  const msg = (t)=> document.getElementById("msg").textContent = t;
+  function esc(s){ return String(s||"").replace(/[&<>"']/g, c=>({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c])); }
+  function fmtDate(d){
+    if(!d) return "—";
+    try{ return new Date(d).toLocaleString("ar", {year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit"}); }
+    catch{ return "—"; }
+  }
+  function safeNum(n){ n=Number(n); return Number.isFinite(n)?n:0; }
+
+  async function loadBalances(){
+    const Balances = Parse.Object.extend("Balances");
+    const q = new Parse.Query(Balances);
+    q.equalTo("user", user);
+    let b = await q.first();
+    if(!b){
+      // إذا لم توجد Balance (لأسباب قديمة)، أنشئها
+      b = new Balances();
+      b.set("user", user);
+      b.set("available", 0);
+      b.set("locked", 0);
+      await b.save();
+    }
+    const a = safeNum(b.get("available"));
+    const l = safeNum(b.get("locked"));
+    avail.textContent = a.toFixed(2);
+    locked.textContent = l.toFixed(2);
+    sum.textContent = `متاح: ${a.toFixed(2)} | معلق: ${l.toFixed(2)}`;
+  }
+
+  async function loadCommissions(){
+    msg("جاري التحميل...");
+    list.innerHTML = "";
+
+    const Commissions = Parse.Object.extend("Commissions");
+    const q = new Parse.Query(Commissions);
+    q.equalTo("user", user);
+    q.descending("createdAt");
+    q.limit(100);
+    q.include("fromUser");
+
+    const rows = await q.find().catch(e=>{ msg(e.message||"خطأ"); return []; });
+    if(!rows.length){ msg("لا توجد عمولات بعد."); return; }
+    msg("عدد السجلات: " + rows.length);
+
+    rows.forEach(r=>{
+      const from = r.get("fromUser");
+      const fromEmail = from ? (from.get("email") || from.get("username") || "—") : "—";
+      const amt = safeNum(r.get("amount"));
+      const percent = safeNum(r.get("percent"));
+      const plan = safeNum(r.get("planAmount"));
+      const status = r.get("status") || "available";
+
+      const el = document.createElement("div");
+      el.className = "item";
+      el.innerHTML = `
+        <div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap">
+          <div><b>من:</b> ${esc(fromEmail)}</div>
+          <div class="tag">${esc(status)}</div>
+        </div>
+        <div style="margin-top:6px"><b>العمولة:</b> ${esc(amt.toFixed(2))} USDT (${esc(percent)}%)</div>
+        <div class="muted" style="margin-top:6px">خطة المشتري: ${esc(plan)} | التاريخ: ${esc(fmtDate(r.createdAt))}</div>
+      `;
+      list.appendChild(el);
+    });
+  }
+
+  async function loadAll(){
+    await loadBalances();
+    await loadCommissions();
+  }
+
+  refreshBtn.onclick = loadAll;
+  loadAll();
+</script>
+</body>
+</html>
