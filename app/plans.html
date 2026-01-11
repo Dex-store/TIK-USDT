@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>الاشتراكات • TIK-USDT</title>
+  <style>
+    body{margin:0;font-family:system-ui;background:radial-gradient(1200px 600px at 50% -10%, #1b255a, #060913);color:#eaf0ff}
+    .wrap{max-width:1100px;margin:0 auto;padding:18px}
+    .topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;
+      background:rgba(12,18,45,.75);border:1px solid rgba(255,255,255,.08);border-radius:22px;padding:14px 16px;
+      box-shadow:0 20px 60px rgba(0,0,0,.35);backdrop-filter:blur(10px)}
+    .brand{display:flex;align-items:center;gap:10px}
+    .logo{width:44px;height:44px;border-radius:16px;background:linear-gradient(135deg,#5b8cff,#7c5cff);
+      display:flex;align-items:center;justify-content:center;font-weight:900}
+    .muted{color:#a8b3cf;font-size:13px;line-height:1.7}
+    .btn{padding:11px 14px;border-radius:16px;border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.04);color:#eaf0ff;font-weight:800;cursor:pointer;text-decoration:none;display:inline-block}
+    .btn.primary{background:linear-gradient(135deg,#5b8cff,#7c5cff);border-color:transparent}
+    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:14px}
+    @media(max-width:900px){.grid{grid-template-columns:1fr}}
+    .card{background:rgba(12,18,45,.75);border:1px solid rgba(255,255,255,.08);border-radius:22px;
+      padding:16px;box-shadow:0 20px 60px rgba(0,0,0,.25);backdrop-filter:blur(10px)}
+    .price{font-size:22px;font-weight:900;margin-top:6px}
+    .pill{display:inline-block;padding:6px 10px;border-radius:999px;border:1px dashed rgba(255,255,255,.16);color:#cfe0ff;font-size:12px;margin-top:10px}
+    input{width:100%;padding:12px;border-radius:16px;border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.04);color:#eaf0ff;margin-top:10px;outline:none}
+    .ok{color:#7CFFB2}
+    .err{color:#FF8FA3}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="topbar">
+      <div class="brand">
+        <div class="logo">T</div>
+        <div>
+          <div style="font-weight:900">TIK-USDT</div>
+          <div class="muted">الاشتراكات</div>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <a class="btn" href="./dashboard.html">لوحة التحكم</a>
+        <a class="btn" href="../index.html">الرئيسية</a>
+        <button class="btn primary" id="logoutBtn">تسجيل خروج</button>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:14px">
+      <div style="font-weight:900;font-size:16px">طريقة الدفع</div>
+      <div class="muted">
+        الدفع يكون USDT على شبكة Ethereum (ERC-20). بعد الدفع ضع TX Hash هنا لتسجيل الطلب.
+      </div>
+      <div class="pill">عنوان الاستقبال: <span id="walletTxt"></span></div>
+    </div>
+
+    <div class="grid" id="plans"></div>
+
+    <div class="card" style="margin-top:14px">
+      <div style="font-weight:900">إرسال TX Hash (بعد الدفع)</div>
+      <div class="muted">الصق TX Hash ثم اضغط “تسجيل الطلب”.</div>
+      <input id="txHash" placeholder="TX Hash مثل: 0x....">
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px">
+        <button class="btn primary" id="submitTxBtn">تسجيل الطلب</button>
+        <a class="btn" href="https://t.me/TIK_USDT" target="_blank">تواصل مع الدعم</a>
+      </div>
+      <div class="muted" id="msg" style="margin-top:10px"></div>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/parse/dist/parse.min.js"></script>
+  <script src="./config.js"></script>
+
+<script>
+  // ==== إعدادات ثابتة عندك ====
+  const RECEIVER_WALLET = "0xb56a89f790060cbb0f08d02234921e5fefff11a6"; // عدلك إن أردت
+  const PLAN_OPTIONS = [10,20,50,100,200];
+
+  Parse.initialize(window.TIK.PARSE_APP_ID, window.TIK.PARSE_JS_KEY);
+  Parse.serverURL = window.TIK.PARSE_SERVER_URL;
+
+  const user = Parse.User.current();
+  if (!user) location.href = "../auth/login.html";
+
+  walletTxt.textContent = RECEIVER_WALLET;
+
+  let selectedPlan = null;
+
+  function card(plan){
+    return `
+      <div class="card">
+        <div class="pill">اشتراك شهري</div>
+        <div style="font-weight:900;margin-top:8px">الخطة</div>
+        <div class="price">${plan} USDT</div>
+        <div class="muted">بعد الدفع على العنوان أعلاه، ضع TX Hash وسجّل الطلب.</div>
+        <div style="margin-top:10px">
+          <button class="btn ${selectedPlan===plan?'primary':''}" onclick="selectPlan(${plan})">
+            ${selectedPlan===plan?'مختارة ✅':'اختيار الخطة'}
+          </button>
+        </div>
+      </div>
+    `;
+  }
+
+  window.selectPlan = (p)=>{
+    selectedPlan = p;
+    render();
+    msg.className = "muted";
+    msg.textContent = "تم اختيار خطة: " + p + " USDT";
+  };
+
+  function render(){
+    plans.innerHTML = PLAN_OPTIONS.map(p=>card(p)).join("");
+  }
+  render();
+
+  logoutBtn.onclick = async ()=>{ await Parse.User.logOut(); location.href="../auth/login.html"; };
+
+  // حفظ طلب الدفع في Back4App داخل Class: Payments
+  submitTxBtn.onclick = async ()=>{
+    msg.className="muted";
+    const hash = txHash.value.trim();
+
+    if(!selectedPlan){
+      msg.className="muted err";
+      msg.textContent="اختر الخطة أولاً.";
+      return;
+    }
+    if(!hash || !hash.startsWith("0x") || hash.length < 20){
+      msg.className="muted err";
+      msg.textContent="TX Hash غير صحيح.";
+      return;
+    }
+
+    try{
+      const Payments = Parse.Object.extend("Payments");
+      const pay = new Payments();
+      pay.set("user", user);
+      pay.set("planAmount", selectedPlan);
+      pay.set("txHash", hash);
+      pay.set("receiverWallet", RECEIVER_WALLET);
+      pay.set("status", "pending"); // pending → verified لاحقًا
+      await pay.save();
+
+      msg.className="muted ok";
+      msg.textContent="تم تسجيل الطلب ✅ سيتم المراجعة وتفعيل الاشتراك.";
+      txHash.value="";
+    }catch(e){
+      msg.className="muted err";
+      msg.textContent = (e && e.message) ? e.message : "تعذر تسجيل الطلب.";
+    }
+  };
+</script>
+</body>
+</html>
