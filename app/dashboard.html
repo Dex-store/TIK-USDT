@@ -1,276 +1,148 @@
 <!doctype html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>لوحة التحكم • TIK-USDT</title>
-  <style>
-    body{margin:0;font-family:system-ui;background:radial-gradient(1200px 600px at 50% -10%, #1b255a, #060913);color:#eaf0ff}
-    .wrap{max-width:1100px;margin:0 auto;padding:18px}
-    .topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;
-      background:rgba(12,18,45,.75);border:1px solid rgba(255,255,255,.08);border-radius:22px;padding:14px 16px;
-      box-shadow:0 20px 60px rgba(0,0,0,.35);backdrop-filter:blur(10px)}
-    .brand{display:flex;align-items:center;gap:10px}
-    .logo{width:44px;height:44px;border-radius:16px;background:linear-gradient(135deg,#5b8cff,#7c5cff);
-      display:flex;align-items:center;justify-content:center;font-weight:900}
-    .muted{color:#a8b3cf;font-size:13px;line-height:1.7}
-    .btn{padding:11px 14px;border-radius:16px;border:1px solid rgba(255,255,255,.12);
-      background:rgba(255,255,255,.04);color:#eaf0ff;font-weight:800;cursor:pointer;text-decoration:none;display:inline-block}
-    .btn.primary{background:linear-gradient(135deg,#5b8cff,#7c5cff);border-color:transparent}
-    .btn.danger{background:rgba(255,90,120,.14);border-color:rgba(255,90,120,.35)}
-    .btn[disabled]{opacity:.45;cursor:not-allowed}
-    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:14px}
-    @media(max-width:900px){.grid{grid-template-columns:1fr}}
-    .card{background:rgba(12,18,45,.75);border:1px solid rgba(255,255,255,.08);border-radius:22px;
-      padding:16px;box-shadow:0 20px 60px rgba(0,0,0,.25);backdrop-filter:blur(10px)}
-    .h{font-weight:900;font-size:16px}
-    .v{font-weight:900;font-size:22px;margin-top:6px}
-    .pill{display:inline-flex;align-items:center;gap:8px;padding:7px 10px;border-radius:999px;border:1px dashed rgba(255,255,255,.16);color:#cfe0ff;font-size:12px;margin-top:10px}
-    .dot{width:10px;height:10px;border-radius:99px;background:#999}
-    .ok{background:#2cff8f}
-    .warn{background:#ffcc66}
-    .bad{background:#ff5a78}
-    .mono{font-family:ui-monospace,Menlo,Consolas,monospace;word-break:break-all}
-    input{width:100%;padding:12px;border-radius:16px;border:1px solid rgba(255,255,255,.12);
-      background:rgba(255,255,255,.04);color:#eaf0ff;margin-top:10px;outline:none}
-    .oktxt{color:#7CFFB2}
-    .errtxt{color:#FF8FA3}
-  </style>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>لوحة التحكم • TIK-USDT</title>
+<style>
+body{margin:0;font-family:system-ui;background:radial-gradient(1200px 600px at 50% -10%, #1b255a, #060913);color:#eaf0ff}
+.wrap{max-width:1150px;margin:0 auto;padding:18px}
+.topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;
+background:rgba(12,18,45,.75);border:1px solid rgba(255,255,255,.08);border-radius:22px;padding:14px 16px}
+.brand{display:flex;align-items:center;gap:10px}
+.logo{width:44px;height:44px;border-radius:16px;background:linear-gradient(135deg,#5b8cff,#7c5cff);
+display:flex;align-items:center;justify-content:center;font-weight:900}
+.btn{padding:11px 14px;border-radius:16px;border:1px solid rgba(255,255,255,.12);
+background:rgba(255,255,255,.04);color:#eaf0ff;font-weight:800;cursor:pointer;text-decoration:none}
+.btn.primary{background:linear-gradient(135deg,#5b8cff,#7c5cff);border-color:transparent}
+.btn.danger{background:rgba(255,90,120,.14);border-color:rgba(255,90,120,.35)}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:14px}
+@media(max-width:900px){.grid{grid-template-columns:1fr}}
+.card{background:rgba(12,18,45,.75);border:1px solid rgba(255,255,255,.08);border-radius:22px;padding:16px}
+.h{font-weight:900}
+.v{font-weight:900;font-size:22px;margin-top:6px}
+.muted{color:#a8b3cf;font-size:13px}
+.pill{display:inline-flex;gap:8px;padding:7px 10px;border-radius:999px;border:1px dashed rgba(255,255,255,.16);margin-top:10px}
+.dot{width:10px;height:10px;border-radius:99px;background:#999}
+.ok{background:#2cff8f}
+.warn{background:#ffcc66}
+.mono{font-family:ui-monospace,Menlo,Consolas,monospace}
+input{width:100%;padding:12px;border-radius:16px;border:1px solid rgba(255,255,255,.12);
+background:rgba(255,255,255,.04);color:#eaf0ff;margin-top:10px}
+</style>
 </head>
+
 <body>
-  <div class="wrap">
-    <div class="topbar">
-      <div class="brand">
-        <div class="logo">T</div>
-        <div>
-          <div style="font-weight:900">TIK-USDT</div>
-          <div class="muted">لوحة التحكم</div>
-        </div>
-      </div>
+<div class="wrap">
 
-      <div style="display:flex;gap:10px;flex-wrap:wrap">
-        <a class="btn" href="./plans.html">الاشتراكات</a>
-        <a class="btn" href="./withdraw-request.html" id="topWithdrawBtn">طلب سحب</a>
-        <a class="btn" href="./withdraw-history.html">سجل السحوبات</a>
-        <a class="btn" href="https://t.me/TIK_USDT" target="_blank">الدعم</a>
-        <a class="btn" href="https://t.me/+P2nKCspWsyNmYmFk" target="_blank">قناة التلجرام</a>
-        <button class="btn danger" id="logoutBtn">تسجيل خروج</button>
-      </div>
-    </div>
-
-    <div class="grid">
-      <div class="card">
-        <div class="h">حالة الاشتراك</div>
-        <div class="pill">
-          <span class="dot warn" id="subDot"></span>
-          <span id="subTxt">جارٍ التحميل...</span>
-        </div>
-        <div class="muted" style="margin-top:10px" id="subInfo"></div>
-      </div>
-
-      <div class="card">
-        <div class="h">الخطة الحالية</div>
-        <div class="v" id="planTxt">—</div>
-        <div class="muted" id="planInfo">—</div>
-      </div>
-
-      <div class="card">
-        <div class="h">رصيدك الافتراضي</div>
-        <div class="v" id="balTxt">0</div>
-        <div class="muted">الرصيد داخل المنصة. السحب يتم يدويًا خلال 3–24 ساعة.</div>
-      </div>
-    </div>
-
-    <!-- ✅ قسم رابط الدعوة -->
-    <div class="card" style="margin-top:14px">
-      <div class="h">الإحالات (رابط الدعوة)</div>
-      <div class="muted">شارك الرابط التالي مع أصدقائك ليقوموا بالتسجيل من خلالك.</div>
-
-      <div class="pill" style="margin-top:10px">
-        <b>refCode:</b> <span class="mono" id="refCodeTxt">—</span>
-      </div>
-
-      <input id="refLink" class="mono" readonly placeholder="سيظهر رابط الدعوة هنا...">
-
-      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px">
-        <button class="btn primary" id="copyRefBtn" type="button">نسخ رابط الدعوة</button>
-        <a class="btn" id="openRefBtn" href="#" target="_blank">فتح رابط الدعوة</a>
-      </div>
-
-      <div class="muted" id="refMsg" style="margin-top:10px"></div>
-    </div>
-
-    <div class="card" style="margin-top:14px">
-      <div class="h">السحب</div>
-      <div class="muted" id="wdHint" style="margin-top:8px">جارٍ التحميل...</div>
-
-      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px">
-        <a class="btn primary" id="withdrawBtn" href="./withdraw-request.html">طلب سحب</a>
-        <a class="btn" href="./withdraw-history.html">سجل السحوبات</a>
-        <a class="btn" href="./plans.html">تجديد / اشتراك</a>
-      </div>
-    </div>
-
-    <div class="card" style="margin-top:14px">
-      <div class="h">آخر طلب دفع</div>
-      <div class="muted" id="lastPay">جارٍ التحميل...</div>
+<!-- ===== TOP BAR ===== -->
+<div class="topbar">
+  <div class="brand">
+    <div class="logo">T</div>
+    <div>
+      <div style="font-weight:900">TIK-USDT</div>
+      <div class="muted">لوحة التحكم</div>
     </div>
   </div>
 
-  <script src="https://unpkg.com/parse/dist/parse.min.js"></script>
-  <script src="./config.js"></script>
+  <div style="display:flex;gap:10px;flex-wrap:wrap">
+    <a class="btn" href="./plans.html">الاشتراكات</a>
+    <a class="btn" href="./referrals.html">إحالاتي</a>
+    <a class="btn" href="./commissions.html">عمولاتي</a>
+    <a class="btn" href="./withdraw-history.html">سجل السحوبات</a>
+    <a class="btn" href="https://t.me/TIK_USDT" target="_blank">الدعم</a>
+    <button class="btn danger" id="logoutBtn">خروج</button>
+  </div>
+</div>
+
+<!-- ===== INFO GRID ===== -->
+<div class="grid">
+
+  <div class="card">
+    <div class="h">حالة الاشتراك</div>
+    <div class="pill">
+      <span class="dot warn" id="subDot"></span>
+      <span id="subTxt">جارٍ التحميل…</span>
+    </div>
+    <div class="muted" id="subInfo"></div>
+  </div>
+
+  <div class="card">
+    <div class="h">الخطة الحالية</div>
+    <div class="v" id="planTxt">—</div>
+    <div class="muted" id="planInfo">—</div>
+  </div>
+
+  <div class="card">
+    <div class="h">رصيدك</div>
+    <div class="v" id="balTxt">0.00</div>
+    <div class="muted">USDT (رصيد افتراضي)</div>
+  </div>
+
+</div>
+
+<!-- ===== REFERRAL ===== -->
+<div class="card" style="margin-top:14px">
+  <div class="h">رابط الدعوة</div>
+  <div class="pill"><b>refCode:</b> <span class="mono" id="refCodeTxt">—</span></div>
+  <input id="refLink" readonly class="mono">
+  <div style="margin-top:10px;display:flex;gap:10px;flex-wrap:wrap">
+    <button class="btn primary" id="copyRefBtn">نسخ الرابط</button>
+    <a class="btn" id="openRefBtn" target="_blank">فتح الرابط</a>
+  </div>
+</div>
+
+<!-- ===== WITHDRAW ===== -->
+<div class="card" style="margin-top:14px">
+  <div class="h">السحب</div>
+  <div class="muted" id="wdHint">جارٍ التحميل…</div>
+  <div style="margin-top:10px;display:flex;gap:10px;flex-wrap:wrap">
+    <a class="btn primary" id="withdrawBtn" href="./withdraw-request.html">طلب سحب</a>
+  </div>
+</div>
+
+</div>
+
+<script src="https://unpkg.com/parse/dist/parse.min.js"></script>
+<script src="./config.js"></script>
 
 <script>
-  Parse.initialize(window.TIK.PARSE_APP_ID, window.TIK.PARSE_JS_KEY);
-  Parse.serverURL = window.TIK.PARSE_SERVER_URL;
+Parse.initialize(window.TIK.PARSE_APP_ID, window.TIK.PARSE_JS_KEY);
+Parse.serverURL = window.TIK.PARSE_SERVER_URL;
 
-  const user = Parse.User.current();
-  if(!user) location.href = "../auth/login.html";
+const user = Parse.User.current();
+if(!user) location.href="../auth/login.html";
 
-  function setSub(state, text, info){
-    subTxt.textContent = text;
-    subInfo.textContent = info || "";
-    subDot.className = "dot " + (state==="ok" ? "ok" : state==="bad" ? "bad" : "warn");
+refCodeTxt.textContent = user.get("refCode");
+const link = location.origin + "/TIK-USDT/auth/signup.html?ref=" + user.get("refCode");
+refLink.value = link;
+openRefBtn.href = link;
+copyRefBtn.onclick = ()=>navigator.clipboard.writeText(link);
+
+logoutBtn.onclick = async ()=>{
+  await Parse.User.logOut();
+  location.href="../auth/login.html";
+};
+
+// Profile
+(async()=>{
+  const Profile = Parse.Object.extend("Profile");
+  const q = new Parse.Query(Profile);
+  q.equalTo("user", user);
+  const p = await q.first();
+
+  if(p && p.get("isActive")){
+    subTxt.textContent="نشط";
+    subDot.className="dot ok";
+    planTxt.textContent=p.get("planAmount")+" USDT";
+    wdHint.textContent="يمكنك السحب مرة واحدة أسبوعيًا";
+  }else{
+    subTxt.textContent="غير مفعل";
+    wdHint.textContent="لا يمكن السحب قبل التفعيل";
+    withdrawBtn.style.pointerEvents="none";
+    withdrawBtn.style.opacity=.5;
   }
-
-  async function getProfile(){
-    const Profile = Parse.Object.extend("Profile");
-    const q = new Parse.Query(Profile);
-    q.equalTo("user", user);
-    q.limit(1);
-    return await q.first({ useMasterKey: false });
-  }
-
-  async function getLastPayment(){
-    const Payments = Parse.Object.extend("Payments");
-    const q = new Parse.Query(Payments);
-    q.equalTo("user", user);
-    q.descending("createdAt");
-    q.limit(1);
-    return await q.first({ useMasterKey: false });
-  }
-
-  async function getLastWithdraw(){
-    const WithdrawRequests = Parse.Object.extend("WithdrawRequests");
-    const q = new Parse.Query(WithdrawRequests);
-    q.equalTo("user", user);
-    q.descending("createdAt");
-    q.limit(1);
-    return await q.first({ useMasterKey: false });
-  }
-
-  function fmtDate(d){
-    if(!d) return "—";
-    try{
-      return new Date(d).toLocaleString("ar", {year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit"});
-    }catch{ return "—"; }
-  }
-  function safeNum(n){ return (typeof n === "number" && isFinite(n)) ? n : 0; }
-
-  function buildRefLink(refCode){
-    const base = window.location.origin + "/TIK-USDT";
-    return base + "/auth/signup.html?ref=" + encodeURIComponent(refCode);
-  }
-
-  // ====== Referral link UI ======
-  const refMsg = (t, cls="")=>{
-    refMsgEl.className = "muted " + (cls||"");
-    refMsgEl.textContent = t;
-  };
-  const refMsgEl = document.getElementById("refMsg");
-
-  function initReferralSection(){
-    const refCode = user.get("refCode");
-
-    if(!refCode){
-      refCodeTxt.textContent = "غير موجود";
-      refLink.value = "";
-      openRefBtn.href = "#";
-      openRefBtn.style.pointerEvents = "none";
-      refMsgEl.className = "muted errtxt";
-      refMsgEl.textContent = "⚠️ لا يوجد refCode لهذا الحساب. (هذا يحدث فقط لو الحساب قديم قبل إضافة refCode).";
-      copyRefBtn.disabled = true;
-      return;
-    }
-
-    refCodeTxt.textContent = refCode;
-    const link = buildRefLink(refCode);
-    refLink.value = link;
-    openRefBtn.href = link;
-    refMsgEl.textContent = "✅ رابط الدعوة جاهز.";
-
-    copyRefBtn.onclick = async ()=>{
-      try{
-        await navigator.clipboard.writeText(link);
-        refMsgEl.className = "muted oktxt";
-        refMsgEl.textContent = "تم نسخ رابط الدعوة ✅";
-      }catch{
-        refMsgEl.className = "muted errtxt";
-        refMsgEl.textContent = "لم أستطع النسخ تلقائيًا — انسخه يدويًا.";
-      }
-    };
-  }
-
-  (async ()=>{
-    // 1) referral section first
-    initReferralSection();
-
-    // 2) Profile + subscription status
-    const profile = await getProfile();
-    const isActive = !!(profile && profile.get("isActive"));
-    const planAmount = profile ? profile.get("planAmount") : null;
-    const activatedAt = profile ? profile.get("activatedAt") : null;
-
-    const balance = profile ? safeNum(profile.get("virtualBalance")) || safeNum(profile.get("balance")) || 0 : 0;
-    balTxt.textContent = balance.toFixed(2);
-
-    if(isActive){
-      setSub("ok","نشط","تم تفعيل اشتراكك. يمكنك طلب السحب مرة واحدة أسبوعيًا.");
-      withdrawBtn.removeAttribute("disabled");
-      withdrawBtn.style.pointerEvents = "auto";
-      topWithdrawBtn.style.pointerEvents = "auto";
-      wdHint.textContent = "✅ يمكنك طلب سحب الآن.";
-    }else{
-      setSub("warn","غير نشط / بانتظار التفعيل","قم بالدفع ثم سجّل TX Hash من صفحة الاشتراكات، وسيتم التفعيل بعد المراجعة.");
-      withdrawBtn.setAttribute("disabled","disabled");
-      withdrawBtn.style.pointerEvents = "none";
-      topWithdrawBtn.style.pointerEvents = "none";
-      wdHint.textContent = "⛔ لا يمكنك السحب قبل تفعيل الاشتراك.";
-    }
-
-    planTxt.textContent = planAmount ? (planAmount + " USDT") : "—";
-    planInfo.textContent = activatedAt ? ("آخر تفعيل: " + fmtDate(activatedAt)) : "—";
-
-    // 3) last payment
-    const lastPayObj = await getLastPayment();
-    if(!lastPayObj){
-      lastPay.textContent = "لا يوجد طلبات دفع بعد. اذهب إلى صفحة الاشتراكات وسجّل TX Hash.";
-    }else{
-      const st = lastPayObj.get("status") || "pending";
-      const pa = lastPayObj.get("planAmount") || "—";
-      const hx = lastPayObj.get("txHash") || "";
-      lastPay.innerHTML = `
-        الحالة: <b>${st}</b><br/>
-        الخطة: <b>${pa} USDT</b><br/>
-        الوقت: <b>${fmtDate(lastPayObj.createdAt)}</b><br/>
-        txHash: <span class="mono">${hx}</span>
-      `;
-    }
-
-    // 4) last withdraw hint
-    const lastW = await getLastWithdraw();
-    if(lastW){
-      wdHint.textContent += " | آخر طلب سحب: " + fmtDate(lastW.createdAt) + " (الحالة: " + (lastW.get("status")||"pending") + ")";
-    }
-  })().catch(e=>{
-    subTxt.textContent = "خطأ";
-    subInfo.textContent = (e && e.message) ? e.message : "حدث خطأ غير معروف";
-  });
-
-  logoutBtn.onclick = async ()=>{
-    await Parse.User.logOut();
-    location.href = "../auth/login.html";
-  };
+})();
 </script>
 </body>
 </html>
