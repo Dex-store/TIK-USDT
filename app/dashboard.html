@@ -31,6 +31,10 @@
     .warn{background:#ffcc66}
     .bad{background:#ff5a78}
     .mono{font-family:ui-monospace,Menlo,Consolas,monospace;word-break:break-all}
+    input{width:100%;padding:12px;border-radius:16px;border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.04);color:#eaf0ff;margin-top:10px;outline:none}
+    .oktxt{color:#7CFFB2}
+    .errtxt{color:#FF8FA3}
   </style>
 </head>
 <body>
@@ -57,7 +61,7 @@
     <div class="grid">
       <div class="card">
         <div class="h">حالة الاشتراك</div>
-        <div class="pill" id="subPill">
+        <div class="pill">
           <span class="dot warn" id="subDot"></span>
           <span id="subTxt">جارٍ التحميل...</span>
         </div>
@@ -73,8 +77,27 @@
       <div class="card">
         <div class="h">رصيدك الافتراضي</div>
         <div class="v" id="balTxt">0</div>
-        <div class="muted">هذا رصيد افتراضي داخل المنصة. السحب يتم يدويًا خلال 3–24 ساعة.</div>
+        <div class="muted">الرصيد داخل المنصة. السحب يتم يدويًا خلال 3–24 ساعة.</div>
       </div>
+    </div>
+
+    <!-- ✅ قسم رابط الدعوة -->
+    <div class="card" style="margin-top:14px">
+      <div class="h">الإحالات (رابط الدعوة)</div>
+      <div class="muted">شارك الرابط التالي مع أصدقائك ليقوموا بالتسجيل من خلالك.</div>
+
+      <div class="pill" style="margin-top:10px">
+        <b>refCode:</b> <span class="mono" id="refCodeTxt">—</span>
+      </div>
+
+      <input id="refLink" class="mono" readonly placeholder="سيظهر رابط الدعوة هنا...">
+
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px">
+        <button class="btn primary" id="copyRefBtn" type="button">نسخ رابط الدعوة</button>
+        <a class="btn" id="openRefBtn" href="#" target="_blank">فتح رابط الدعوة</a>
+      </div>
+
+      <div class="muted" id="refMsg" style="margin-top:10px"></div>
     </div>
 
     <div class="card" style="margin-top:14px">
@@ -144,7 +167,55 @@
   }
   function safeNum(n){ return (typeof n === "number" && isFinite(n)) ? n : 0; }
 
+  function buildRefLink(refCode){
+    const base = window.location.origin + "/TIK-USDT";
+    return base + "/auth/signup.html?ref=" + encodeURIComponent(refCode);
+  }
+
+  // ====== Referral link UI ======
+  const refMsg = (t, cls="")=>{
+    refMsgEl.className = "muted " + (cls||"");
+    refMsgEl.textContent = t;
+  };
+  const refMsgEl = document.getElementById("refMsg");
+
+  function initReferralSection(){
+    const refCode = user.get("refCode");
+
+    if(!refCode){
+      refCodeTxt.textContent = "غير موجود";
+      refLink.value = "";
+      openRefBtn.href = "#";
+      openRefBtn.style.pointerEvents = "none";
+      refMsgEl.className = "muted errtxt";
+      refMsgEl.textContent = "⚠️ لا يوجد refCode لهذا الحساب. (هذا يحدث فقط لو الحساب قديم قبل إضافة refCode).";
+      copyRefBtn.disabled = true;
+      return;
+    }
+
+    refCodeTxt.textContent = refCode;
+    const link = buildRefLink(refCode);
+    refLink.value = link;
+    openRefBtn.href = link;
+    refMsgEl.textContent = "✅ رابط الدعوة جاهز.";
+
+    copyRefBtn.onclick = async ()=>{
+      try{
+        await navigator.clipboard.writeText(link);
+        refMsgEl.className = "muted oktxt";
+        refMsgEl.textContent = "تم نسخ رابط الدعوة ✅";
+      }catch{
+        refMsgEl.className = "muted errtxt";
+        refMsgEl.textContent = "لم أستطع النسخ تلقائيًا — انسخه يدويًا.";
+      }
+    };
+  }
+
   (async ()=>{
+    // 1) referral section first
+    initReferralSection();
+
+    // 2) Profile + subscription status
     const profile = await getProfile();
     const isActive = !!(profile && profile.get("isActive"));
     const planAmount = profile ? profile.get("planAmount") : null;
@@ -170,6 +241,7 @@
     planTxt.textContent = planAmount ? (planAmount + " USDT") : "—";
     planInfo.textContent = activatedAt ? ("آخر تفعيل: " + fmtDate(activatedAt)) : "—";
 
+    // 3) last payment
     const lastPayObj = await getLastPayment();
     if(!lastPayObj){
       lastPay.textContent = "لا يوجد طلبات دفع بعد. اذهب إلى صفحة الاشتراكات وسجّل TX Hash.";
@@ -185,6 +257,7 @@
       `;
     }
 
+    // 4) last withdraw hint
     const lastW = await getLastWithdraw();
     if(lastW){
       wdHint.textContent += " | آخر طلب سحب: " + fmtDate(lastW.createdAt) + " (الحالة: " + (lastW.get("status")||"pending") + ")";
@@ -200,4 +273,4 @@
   };
 </script>
 </body>
-  </html>
+</html>
