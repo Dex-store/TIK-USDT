@@ -46,6 +46,8 @@
 
       <div style="display:flex;gap:10px;flex-wrap:wrap">
         <a class="btn" href="./plans.html">الاشتراكات</a>
+        <a class="btn" href="./withdraw-request.html" id="topWithdrawBtn">طلب سحب</a>
+        <a class="btn" href="./withdraw-history.html">سجل السحوبات</a>
         <a class="btn" href="https://t.me/TIK_USDT" target="_blank">الدعم</a>
         <a class="btn" href="https://t.me/+P2nKCspWsyNmYmFk" target="_blank">قناة التلجرام</a>
         <button class="btn danger" id="logoutBtn">تسجيل خروج</button>
@@ -81,6 +83,7 @@
 
       <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px">
         <a class="btn primary" id="withdrawBtn" href="./withdraw-request.html">طلب سحب</a>
+        <a class="btn" href="./withdraw-history.html">سجل السحوبات</a>
         <a class="btn" href="./plans.html">تجديد / اشتراك</a>
       </div>
     </div>
@@ -139,37 +142,34 @@
       return new Date(d).toLocaleString("ar", {year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit"});
     }catch{ return "—"; }
   }
-
   function safeNum(n){ return (typeof n === "number" && isFinite(n)) ? n : 0; }
 
   (async ()=>{
-    // Profile
     const profile = await getProfile();
     const isActive = !!(profile && profile.get("isActive"));
     const planAmount = profile ? profile.get("planAmount") : null;
     const activatedAt = profile ? profile.get("activatedAt") : null;
 
-    // balance field names (لو عندك اسم مختلف لاحقًا سنعدله)
     const balance = profile ? safeNum(profile.get("virtualBalance")) || safeNum(profile.get("balance")) || 0 : 0;
-
     balTxt.textContent = balance.toFixed(2);
 
     if(isActive){
       setSub("ok","نشط","تم تفعيل اشتراكك. يمكنك طلب السحب مرة واحدة أسبوعيًا.");
       withdrawBtn.removeAttribute("disabled");
       withdrawBtn.style.pointerEvents = "auto";
+      topWithdrawBtn.style.pointerEvents = "auto";
       wdHint.textContent = "✅ يمكنك طلب سحب الآن.";
     }else{
       setSub("warn","غير نشط / بانتظار التفعيل","قم بالدفع ثم سجّل TX Hash من صفحة الاشتراكات، وسيتم التفعيل بعد المراجعة.");
       withdrawBtn.setAttribute("disabled","disabled");
       withdrawBtn.style.pointerEvents = "none";
-      wdHint.textContent = "⛔ لا يمكنك السحب قبل تفعيل الاشتراك. يمكنك الدفع أو الاشتراك من العمولات لاحقًا.";
+      topWithdrawBtn.style.pointerEvents = "none";
+      wdHint.textContent = "⛔ لا يمكنك السحب قبل تفعيل الاشتراك.";
     }
 
     planTxt.textContent = planAmount ? (planAmount + " USDT") : "—";
     planInfo.textContent = activatedAt ? ("آخر تفعيل: " + fmtDate(activatedAt)) : "—";
 
-    // last payment
     const lastPayObj = await getLastPayment();
     if(!lastPayObj){
       lastPay.textContent = "لا يوجد طلبات دفع بعد. اذهب إلى صفحة الاشتراكات وسجّل TX Hash.";
@@ -185,11 +185,9 @@
       `;
     }
 
-    // last withdraw (للتنبيه فقط)
     const lastW = await getLastWithdraw();
     if(lastW){
-      const dt = lastW.createdAt;
-      wdHint.textContent += " | آخر طلب سحب: " + fmtDate(dt) + " (الحالة: " + (lastW.get("status")||"pending") + ")";
+      wdHint.textContent += " | آخر طلب سحب: " + fmtDate(lastW.createdAt) + " (الحالة: " + (lastW.get("status")||"pending") + ")";
     }
   })().catch(e=>{
     subTxt.textContent = "خطأ";
@@ -202,4 +200,4 @@
   };
 </script>
 </body>
-</html>
+  </html>
