@@ -1,200 +1,191 @@
 <!doctype html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>الاشتراكات • TIK-USDT</title>
-  <style>
-    body{margin:0;font-family:system-ui;background:radial-gradient(1200px 600px at 50% -10%, #1b255a, #060913);color:#eaf0ff}
-    .wrap{max-width:1100px;margin:0 auto;padding:18px}
-    .topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;
-      background:rgba(12,18,45,.75);border:1px solid rgba(255,255,255,.08);border-radius:22px;padding:14px 16px;
-      box-shadow:0 20px 60px rgba(0,0,0,.35);backdrop-filter:blur(10px)}
-    .brand{display:flex;align-items:center;gap:10px}
-    .logo{width:44px;height:44px;border-radius:16px;background:linear-gradient(135deg,#5b8cff,#7c5cff);
-      display:flex;align-items:center;justify-content:center;font-weight:900}
-    .muted{color:#a8b3cf;font-size:13px;line-height:1.7}
-    .btn{padding:11px 14px;border-radius:16px;border:1px solid rgba(255,255,255,.12);
-      background:rgba(255,255,255,.04);color:#eaf0ff;font-weight:800;cursor:pointer;text-decoration:none;display:inline-block}
-    .btn.primary{background:linear-gradient(135deg,#5b8cff,#7c5cff);border-color:transparent}
-    .btn[disabled]{opacity:.5;cursor:not-allowed}
-    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:14px}
-    @media(max-width:900px){.grid{grid-template-columns:1fr}}
-    .card{background:rgba(12,18,45,.75);border:1px solid rgba(255,255,255,.08);border-radius:22px;
-      padding:16px;box-shadow:0 20px 60px rgba(0,0,0,.25);backdrop-filter:blur(10px)}
-    .price{font-size:22px;font-weight:900;margin-top:6px}
-    .pill{display:inline-block;padding:6px 10px;border-radius:999px;border:1px dashed rgba(255,255,255,.16);color:#cfe0ff;font-size:12px;margin-top:10px}
-    input{width:100%;padding:12px;border-radius:16px;border:1px solid rgba(255,255,255,.12);
-      background:rgba(255,255,255,.04);color:#eaf0ff;margin-top:10px;outline:none}
-    .ok{color:#7CFFB2}
-    .err{color:#FF8FA3}
-    .mono{font-family:ui-monospace,Menlo,Consolas,monospace;word-break:break-all}
-    .disabledNote{margin-top:10px;padding:10px;border-radius:16px;border:1px dashed rgba(255,255,255,.14);
-      background:rgba(255,255,255,.02);color:#c7d3ff;font-size:12px;line-height:1.6}
-  </style>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>لوحة التحكم • TIK-USDT</title>
+
+<style>
+body{margin:0;font-family:system-ui;background:radial-gradient(1200px 600px at 50% -10%, #1b255a, #060913);color:#eaf0ff}
+.wrap{max-width:1150px;margin:0 auto;padding:18px}
+.topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;
+background:rgba(12,18,45,.75);border:1px solid rgba(255,255,255,.08);border-radius:22px;padding:14px 16px}
+.brand{display:flex;align-items:center;gap:10px}
+.logo{width:44px;height:44px;border-radius:16px;background:linear-gradient(135deg,#5b8cff,#7c5cff);
+display:flex;align-items:center;justify-content:center;font-weight:900}
+.btn{padding:11px 14px;border-radius:16px;border:1px solid rgba(255,255,255,.12);
+background:rgba(255,255,255,.04);color:#eaf0ff;font-weight:800;cursor:pointer;text-decoration:none}
+.btn.primary{background:linear-gradient(135deg,#5b8cff,#7c5cff);border-color:transparent}
+.btn.danger{background:rgba(255,90,120,.14);border-color:rgba(255,90,120,.35)}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:14px}
+@media(max-width:900px){.grid{grid-template-columns:1fr}}
+.card{background:rgba(12,18,45,.75);border:1px solid rgba(255,255,255,.08);border-radius:22px;padding:16px}
+.h{font-weight:900}
+.v{font-weight:900;font-size:22px;margin-top:6px}
+.muted{color:#a8b3cf;font-size:13px}
+.pill{display:inline-flex;gap:8px;padding:7px 10px;border-radius:999px;border:1px dashed rgba(255,255,255,.16);margin-top:10px}
+.dot{width:10px;height:10px;border-radius:99px;background:#999}
+.ok{background:#2cff8f}
+.warn{background:#ffcc66}
+.mono{font-family:ui-monospace,Menlo,Consolas,monospace}
+.kpi{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.kpi .box{border:1px solid rgba(255,255,255,.10);border-radius:18px;padding:12px;background:rgba(255,255,255,.03)}
+</style>
 </head>
+
 <body>
-  <div class="wrap">
-    <div class="topbar">
-      <div class="brand">
-        <div class="logo">T</div>
-        <div>
-          <div style="font-weight:900">TIK-USDT</div>
-          <div class="muted">الاشتراكات الشهرية</div>
-        </div>
-      </div>
+<div class="wrap">
 
-      <div style="display:flex;gap:10px;flex-wrap:wrap">
-        <a class="btn" href="./dashboard.html">لوحة التحكم</a>
-        <a class="btn" href="../index.html">الرئيسية</a>
-        <button class="btn primary" id="logoutBtn">تسجيل خروج</button>
-      </div>
-    </div>
-
-    <div class="card" style="margin-top:14px">
-      <div style="font-weight:900;font-size:16px">طريقة الدفع</div>
-      <div class="muted">
-        ادفع USDT على شبكة Ethereum (ERC-20) إلى العنوان التالي ثم ضع TX Hash لتسجيل الطلب.
-      </div>
-      <div class="pill mono" id="walletTxt"></div>
-      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px">
-        <button class="btn" id="copyWalletBtn">نسخ العنوان</button>
-        <a class="btn" href="https://etherscan.io/" target="_blank">فتح Etherscan</a>
-      </div>
-
-      <div class="disabledNote">
-        ملاحظة: خطة <b>200 USDT</b> غير متاحة حاليًا (مقفولة). سيتم تفعيلها لاحقًا إن رغبت.
-      </div>
-    </div>
-
-    <div class="grid" id="plans"></div>
-
-    <div class="card" style="margin-top:14px">
-      <div style="font-weight:900">تسجيل TX Hash (بعد الدفع)</div>
-      <div class="muted">اختر الخطة أولًا ثم ضع TX Hash.</div>
-      <input id="txHash" class="mono" placeholder="TX Hash مثل: 0x....">
-      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px">
-        <button class="btn primary" id="submitTxBtn">تسجيل الطلب</button>
-        <a class="btn" href="https://t.me/TIK_USDT" target="_blank">الدعم</a>
-      </div>
-      <div class="muted" id="msg" style="margin-top:10px"></div>
+<!-- ===== TOP BAR ===== -->
+<div class="topbar">
+  <div class="brand">
+    <div class="logo">T</div>
+    <div>
+      <div style="font-weight:900">TIK-USDT</div>
+      <div class="muted">لوحة التحكم</div>
     </div>
   </div>
 
-  <script src="https://unpkg.com/parse/dist/parse.min.js"></script>
-  <script src="./config.js"></script>
+  <div style="display:flex;gap:10px;flex-wrap:wrap">
+    <a class="btn" href="./plans.html">الاشتراكات</a>
+    <a class="btn" href="./referrals.html">إحالاتي</a>
+    <a class="btn" href="./commissions.html">عمولاتي</a>
+    <a class="btn" href="./withdraw-history.html">سجل السحوبات</a>
+    <a class="btn" href="https://t.me/TIK_USDT" target="_blank">الدعم</a>
+    <button class="btn danger" id="logoutBtn">خروج</button>
+  </div>
+</div>
+
+<!-- ===== INFO GRID ===== -->
+<div class="grid">
+
+  <div class="card">
+    <div class="h">حالة الاشتراك</div>
+    <div class="pill">
+      <span class="dot warn" id="subDot"></span>
+      <span id="subTxt">جارٍ التحميل…</span>
+    </div>
+    <div class="muted" id="subInfo"></div>
+  </div>
+
+  <div class="card">
+    <div class="h">الخطة الحالية</div>
+    <div class="v" id="planTxt">—</div>
+    <div class="muted" id="planInfo">—</div>
+  </div>
+
+  <div class="card">
+    <div class="h">رصيدك (Balances)</div>
+    <div class="kpi">
+      <div class="box">
+        <div class="muted">متاح</div>
+        <div class="v" id="availTxt">0.00</div>
+      </div>
+      <div class="box">
+        <div class="muted">معلّق</div>
+        <div class="v" id="lockedTxt">0.00</div>
+      </div>
+    </div>
+    <div class="muted" style="margin-top:8px">USDT (رصيد افتراضي)</div>
+  </div>
+
+</div>
+
+<!-- ===== REFERRAL ===== -->
+<div class="card" style="margin-top:14px">
+  <div class="h">رابط الدعوة</div>
+  <div class="pill"><b>refCode:</b> <span class="mono" id="refCodeTxt">—</span></div>
+  <input id="refLink" readonly class="mono">
+  <div style="margin-top:10px;display:flex;gap:10px;flex-wrap:wrap">
+    <button class="btn primary" id="copyRefBtn">نسخ الرابط</button>
+    <a class="btn" id="openRefBtn" target="_blank">فتح الرابط</a>
+  </div>
+</div>
+
+<!-- ===== WITHDRAW ===== -->
+<div class="card" style="margin-top:14px">
+  <div class="h">السحب</div>
+  <div class="muted" id="wdHint">جارٍ التحميل…</div>
+  <div style="margin-top:10px">
+    <a class="btn primary" id="withdrawBtn" href="./withdraw-request.html">طلب سحب</a>
+  </div>
+</div>
+
+</div>
+
+<script src="https://unpkg.com/parse/dist/parse.min.js"></script>
+<script src="./config.js"></script>
 
 <script>
-  // ===== عنوان استلام الدفع =====
-  const RECEIVER_WALLET = "0xb56a89f790060cbb0f08d02234921e5fefff11a6";
+Parse.initialize(window.TIK.PARSE_APP_ID, window.TIK.PARSE_JS_KEY);
+Parse.serverURL = window.TIK.PARSE_SERVER_URL;
 
-  // الخطط (نترك 200 موجودة لكن مقفولة)
-  const PLAN_OPTIONS = [10,20,50,100,200];
-  const DISABLED_PLANS = [200];
+const user = Parse.User.current();
+if(!user) location.href="../auth/login.html";
 
-  Parse.initialize(window.TIK.PARSE_APP_ID, window.TIK.PARSE_JS_KEY);
-  Parse.serverURL = window.TIK.PARSE_SERVER_URL;
+// logout
+logoutBtn.onclick = async ()=>{
+  await Parse.User.logOut();
+  location.href="../auth/login.html";
+};
 
-  const user = Parse.User.current();
-  if (!user) location.href = "../auth/login.html";
+// referral link
+const refCode = user.get("refCode") || "";
+refCodeTxt.textContent = refCode || "—";
+const link = location.origin + "/TIK-USDT/auth/signup.html?ref=" + encodeURIComponent(refCode);
+refLink.value = link;
+openRefBtn.href = link;
+copyRefBtn.onclick = ()=>navigator.clipboard.writeText(link);
 
-  walletTxt.textContent = RECEIVER_WALLET;
+// helpers
+function safeNum(n){ n=Number(n); return Number.isFinite(n)?n:0; }
 
-  copyWalletBtn.onclick = async ()=>{
-    try{
-      await navigator.clipboard.writeText(RECEIVER_WALLET);
-      msg.className="muted ok";
-      msg.textContent="تم نسخ العنوان ✅";
-    }catch{
-      msg.className="muted err";
-      msg.textContent="لم أستطع النسخ تلقائيًا — انسخه يدويًا.";
-    }
-  };
+// load subscription
+async function loadProfile(){
+  const Profile = Parse.Object.extend("Profile");
+  const q = new Parse.Query(Profile);
+  q.equalTo("user", user);
+  const p = await q.first();
 
-  let selectedPlan = null;
+  if(p && p.get("isActive")){
+    subTxt.textContent="نشط";
+    subDot.className="dot ok";
+    planTxt.textContent=(p.get("planAmount")||"—")+" USDT";
+    wdHint.textContent="✅ يمكنك السحب مرة واحدة أسبوعيًا";
+    withdrawBtn.style.pointerEvents="auto";
+    withdrawBtn.style.opacity=1;
+  }else{
+    subTxt.textContent="غير مفعل";
+    subDot.className="dot warn";
+    wdHint.textContent="⛔ لا يمكن السحب قبل التفعيل";
+    withdrawBtn.style.pointerEvents="none";
+    withdrawBtn.style.opacity=.5;
+  }
+}
 
-  function render(){
-    plans.innerHTML = PLAN_OPTIONS.map(p=>{
-      const disabled = DISABLED_PLANS.includes(p);
-      const isSelected = selectedPlan === p;
+// load balances
+async function loadBalances(){
+  const Balances = Parse.Object.extend("Balances");
+  const q = new Parse.Query(Balances);
+  q.equalTo("user", user);
+  let b = await q.first();
 
-      return `
-        <div class="card">
-          <div class="pill">اشتراك شهري</div>
-          <div style="font-weight:900;margin-top:8px">الخطة</div>
-          <div class="price">${p} USDT</div>
-          <div class="muted">
-            ${disabled ? "هذه الخطة غير متاحة الآن." : "ادفع إلى العنوان أعلاه ثم سجّل TX Hash."}
-          </div>
-          <div style="margin-top:10px">
-            ${
-              disabled
-              ? `<button class="btn" disabled>غير متاحة الآن</button>`
-              : `<button class="btn ${isSelected?'primary':''}" onclick="selectPlan(${p})">
-                    ${isSelected?'مختارة ✅':'اختيار الخطة'}
-                 </button>`
-            }
-          </div>
-        </div>
-      `;
-    }).join("");
+  if(!b){
+    b = new Balances();
+    b.set("user", user);
+    b.set("available", 0);
+    b.set("locked", 0);
+    await b.save();
   }
 
-  window.selectPlan = (p)=>{
-    if (DISABLED_PLANS.includes(p)) return;
-    selectedPlan = p;
-    render();
-    msg.className="muted";
-    msg.textContent = "تم اختيار خطة: " + p + " USDT";
-  };
+  availTxt.textContent = safeNum(b.get("available")).toFixed(2);
+  lockedTxt.textContent = safeNum(b.get("locked")).toFixed(2);
+}
 
-  render();
-
-  logoutBtn.onclick = async ()=>{ await Parse.User.logOut(); location.href="../auth/login.html"; };
-
-  function isTxHashLike(h){
-    // Ethereum tx hash: 0x + 64 hex chars
-    return /^0x([A-Fa-f0-9]{64})$/.test(h);
-  }
-
-  submitTxBtn.onclick = async ()=>{
-    msg.className="muted";
-    const hash = (txHash.value||"").trim();
-
-    if(!selectedPlan){
-      msg.className="muted err";
-      msg.textContent="اختر الخطة أولًا.";
-      return;
-    }
-    if (DISABLED_PLANS.includes(selectedPlan)) {
-      msg.className="muted err";
-      msg.textContent="هذه الخطة غير متاحة الآن.";
-      return;
-    }
-    if(!isTxHashLike(hash)){
-      msg.className="muted err";
-      msg.textContent="TX Hash غير صحيح (يجب أن يكون 0x ثم 64 حرف/رقم).";
-      return;
-    }
-
-    try{
-      const Payments = Parse.Object.extend("Payments");
-      const pay = new Payments();
-      pay.set("user", user);
-      pay.set("planAmount", selectedPlan);
-      pay.set("txHash", hash);
-      pay.set("receiverWallet", RECEIVER_WALLET);
-      pay.set("status", "pending");
-      await pay.save();
-
-      msg.className="muted ok";
-      msg.textContent="تم تسجيل الطلب ✅ سيتم المراجعة وتفعيل الاشتراك.";
-      txHash.value="";
-    }catch(e){
-      msg.className="muted err";
-      msg.textContent = (e && e.message) ? e.message : "تعذر تسجيل الطلب.";
-    }
-  };
+(async()=>{
+  await loadProfile();
+  await loadBalances();
+})();
 </script>
 </body>
 </html>
