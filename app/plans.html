@@ -17,6 +17,7 @@
     .btn{padding:11px 14px;border-radius:16px;border:1px solid rgba(255,255,255,.12);
       background:rgba(255,255,255,.04);color:#eaf0ff;font-weight:800;cursor:pointer;text-decoration:none;display:inline-block}
     .btn.primary{background:linear-gradient(135deg,#5b8cff,#7c5cff);border-color:transparent}
+    .btn[disabled]{opacity:.5;cursor:not-allowed}
     .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:14px}
     @media(max-width:900px){.grid{grid-template-columns:1fr}}
     .card{background:rgba(12,18,45,.75);border:1px solid rgba(255,255,255,.08);border-radius:22px;
@@ -28,6 +29,8 @@
     .ok{color:#7CFFB2}
     .err{color:#FF8FA3}
     .mono{font-family:ui-monospace,Menlo,Consolas,monospace;word-break:break-all}
+    .disabledNote{margin-top:10px;padding:10px;border-radius:16px;border:1px dashed rgba(255,255,255,.14);
+      background:rgba(255,255,255,.02);color:#c7d3ff;font-size:12px;line-height:1.6}
   </style>
 </head>
 <body>
@@ -58,6 +61,10 @@
         <button class="btn" id="copyWalletBtn">نسخ العنوان</button>
         <a class="btn" href="https://etherscan.io/" target="_blank">فتح Etherscan</a>
       </div>
+
+      <div class="disabledNote">
+        ملاحظة: خطة <b>200 USDT</b> غير متاحة حاليًا (مقفولة). سيتم تفعيلها لاحقًا إن رغبت.
+      </div>
     </div>
 
     <div class="grid" id="plans"></div>
@@ -80,8 +87,11 @@
 <script>
   // ===== عنوان استلام الدفع =====
   const RECEIVER_WALLET = "0xb56a89f790060cbb0f08d02234921e5fefff11a6";
+
+  // الخطط (نترك 200 موجودة لكن مقفولة)
   const PLAN_OPTIONS = [10,20,50,100,200];
-const DISABLED_PLANS = [200];
+  const DISABLED_PLANS = [200];
+
   Parse.initialize(window.TIK.PARSE_APP_ID, window.TIK.PARSE_JS_KEY);
   Parse.serverURL = window.TIK.PARSE_SERVER_URL;
 
@@ -91,29 +101,47 @@ const DISABLED_PLANS = [200];
   walletTxt.textContent = RECEIVER_WALLET;
 
   copyWalletBtn.onclick = async ()=>{
-    try{ await navigator.clipboard.writeText(RECEIVER_WALLET); msg.textContent="تم نسخ العنوان ✅"; }
-    catch{ msg.textContent="انسخ العنوان يدويًا."; }
+    try{
+      await navigator.clipboard.writeText(RECEIVER_WALLET);
+      msg.className="muted ok";
+      msg.textContent="تم نسخ العنوان ✅";
+    }catch{
+      msg.className="muted err";
+      msg.textContent="لم أستطع النسخ تلقائيًا — انسخه يدويًا.";
+    }
   };
 
   let selectedPlan = null;
 
   function render(){
-    plans.innerHTML = PLAN_OPTIONS.map(p=>`
-      <div class="card">
-        <div class="pill">اشتراك شهري</div>
-        <div style="font-weight:900;margin-top:8px">الخطة</div>
-        <div class="price">${p} USDT</div>
-        <div class="muted">ادفع إلى العنوان أعلاه ثم سجّل TX Hash.</div>
-        <div style="margin-top:10px">
-          <button class="btn ${selectedPlan===p?'primary':''}" onclick="selectPlan(${p})">
-            ${selectedPlan===p?'مختارة ✅':'اختيار الخطة'}
-          </button>
+    plans.innerHTML = PLAN_OPTIONS.map(p=>{
+      const disabled = DISABLED_PLANS.includes(p);
+      const isSelected = selectedPlan === p;
+
+      return `
+        <div class="card">
+          <div class="pill">اشتراك شهري</div>
+          <div style="font-weight:900;margin-top:8px">الخطة</div>
+          <div class="price">${p} USDT</div>
+          <div class="muted">
+            ${disabled ? "هذه الخطة غير متاحة الآن." : "ادفع إلى العنوان أعلاه ثم سجّل TX Hash."}
+          </div>
+          <div style="margin-top:10px">
+            ${
+              disabled
+              ? `<button class="btn" disabled>غير متاحة الآن</button>`
+              : `<button class="btn ${isSelected?'primary':''}" onclick="selectPlan(${p})">
+                    ${isSelected?'مختارة ✅':'اختيار الخطة'}
+                 </button>`
+            }
+          </div>
         </div>
-      </div>
-    `).join("");
+      `;
+    }).join("");
   }
 
   window.selectPlan = (p)=>{
+    if (DISABLED_PLANS.includes(p)) return;
     selectedPlan = p;
     render();
     msg.className="muted";
@@ -124,6 +152,11 @@ const DISABLED_PLANS = [200];
 
   logoutBtn.onclick = async ()=>{ await Parse.User.logOut(); location.href="../auth/login.html"; };
 
+  function isTxHashLike(h){
+    // Ethereum tx hash: 0x + 64 hex chars
+    return /^0x([A-Fa-f0-9]{64})$/.test(h);
+  }
+
   submitTxBtn.onclick = async ()=>{
     msg.className="muted";
     const hash = (txHash.value||"").trim();
@@ -133,9 +166,14 @@ const DISABLED_PLANS = [200];
       msg.textContent="اختر الخطة أولًا.";
       return;
     }
-    if(!hash || !hash.startsWith("0x") || hash.length < 30){
+    if (DISABLED_PLANS.includes(selectedPlan)) {
       msg.className="muted err";
-      msg.textContent="TX Hash غير صحيح.";
+      msg.textContent="هذه الخطة غير متاحة الآن.";
+      return;
+    }
+    if(!isTxHashLike(hash)){
+      msg.className="muted err";
+      msg.textContent="TX Hash غير صحيح (يجب أن يكون 0x ثم 64 حرف/رقم).";
       return;
     }
 
