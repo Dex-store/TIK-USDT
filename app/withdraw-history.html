@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>TIK-USDT • سجل الطلبات</title>
+  <script src="https://unpkg.com/parse/dist/parse.min.js"></script>
+  <style>
+    body{margin:0;font-family:system-ui;background:#070A12;color:#EAF0FF}
+    .wrap{max-width:980px;margin:0 auto;padding:18px}
+    .top{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between}
+    .card{margin-top:14px;background:#0E1426;border:1px solid rgba(255,255,255,.1);border-radius:18px;padding:16px}
+    .item{border:1px solid rgba(255,255,255,.10);border-radius:14px;padding:12px;margin-top:10px;background:rgba(255,255,255,.03)}
+    .note{color:#A8B3CF;font-size:12px;line-height:1.7}
+    .mono{font-family:ui-monospace,Menlo,Consolas,monospace;word-break:break-all}
+    .btn{padding:10px 12px;border-radius:14px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);color:#EAF0FF;font-weight:800;cursor:pointer}
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <div>
+      <h2 style="margin:0">سجل طلبات الصرف</h2>
+      <div class="note">
+        <a href="withdraw-request.html" style="color:#EAF0FF">طلب جديد</a> •
+        <a href="dashboard.html" style="color:#EAF0FF">لوحة التحكم</a>
+      </div>
+    </div>
+    <button class="btn" id="refresh">تحديث</button>
+  </div>
+
+  <div class="card">
+    <div class="note" id="msg">—</div>
+    <div id="list"></div>
+  </div>
+</div>
+
+<script>
+  const APP_ID = "PUT_YOUR_APP_ID_HERE";
+  const JS_KEY = "PUT_YOUR_JS_KEY_HERE";
+  const SERVER_URL = "https://parseapi.back4app.com/";
+
+  Parse.initialize(APP_ID, JS_KEY);
+  Parse.serverURL = SERVER_URL;
+
+  if(!Parse.User.current()) location.href = "../auth/login.html";
+
+  const msg = (m)=> document.getElementById("msg").textContent = m;
+
+  function esc(s){ return String(s||"").replace(/[&<>"']/g, c=>({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c])); }
+
+  async function load(){
+    try{
+      msg("جار التحميل...");
+      const rows = await Parse.Cloud.run("listMyPayoutRequests");
+      const wrap = document.getElementById("list");
+      wrap.innerHTML = "";
+      if(!rows.length){ msg("لا توجد طلبات بعد."); return; }
+      msg(`عدد الطلبات: ${rows.length}`);
+      for(const r of rows){
+        const el = document.createElement("div");
+        el.className = "item";
+        el.innerHTML = `
+          <div><b>الحالة:</b> ${esc(r.status)}</div>
+          <div><b>المبلغ:</b> ${esc(r.amount)} USDT</div>
+          <div><b>المحفظة:</b> <span class="mono">${esc(r.walletAddress)}</span></div>
+          <div><b>تاريخ الطلب:</b> ${esc(r.createdAt)}</div>
+          ${r.txHash ? `<div><b>TxHash:</b> <span class="mono">${esc(r.txHash)}</span></div>` : ``}
+          ${r.note ? `<div><b>ملاحظة:</b> ${esc(r.note)}</div>` : ``}
+        `;
+        wrap.appendChild(el);
+      }
+    }catch(e){
+      msg("خطأ: " + (e.message||e));
+    }
+  }
+
+  document.getElementById("refresh").onclick = load;
+  load();
+</script>
+</body>
+</html>
