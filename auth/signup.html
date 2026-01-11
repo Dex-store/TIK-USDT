@@ -7,7 +7,7 @@
   <style>
     body{margin:0;font-family:system-ui;background:radial-gradient(1200px 600px at 50% -10%, #1b255a, #060913);color:#eaf0ff}
     .wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
-    .card{width:100%;max-width:520px;background:rgba(12,18,45,.75);border:1px solid rgba(255,255,255,.08);
+    .card{width:100%;max-width:560px;background:rgba(12,18,45,.75);border:1px solid rgba(255,255,255,.08);
       border-radius:28px;padding:22px;box-shadow:0 20px 60px rgba(0,0,0,.4);backdrop-filter:blur(10px)}
     .top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
     .logo{width:46px;height:46px;border-radius:16px;background:linear-gradient(135deg,#5b8cff,#7c5cff);
@@ -20,10 +20,11 @@
     .btn{padding:13px 16px;border-radius:16px;border:1px solid rgba(255,255,255,.12);
       background:rgba(255,255,255,.04);color:#eaf0ff;font-weight:800;cursor:pointer;text-decoration:none;display:inline-block}
     .btn.primary{background:linear-gradient(135deg,#5b8cff,#7c5cff);border-color:transparent}
-    .pill{display:inline-block;padding:6px 10px;border-radius:999px;border:1px dashed rgba(255,255,255,.16);color:#cfe0ff;font-size:12px;margin-top:10px}
+    .links{margin-top:14px;display:flex;gap:12px;flex-wrap:wrap}
     a{color:#9fb0ff;text-decoration:none}
     .ok{color:#7CFFB2}
     .err{color:#FF8FA3}
+    .pill{display:inline-block;padding:6px 10px;border-radius:999px;border:1px dashed rgba(255,255,255,.16);color:#cfe0ff;font-size:12px;margin-top:10px}
   </style>
 </head>
 <body>
@@ -34,112 +35,111 @@
           <div class="logo">T</div>
           <div>
             <div style="font-weight:900">TIK-USDT</div>
-            <div class="note">إنشاء حساب</div>
+            <div class="note">إنشاء حساب جديد</div>
           </div>
         </div>
-        <a class="btn" href="login.html">تسجيل الدخول</a>
+        <a class="btn" href="../index.html">الرئيسية</a>
       </div>
 
       <h2>إنشاء حساب</h2>
-      <div class="note">أدخل بريدك وكلمة المرور. يمكنك إضافة كود الدعوة يدويًا أو سيتم تعبئته تلقائيًا إذا دخلت من رابط إحالة.</div>
-
-      <div class="pill" id="refPill" style="display:none"></div>
+      <div class="note">املأ البيانات ثم أنشئ الحساب.</div>
 
       <input id="email" type="email" placeholder="البريد الإلكتروني">
       <input id="password" type="password" placeholder="كلمة المرور">
 
-      <input id="refCode" type="text" placeholder="كود الدعوة (اختياري)">
-      <div class="note" id="refHint" style="margin-top:8px"></div>
+      <div class="pill">كود الدعوة (اختياري)</div>
+      <input id="ref" type="text" placeholder="مثال: ABC123 (اختياري)">
 
       <div class="row">
-        <button class="btn primary" id="signupBtn">إنشاء حساب</button>
-        <a class="btn" href="../index.html">الرئيسية</a>
+        <button class="btn primary" id="signupBtn" type="button">إنشاء حساب</button>
+        <a class="btn" href="login.html">تسجيل دخول</a>
+      </div>
+
+      <div class="links">
+        <a href="https://t.me/TIK_USDT" target="_blank">الدعم على تلجرام</a>
+        <a href="https://t.me/+P2nKCspWsyNmYmFk" target="_blank">قناة تلجرام</a>
       </div>
 
       <div class="note" id="msg" style="margin-top:10px"></div>
     </div>
   </div>
 
-  <!-- Parse SDK + config -->
   <script src="https://unpkg.com/parse/dist/parse.min.js"></script>
   <script src="../app/config.js"></script>
 
-<script>
-  Parse.initialize(window.TIK.PARSE_APP_ID, window.TIK.PARSE_JS_KEY);
-  Parse.serverURL = window.TIK.PARSE_SERVER_URL;
+  <script>
+    Parse.initialize(window.TIK.PARSE_APP_ID, window.TIK.PARSE_JS_KEY);
+    Parse.serverURL = window.TIK.PARSE_SERVER_URL;
 
-  // تعبئة ref من الرابط
-  const ref = new URLSearchParams(window.location.search).get("ref");
-  const refInput = document.getElementById("refCode");
-  const refHint  = document.getElementById("refHint");
-  const refPill  = document.getElementById("refPill");
-
-  if (ref) {
-    refInput.value = ref;
-    refHint.textContent = "تم تعبئة كود الدعوة تلقائيًا من رابط الإحالة.";
-    refPill.style.display = "inline-block";
-    refPill.textContent = "كود الإحالة المكتشف: " + ref;
-  } else {
-    refHint.textContent = "إذا كان لديك كود دعوة اكتبه هنا (اختياري).";
-  }
-
-  // توليد refCode خاص بالمستخدم (مبدئيًا)
-  async function generateRefCode() {
-    const chars = "ABCDEFGHJKMNPQRSTUVWXYZ23456789";
-    for (let attempt = 0; attempt < 10; attempt++) {
-      let code = "TIK-";
-      for (let i=0;i<6;i++) code += chars[Math.floor(Math.random()*chars.length)];
-
-      // تحقق بسيط من عدم التكرار
-      const q = new Parse.Query(Parse.User);
-      q.equalTo("refCode", code);
-      const exists = await q.first({ useMasterKey: false }).catch(()=>null);
-      if (!exists) return code;
-    }
-    // fallback
-    return "TIK-" + Date.now().toString(36).toUpperCase();
-  }
-
-  signupBtn.onclick = async () => {
-    msg.className = "note";
-    msg.textContent = "جاري إنشاء الحساب...";
-
-    const email = document.getElementById("email").value.trim();
-    const pass  = document.getElementById("password").value.trim();
-    const refCode = document.getElementById("refCode").value.trim();
-
-    if(!email || !pass){
-      msg.className = "note err";
-      msg.textContent = "اكتب البريد وكلمة المرور أولاً.";
-      return;
+    // لو مسجل دخول بالفعل → داشبورد
+    if (Parse.User.current()) {
+      location.href = "../app/dashboard.html";
     }
 
-    try{
-      const myRef = await generateRefCode();
+    const emailEl = document.getElementById("email");
+    const passEl  = document.getElementById("password");
+    const refEl   = document.getElementById("ref");
+    const msgEl   = document.getElementById("msg");
+    const btnEl   = document.getElementById("signupBtn");
 
-      const user = new Parse.User();
-      user.set("username", email); // مهم: نستخدم البريد كـ username
-      user.set("email", email);
-      user.set("password", pass);
+    // تعبئة تلقائية من ?ref=
+    const params = new URLSearchParams(location.search);
+    const refFromLink = (params.get("ref") || "").trim();
+    if (refFromLink) refEl.value = refFromLink;
 
-      // كود المستخدم الخاص
-      user.set("refCode", myRef);
-
-      // كود الدعوة الذي أدخله (مؤقتًا)
-      // (لاحقًا سنحوّله إلى علاقة referrer + حساب عمولات)
-      if (refCode) user.set("pendingRefCode", refCode);
-
-      await user.signUp();
-
-      msg.className = "note ok";
-      msg.textContent = "تم إنشاء الحساب ✅";
-      setTimeout(()=> location.href = "../app/dashboard.html", 800);
-
-    }catch(e){
-      msg.className = "note err";
-      msg.textContent = (e && e.message) ? e.message : "فشل إنشاء الحساب.";
+    // إنشاء refCode خاص بالمستخدم
+    function genRefCode(){
+      const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"; // بدون I O 0 1
+      let s = "";
+      for(let i=0;i<6;i++) s += chars[Math.floor(Math.random()*chars.length)];
+      return s;
     }
-  };
-</script>
+
+    async function doSignup(){
+      msgEl.className="note";
+      msgEl.textContent="جاري إنشاء الحساب...";
+
+      const email = (emailEl.value||"").trim().toLowerCase();
+      const pass  = (passEl.value||"").trim();
+      const ref   = (refEl.value||"").trim().toUpperCase();
+
+      if(!email || !pass){
+        msgEl.className="note err";
+        msgEl.textContent="اكتب البريد وكلمة المرور أولاً.";
+        return;
+      }
+      if(pass.length < 6){
+        msgEl.className="note err";
+        msgEl.textContent="كلمة المرور يجب أن تكون 6 أحرف على الأقل.";
+        return;
+      }
+
+      try{
+        const u = new Parse.User();
+        u.set("username", email);
+        u.set("email", email);
+        u.set("password", pass);
+
+        // كود المستخدم الخاص (refCode)
+        u.set("refCode", genRefCode());
+
+        // كود دعوة المستخدم (pendingRefCode) لو موجود
+        if(ref) u.set("pendingRefCode", ref);
+
+        await u.signUp();
+
+        msgEl.className="note ok";
+        msgEl.textContent="تم إنشاء الحساب ✅";
+        setTimeout(()=> location.href="../app/dashboard.html", 400);
+
+      }catch(e){
+        msgEl.className="note err";
+        msgEl.textContent = (e && e.message) ? e.message : "تعذر إنشاء الحساب.";
+      }
+    }
+
+    btnEl.addEventListener("click", doSignup);
+    passEl.addEventListener("keydown", (ev)=>{ if(ev.key==="Enter") doSignup(); });
+  </script>
 </body>
 </html>
