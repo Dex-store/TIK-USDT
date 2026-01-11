@@ -27,6 +27,7 @@
       background:rgba(255,255,255,.04);color:#eaf0ff;margin-top:10px;outline:none}
     .ok{color:#7CFFB2}
     .err{color:#FF8FA3}
+    .mono{font-family:ui-monospace,Menlo,Consolas,monospace;word-break:break-all}
   </style>
 </head>
 <body>
@@ -36,7 +37,7 @@
         <div class="logo">T</div>
         <div>
           <div style="font-weight:900">TIK-USDT</div>
-          <div class="muted">الاشتراكات</div>
+          <div class="muted">الاشتراكات الشهرية</div>
         </div>
       </div>
 
@@ -50,20 +51,24 @@
     <div class="card" style="margin-top:14px">
       <div style="font-weight:900;font-size:16px">طريقة الدفع</div>
       <div class="muted">
-        الدفع يكون USDT على شبكة Ethereum (ERC-20). بعد الدفع ضع TX Hash هنا لتسجيل الطلب.
+        ادفع USDT على شبكة Ethereum (ERC-20) إلى العنوان التالي ثم ضع TX Hash لتسجيل الطلب.
       </div>
-      <div class="pill">عنوان الاستقبال: <span id="walletTxt"></span></div>
+      <div class="pill mono" id="walletTxt"></div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px">
+        <button class="btn" id="copyWalletBtn">نسخ العنوان</button>
+        <a class="btn" href="https://etherscan.io/" target="_blank">فتح Etherscan</a>
+      </div>
     </div>
 
     <div class="grid" id="plans"></div>
 
     <div class="card" style="margin-top:14px">
-      <div style="font-weight:900">إرسال TX Hash (بعد الدفع)</div>
-      <div class="muted">الصق TX Hash ثم اضغط “تسجيل الطلب”.</div>
-      <input id="txHash" placeholder="TX Hash مثل: 0x....">
+      <div style="font-weight:900">تسجيل TX Hash (بعد الدفع)</div>
+      <div class="muted">اختر الخطة أولًا ثم ضع TX Hash.</div>
+      <input id="txHash" class="mono" placeholder="TX Hash مثل: 0x....">
       <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px">
         <button class="btn primary" id="submitTxBtn">تسجيل الطلب</button>
-        <a class="btn" href="https://t.me/TIK_USDT" target="_blank">تواصل مع الدعم</a>
+        <a class="btn" href="https://t.me/TIK_USDT" target="_blank">الدعم</a>
       </div>
       <div class="muted" id="msg" style="margin-top:10px"></div>
     </div>
@@ -73,8 +78,8 @@
   <script src="./config.js"></script>
 
 <script>
-  // ==== إعدادات ثابتة عندك ====
-  const RECEIVER_WALLET = "0xb56a89f790060cbb0f08d02234921e5fefff11a6"; // عدلك إن أردت
+  // ===== عنوان استلام الدفع =====
+  const RECEIVER_WALLET = "0xb56a89f790060cbb0f08d02234921e5fefff11a6";
   const PLAN_OPTIONS = [10,20,50,100,200];
 
   Parse.initialize(window.TIK.PARSE_APP_ID, window.TIK.PARSE_JS_KEY);
@@ -85,49 +90,50 @@
 
   walletTxt.textContent = RECEIVER_WALLET;
 
+  copyWalletBtn.onclick = async ()=>{
+    try{ await navigator.clipboard.writeText(RECEIVER_WALLET); msg.textContent="تم نسخ العنوان ✅"; }
+    catch{ msg.textContent="انسخ العنوان يدويًا."; }
+  };
+
   let selectedPlan = null;
 
-  function card(plan){
-    return `
+  function render(){
+    plans.innerHTML = PLAN_OPTIONS.map(p=>`
       <div class="card">
         <div class="pill">اشتراك شهري</div>
         <div style="font-weight:900;margin-top:8px">الخطة</div>
-        <div class="price">${plan} USDT</div>
-        <div class="muted">بعد الدفع على العنوان أعلاه، ضع TX Hash وسجّل الطلب.</div>
+        <div class="price">${p} USDT</div>
+        <div class="muted">ادفع إلى العنوان أعلاه ثم سجّل TX Hash.</div>
         <div style="margin-top:10px">
-          <button class="btn ${selectedPlan===plan?'primary':''}" onclick="selectPlan(${plan})">
-            ${selectedPlan===plan?'مختارة ✅':'اختيار الخطة'}
+          <button class="btn ${selectedPlan===p?'primary':''}" onclick="selectPlan(${p})">
+            ${selectedPlan===p?'مختارة ✅':'اختيار الخطة'}
           </button>
         </div>
       </div>
-    `;
+    `).join("");
   }
 
   window.selectPlan = (p)=>{
     selectedPlan = p;
     render();
-    msg.className = "muted";
+    msg.className="muted";
     msg.textContent = "تم اختيار خطة: " + p + " USDT";
   };
 
-  function render(){
-    plans.innerHTML = PLAN_OPTIONS.map(p=>card(p)).join("");
-  }
   render();
 
   logoutBtn.onclick = async ()=>{ await Parse.User.logOut(); location.href="../auth/login.html"; };
 
-  // حفظ طلب الدفع في Back4App داخل Class: Payments
   submitTxBtn.onclick = async ()=>{
     msg.className="muted";
-    const hash = txHash.value.trim();
+    const hash = (txHash.value||"").trim();
 
     if(!selectedPlan){
       msg.className="muted err";
-      msg.textContent="اختر الخطة أولاً.";
+      msg.textContent="اختر الخطة أولًا.";
       return;
     }
-    if(!hash || !hash.startsWith("0x") || hash.length < 20){
+    if(!hash || !hash.startsWith("0x") || hash.length < 30){
       msg.className="muted err";
       msg.textContent="TX Hash غير صحيح.";
       return;
@@ -140,7 +146,7 @@
       pay.set("planAmount", selectedPlan);
       pay.set("txHash", hash);
       pay.set("receiverWallet", RECEIVER_WALLET);
-      pay.set("status", "pending"); // pending → verified لاحقًا
+      pay.set("status", "pending");
       await pay.save();
 
       msg.className="muted ok";
