@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Dashboard • TIK-USDT</title>
+  <script src="https://unpkg.com/parse/dist/parse.min.js"></script>
+  <script src="../assets/config.js"></script>
+  <script src="../assets/app.js"></script>
+  <style>
+    body{margin:0;font-family:system-ui;background:#070A12;color:#EAF0FF}
+    .wrap{max-width:980px;margin:0 auto;padding:18px}
+    .nav{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between}
+    .card{margin-top:14px;background:#0E1426;border:1px solid rgba(255,255,255,.1);border-radius:18px;padding:16px}
+    .btn{padding:10px 12px;border-radius:14px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);color:#EAF0FF;font-weight:800;cursor:pointer;text-decoration:none;display:inline-block}
+    .btn.primary{background:linear-gradient(135deg,#5B8CFF,#7C5CFF);border-color:transparent}
+    .note{color:#A8B3CF;font-size:12px;line-height:1.7}
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <div class="nav">
+    <div>
+      <h2 style="margin:0">لوحة التحكم</h2>
+      <div class="note">TIK-USDT</div>
+    </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <a class="btn" href="subscriptions.html">الاشتراك</a>
+      <a class="btn" href="referrals.html">الإحالات</a>
+      <a class="btn" href="withdraw-request.html">طلب صرف</a>
+      <button class="btn" id="logoutBtn">خروج</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="note" id="msg">جار التحميل...</div>
+    <div class="note" id="data" style="margin-top:8px">—</div>
+  </div>
+
+  <div class="card">
+    <div class="note">روابط تلغرام</div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px">
+      <a class="btn primary" target="_blank" rel="noopener" id="support">الدعم</a>
+      <a class="btn" target="_blank" rel="noopener" id="channel">القناة</a>
+    </div>
+  </div>
+</div>
+
+<script>
+  initParse();
+  if (!requireAuth()) { /* redirected */ }
+
+  support.href = APP_CONFIG.TELEGRAM_SUPPORT;
+  channel.href = APP_CONFIG.TELEGRAM_CHANNEL;
+
+  logoutBtn.onclick = logout;
+
+  (async ()=>{
+    try{
+      const p = await Parse.Cloud.run("getMyProfile");
+      toast(msg, "تم ✅");
+      data.innerHTML = `
+        RefCode: <b>${p.refCode || "—"}</b><br>
+        Plan: <b>${p.planAmount || 0}</b> USDT<br>
+        Available: <b>${p.availableBalance || 0}</b> USDT<br>
+        Pending: <b>${p.lockedBalance || 0}</b> USDT
+      `;
+    }catch(e){
+      toast(msg, e.message || String(e));
+    }
+  })();
+</script>
+</body>
+</html>
