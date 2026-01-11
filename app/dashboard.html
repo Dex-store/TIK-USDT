@@ -31,9 +31,13 @@
     @media(max-width:650px){.kpis{grid-template-columns:1fr}}
     .kpi{border:1px solid rgba(255,255,255,.10);border-radius:18px;padding:12px;background:rgba(255,255,255,.03)}
     .kpi .t{color:#a8b3cf;font-size:12px}
-    .kpi .v{font-size:18px;font-weight:900;margin-top:6px}
+    .kpi .v{font-size:16px;font-weight:900;margin-top:6px;word-break:break-word}
     .links{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
     a{color:#9fb0ff;text-decoration:none}
+    .ok{color:#7CFFB2}
+    .err{color:#FF8FA3}
+    input{width:100%;padding:12px;border-radius:16px;border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.04);color:#eaf0ff;margin-top:10px;outline:none}
   </style>
 </head>
 <body>
@@ -43,54 +47,102 @@
         <div class="logo">T</div>
         <div>
           <div style="font-weight:900">TIK-USDT</div>
-          <div class="muted">لوحة التحكم (واجهة فقط الآن)</div>
+          <div class="muted" id="hello">جاري التحميل...</div>
         </div>
       </div>
 
       <div style="display:flex;gap:10px;flex-wrap:wrap">
         <a class="btn" href="../index.html">الرئيسية</a>
-        <a class="btn" href="../auth/login.html">تسجيل الدخول</a>
-        <a class="btn primary" href="../auth/signup.html">إنشاء حساب</a>
+        <button class="btn primary" id="logoutBtn">تسجيل خروج</button>
       </div>
     </div>
 
     <div class="grid">
       <div class="card">
         <h3 style="margin:0 0 6px">ملخص الحساب</h3>
-        <div class="muted">
-          في الخطوة القادمة سنجعل هذه الصفحة تقرأ بياناتك الحقيقية من Back4App
-          (الرصيد، حالة الاشتراك، كود الإحالة…).
-        </div>
+        <div class="muted">هذه بياناتك من Back4App.</div>
 
         <div class="kpis">
           <div class="kpi">
-            <div class="t">حالة الاشتراك</div>
-            <div class="v">—</div>
+            <div class="t">البريد</div>
+            <div class="v" id="kEmail">—</div>
           </div>
           <div class="kpi">
-            <div class="t">الرصيد المتاح</div>
-            <div class="v">0 USDT</div>
+            <div class="t">كود الإحالة الخاص بك</div>
+            <div class="v" id="kRef">—</div>
           </div>
           <div class="kpi">
-            <div class="t">كود الإحالة</div>
-            <div class="v">—</div>
+            <div class="t">كود الدعوة الذي استخدمته</div>
+            <div class="v" id="kPending">—</div>
           </div>
         </div>
+
+        <div style="margin-top:12px" class="muted">رابط الإحالة (انسخه وارسله لغيرك):</div>
+        <input id="refLink" readonly>
+        <div class="links">
+          <button class="btn" id="copyBtn">نسخ الرابط</button>
+        </div>
+
+        <div class="muted" id="msg" style="margin-top:10px"></div>
       </div>
 
       <div class="card">
         <h3 style="margin:0 0 6px">روابط سريعة</h3>
-        <div class="muted">هذه الروابط ستبقى ثابتة داخل المنصّة.</div>
+        <div class="muted">الدعم والقناة:</div>
         <div class="links">
           <a class="btn" href="https://t.me/TIK_USDT" target="_blank">الدعم على تلجرام</a>
           <a class="btn" href="https://t.me/+P2nKCspWsyNmYmFk" target="_blank">قناة تلجرام</a>
         </div>
 
         <div style="margin-top:14px" class="muted">
-          الصفحات القادمة (سنضيفها بعد الربط): الاشتراكات، الإحالات، الرصيد، طلب الصرف، سجل الطلبات…
+          لاحقًا سنضيف صفحات كاملة: الاشتراكات، الإيداع (TX Hash)، سجل العمولات، طلب السحب، سجل السحب...
         </div>
       </div>
     </div>
   </div>
+
+  <script src="https://unpkg.com/parse/dist/parse.min.js"></script>
+  <script src="./config.js"></script>
+
+<script>
+  Parse.initialize(window.TIK.PARSE_APP_ID, window.TIK.PARSE_JS_KEY);
+  Parse.serverURL = window.TIK.PARSE_SERVER_URL;
+
+  const user = Parse.User.current();
+  if (!user) {
+    location.href = "../auth/login.html";
+  }
+
+  // عرض بيانات المستخدم
+  const email = user.get("email") || user.get("username") || "—";
+  const myRef = user.get("refCode") || "—";
+  const pending = user.get("pendingRefCode") || "—";
+
+  document.getElementById("hello").textContent = "مرحبًا 👋";
+  document.getElementById("kEmail").textContent = email;
+  document.getElementById("kRef").textContent = myRef;
+  document.getElementById("kPending").textContent = pending;
+
+  // رابط إحالة
+  const base = window.location.origin + "/TIK-USDT";
+  const link = base + "/auth/signup.html?ref=" + encodeURIComponent(myRef);
+  document.getElementById("refLink").value = link;
+
+  copyBtn.onclick = async () => {
+    try{
+      await navigator.clipboard.writeText(link);
+      msg.className = "muted ok";
+      msg.textContent = "تم نسخ الرابط ✅";
+    }catch(e){
+      msg.className = "muted err";
+      msg.textContent = "لم أستطع النسخ تلقائيًا — انسخه يدويًا.";
+    }
+  };
+
+  logoutBtn.onclick = async () => {
+    await Parse.User.logOut();
+    location.href = "../auth/login.html";
+  };
+</script>
 </body>
-  </html>
+          </html>
