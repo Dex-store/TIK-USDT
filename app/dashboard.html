@@ -7,37 +7,30 @@
   <style>
     body{margin:0;font-family:system-ui;background:radial-gradient(1200px 600px at 50% -10%, #1b255a, #060913);color:#eaf0ff}
     .wrap{max-width:1100px;margin:0 auto;padding:18px}
-    .topbar{
-      display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;
-      background:rgba(12,18,45,.75);border:1px solid rgba(255,255,255,.08);border-radius:22px;
-      padding:14px 16px;box-shadow:0 20px 60px rgba(0,0,0,.35);backdrop-filter:blur(10px)
-    }
+    .topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;
+      background:rgba(12,18,45,.75);border:1px solid rgba(255,255,255,.08);border-radius:22px;padding:14px 16px;
+      box-shadow:0 20px 60px rgba(0,0,0,.35);backdrop-filter:blur(10px)}
     .brand{display:flex;align-items:center;gap:10px}
     .logo{width:44px;height:44px;border-radius:16px;background:linear-gradient(135deg,#5b8cff,#7c5cff);
       display:flex;align-items:center;justify-content:center;font-weight:900}
     .muted{color:#a8b3cf;font-size:13px;line-height:1.7}
-    .btn{
-      padding:11px 14px;border-radius:16px;border:1px solid rgba(255,255,255,.12);
-      background:rgba(255,255,255,.04);color:#eaf0ff;font-weight:800;cursor:pointer;text-decoration:none;display:inline-block
-    }
+    .btn{padding:11px 14px;border-radius:16px;border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.04);color:#eaf0ff;font-weight:800;cursor:pointer;text-decoration:none;display:inline-block}
     .btn.primary{background:linear-gradient(135deg,#5b8cff,#7c5cff);border-color:transparent}
-    .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
+    .btn.danger{background:rgba(255,90,120,.14);border-color:rgba(255,90,120,.35)}
+    .btn[disabled]{opacity:.45;cursor:not-allowed}
+    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:14px}
     @media(max-width:900px){.grid{grid-template-columns:1fr}}
-    .card{
-      background:rgba(12,18,45,.75);border:1px solid rgba(255,255,255,.08);border-radius:22px;
-      padding:16px;box-shadow:0 20px 60px rgba(0,0,0,.25);backdrop-filter:blur(10px)
-    }
-    .kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:10px}
-    @media(max-width:650px){.kpis{grid-template-columns:1fr}}
-    .kpi{border:1px solid rgba(255,255,255,.10);border-radius:18px;padding:12px;background:rgba(255,255,255,.03)}
-    .kpi .t{color:#a8b3cf;font-size:12px}
-    .kpi .v{font-size:16px;font-weight:900;margin-top:6px;word-break:break-word}
-    .links{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
-    a{color:#9fb0ff;text-decoration:none}
-    .ok{color:#7CFFB2}
-    .err{color:#FF8FA3}
-    input{width:100%;padding:12px;border-radius:16px;border:1px solid rgba(255,255,255,.12);
-      background:rgba(255,255,255,.04);color:#eaf0ff;margin-top:10px;outline:none}
+    .card{background:rgba(12,18,45,.75);border:1px solid rgba(255,255,255,.08);border-radius:22px;
+      padding:16px;box-shadow:0 20px 60px rgba(0,0,0,.25);backdrop-filter:blur(10px)}
+    .h{font-weight:900;font-size:16px}
+    .v{font-weight:900;font-size:22px;margin-top:6px}
+    .pill{display:inline-flex;align-items:center;gap:8px;padding:7px 10px;border-radius:999px;border:1px dashed rgba(255,255,255,.16);color:#cfe0ff;font-size:12px;margin-top:10px}
+    .dot{width:10px;height:10px;border-radius:99px;background:#999}
+    .ok{background:#2cff8f}
+    .warn{background:#ffcc66}
+    .bad{background:#ff5a78}
+    .mono{font-family:ui-monospace,Menlo,Consolas,monospace;word-break:break-all}
   </style>
 </head>
 <body>
@@ -47,60 +40,54 @@
         <div class="logo">T</div>
         <div>
           <div style="font-weight:900">TIK-USDT</div>
-          <div class="muted" id="hello">جاري التحميل...</div>
+          <div class="muted">لوحة التحكم</div>
         </div>
       </div>
 
       <div style="display:flex;gap:10px;flex-wrap:wrap">
-        <a class="btn" href="../index.html">الرئيسية</a>
         <a class="btn" href="./plans.html">الاشتراكات</a>
-        <button class="btn primary" id="logoutBtn">تسجيل خروج</button>
+        <a class="btn" href="https://t.me/TIK_USDT" target="_blank">الدعم</a>
+        <a class="btn" href="https://t.me/+P2nKCspWsyNmYmFk" target="_blank">قناة التلجرام</a>
+        <button class="btn danger" id="logoutBtn">تسجيل خروج</button>
       </div>
     </div>
 
     <div class="grid">
       <div class="card">
-        <h3 style="margin:0 0 6px">ملخص الحساب</h3>
-        <div class="muted">هذه بياناتك من Back4App.</div>
-
-        <div class="kpis">
-          <div class="kpi">
-            <div class="t">البريد</div>
-            <div class="v" id="kEmail">—</div>
-          </div>
-          <div class="kpi">
-            <div class="t">كود الإحالة الخاص بك</div>
-            <div class="v" id="kRef">—</div>
-          </div>
-          <div class="kpi">
-            <div class="t">كود الدعوة الذي استخدمته</div>
-            <div class="v" id="kPending">—</div>
-          </div>
+        <div class="h">حالة الاشتراك</div>
+        <div class="pill" id="subPill">
+          <span class="dot warn" id="subDot"></span>
+          <span id="subTxt">جارٍ التحميل...</span>
         </div>
-
-        <div style="margin-top:12px" class="muted">رابط الإحالة (انسخه وارسله لغيرك):</div>
-        <input id="refLink" readonly>
-        <div class="links">
-          <button class="btn" id="copyBtn">نسخ الرابط</button>
-          <a class="btn" href="./plans.html">اشترك الآن</a>
-        </div>
-
-        <div class="muted" id="msg" style="margin-top:10px"></div>
+        <div class="muted" style="margin-top:10px" id="subInfo"></div>
       </div>
 
       <div class="card">
-        <h3 style="margin:0 0 6px">روابط سريعة</h3>
-        <div class="muted">الدعم والقناة + الاشتراكات:</div>
-        <div class="links">
-          <a class="btn" href="./plans.html">صفحة الاشتراكات</a>
-          <a class="btn" href="https://t.me/TIK_USDT" target="_blank">الدعم على تلجرام</a>
-          <a class="btn" href="https://t.me/+P2nKCspWsyNmYmFk" target="_blank">قناة تلجرام</a>
-        </div>
-
-        <div style="margin-top:14px" class="muted">
-          لاحقًا سنضيف صفحات كاملة: الإيداع (TX Hash)، سجل العمولات، طلب السحب، سجل السحب...
-        </div>
+        <div class="h">الخطة الحالية</div>
+        <div class="v" id="planTxt">—</div>
+        <div class="muted" id="planInfo">—</div>
       </div>
+
+      <div class="card">
+        <div class="h">رصيدك الافتراضي</div>
+        <div class="v" id="balTxt">0</div>
+        <div class="muted">هذا رصيد افتراضي داخل المنصة. السحب يتم يدويًا خلال 3–24 ساعة.</div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:14px">
+      <div class="h">السحب</div>
+      <div class="muted" id="wdHint" style="margin-top:8px">جارٍ التحميل...</div>
+
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px">
+        <a class="btn primary" id="withdrawBtn" href="./withdraw-request.html">طلب سحب</a>
+        <a class="btn" href="./plans.html">تجديد / اشتراك</a>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:14px">
+      <div class="h">آخر طلب دفع</div>
+      <div class="muted" id="lastPay">جارٍ التحميل...</div>
     </div>
   </div>
 
@@ -112,37 +99,104 @@
   Parse.serverURL = window.TIK.PARSE_SERVER_URL;
 
   const user = Parse.User.current();
-  if (!user) {
-    location.href = "../auth/login.html";
+  if(!user) location.href = "../auth/login.html";
+
+  function setSub(state, text, info){
+    subTxt.textContent = text;
+    subInfo.textContent = info || "";
+    subDot.className = "dot " + (state==="ok" ? "ok" : state==="bad" ? "bad" : "warn");
   }
 
-  // عرض بيانات المستخدم
-  const email = user.get("email") || user.get("username") || "—";
-  const myRef = user.get("refCode") || "—";
-  const pending = user.get("pendingRefCode") || "—";
+  async function getProfile(){
+    const Profile = Parse.Object.extend("Profile");
+    const q = new Parse.Query(Profile);
+    q.equalTo("user", user);
+    q.limit(1);
+    return await q.first({ useMasterKey: false });
+  }
 
-  document.getElementById("hello").textContent = "مرحبًا 👋";
-  document.getElementById("kEmail").textContent = email;
-  document.getElementById("kRef").textContent = myRef;
-  document.getElementById("kPending").textContent = pending;
+  async function getLastPayment(){
+    const Payments = Parse.Object.extend("Payments");
+    const q = new Parse.Query(Payments);
+    q.equalTo("user", user);
+    q.descending("createdAt");
+    q.limit(1);
+    return await q.first({ useMasterKey: false });
+  }
 
-  // رابط إحالة
-  const base = window.location.origin + "/TIK-USDT";
-  const link = base + "/auth/signup.html?ref=" + encodeURIComponent(myRef);
-  document.getElementById("refLink").value = link;
+  async function getLastWithdraw(){
+    const WithdrawRequests = Parse.Object.extend("WithdrawRequests");
+    const q = new Parse.Query(WithdrawRequests);
+    q.equalTo("user", user);
+    q.descending("createdAt");
+    q.limit(1);
+    return await q.first({ useMasterKey: false });
+  }
 
-  copyBtn.onclick = async () => {
+  function fmtDate(d){
+    if(!d) return "—";
     try{
-      await navigator.clipboard.writeText(link);
-      msg.className = "muted ok";
-      msg.textContent = "تم نسخ الرابط ✅";
-    }catch(e){
-      msg.className = "muted err";
-      msg.textContent = "لم أستطع النسخ تلقائيًا — انسخه يدويًا.";
-    }
-  };
+      return new Date(d).toLocaleString("ar", {year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit"});
+    }catch{ return "—"; }
+  }
 
-  logoutBtn.onclick = async () => {
+  function safeNum(n){ return (typeof n === "number" && isFinite(n)) ? n : 0; }
+
+  (async ()=>{
+    // Profile
+    const profile = await getProfile();
+    const isActive = !!(profile && profile.get("isActive"));
+    const planAmount = profile ? profile.get("planAmount") : null;
+    const activatedAt = profile ? profile.get("activatedAt") : null;
+
+    // balance field names (لو عندك اسم مختلف لاحقًا سنعدله)
+    const balance = profile ? safeNum(profile.get("virtualBalance")) || safeNum(profile.get("balance")) || 0 : 0;
+
+    balTxt.textContent = balance.toFixed(2);
+
+    if(isActive){
+      setSub("ok","نشط","تم تفعيل اشتراكك. يمكنك طلب السحب مرة واحدة أسبوعيًا.");
+      withdrawBtn.removeAttribute("disabled");
+      withdrawBtn.style.pointerEvents = "auto";
+      wdHint.textContent = "✅ يمكنك طلب سحب الآن.";
+    }else{
+      setSub("warn","غير نشط / بانتظار التفعيل","قم بالدفع ثم سجّل TX Hash من صفحة الاشتراكات، وسيتم التفعيل بعد المراجعة.");
+      withdrawBtn.setAttribute("disabled","disabled");
+      withdrawBtn.style.pointerEvents = "none";
+      wdHint.textContent = "⛔ لا يمكنك السحب قبل تفعيل الاشتراك. يمكنك الدفع أو الاشتراك من العمولات لاحقًا.";
+    }
+
+    planTxt.textContent = planAmount ? (planAmount + " USDT") : "—";
+    planInfo.textContent = activatedAt ? ("آخر تفعيل: " + fmtDate(activatedAt)) : "—";
+
+    // last payment
+    const lastPayObj = await getLastPayment();
+    if(!lastPayObj){
+      lastPay.textContent = "لا يوجد طلبات دفع بعد. اذهب إلى صفحة الاشتراكات وسجّل TX Hash.";
+    }else{
+      const st = lastPayObj.get("status") || "pending";
+      const pa = lastPayObj.get("planAmount") || "—";
+      const hx = lastPayObj.get("txHash") || "";
+      lastPay.innerHTML = `
+        الحالة: <b>${st}</b><br/>
+        الخطة: <b>${pa} USDT</b><br/>
+        الوقت: <b>${fmtDate(lastPayObj.createdAt)}</b><br/>
+        txHash: <span class="mono">${hx}</span>
+      `;
+    }
+
+    // last withdraw (للتنبيه فقط)
+    const lastW = await getLastWithdraw();
+    if(lastW){
+      const dt = lastW.createdAt;
+      wdHint.textContent += " | آخر طلب سحب: " + fmtDate(dt) + " (الحالة: " + (lastW.get("status")||"pending") + ")";
+    }
+  })().catch(e=>{
+    subTxt.textContent = "خطأ";
+    subInfo.textContent = (e && e.message) ? e.message : "حدث خطأ غير معروف";
+  });
+
+  logoutBtn.onclick = async ()=>{
     await Parse.User.logOut();
     location.href = "../auth/login.html";
   };
