@@ -3,112 +3,694 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>TIK-USDT</title>
-  <link rel="stylesheet" href="./styles.css" />
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <title>TIK-USDT • Subscriptions</title>
+
+  <!-- Parse SDK -->
+  <script src="https://unpkg.com/parse/dist/parse.min.js"></script>
+
+  <style>
+    :root{
+      --bg:#070A12;
+      --card:#0E1426;
+      --muted:#A8B3CF;
+      --text:#EAF0FF;
+      --line:rgba(255,255,255,.09);
+      --brand:#5B8CFF;
+      --brand2:#7C5CFF;
+      --ok:#36D399;
+      --bad:#FF5C7A;
+      --warn:#FBBF24;
+      --shadow: 0 18px 60px rgba(0,0,0,.55);
+      --radius: 18px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      background: radial-gradient(900px 500px at 20% 0%, rgba(91,140,255,.25), transparent 55%),
+                  radial-gradient(900px 500px at 80% 20%, rgba(124,92,255,.18), transparent 55%),
+                  var(--bg);
+      color:var(--text);
+      min-height:100vh;
+    }
+    a{color:inherit}
+    .container{max-width:1100px;margin:0 auto;padding:22px}
+    .topbar{
+      display:flex;align-items:center;justify-content:space-between;gap:14px;
+      padding:14px 16px;border:1px solid var(--line);background:rgba(14,20,38,.75);
+      backdrop-filter: blur(14px);
+      border-radius: var(--radius); box-shadow: var(--shadow);
+      position:sticky; top:14px; z-index:10;
+    }
+    .brand{
+      display:flex;align-items:center;gap:12px; min-width: 220px;
+    }
+    .logo{
+      width:42px;height:42px;flex:0 0 auto;
+      filter: drop-shadow(0 10px 18px rgba(91,140,255,.25));
+    }
+    .brand h1{margin:0;font-size:16px;line-height:1.15}
+    .brand p{margin:2px 0 0;color:var(--muted);font-size:12px}
+    .actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
+    .btn{
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.04);
+      color:var(--text);
+      padding:10px 12px;border-radius:14px;
+      cursor:pointer; font-weight:600;
+      transition: .18s ease;
+      display:inline-flex;align-items:center;gap:8px;
+    }
+    .btn:hover{transform: translateY(-1px); border-color: rgba(255,255,255,.16)}
+    .btn.primary{
+      background: linear-gradient(135deg, var(--brand), var(--brand2));
+      border-color: transparent;
+    }
+    .btn.ghost{background:transparent}
+    .chip{
+      padding:8px 10px;border-radius:999px;border:1px solid var(--line);
+      color:var(--muted);font-size:12px;display:inline-flex;gap:8px;align-items:center;
+    }
+
+    .grid{
+      display:grid;grid-template-columns: 1.15fr .85fr; gap:16px; margin-top:16px;
+    }
+    @media (max-width: 960px){
+      .grid{grid-template-columns:1fr}
+      .brand{min-width:auto}
+    }
+    .card{
+      border:1px solid var(--line);
+      background: rgba(14,20,38,.7);
+      backdrop-filter: blur(14px);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding:16px;
+    }
+    .hero{
+      padding:18px 18px 12px;
+      background:
+        radial-gradient(650px 240px at 30% 0%, rgba(91,140,255,.22), transparent 70%),
+        radial-gradient(650px 240px at 80% 35%, rgba(124,92,255,.18), transparent 70%),
+        rgba(14,20,38,.65);
+      border:1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+    .hero h2{margin:0 0 6px;font-size:22px}
+    .hero p{margin:0;color:var(--muted);line-height:1.7}
+    .kpi{
+      display:grid; grid-template-columns: repeat(3, 1fr); gap:10px; margin-top:14px
+    }
+    @media(max-width:560px){.kpi{grid-template-columns:1fr}}
+    .kpi .box{
+      border:1px solid var(--line); border-radius:16px; padding:12px;
+      background: rgba(255,255,255,.03);
+    }
+    .kpi .box .t{color:var(--muted);font-size:12px}
+    .kpi .box .v{font-size:16px;font-weight:800;margin-top:4px}
+    .hr{height:1px;background:var(--line);margin:14px 0}
+    .row{display:flex;gap:10px;flex-wrap:wrap}
+    .field{display:flex;flex-direction:column;gap:7px;margin-top:10px}
+    .field label{font-size:12px;color:var(--muted)}
+    input, select{
+      width:100%; padding:12px 12px; border-radius:14px;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.04);
+      color: var(--text);
+      outline:none;
+    }
+    input::placeholder{color: rgba(234,240,255,.35)}
+    .two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    @media(max-width:560px){.two{grid-template-columns:1fr}}
+    .note{
+      border:1px dashed rgba(255,255,255,.18);
+      background: rgba(255,255,255,.03);
+      border-radius: 16px;
+      padding:12px;
+      color: var(--muted);
+      line-height:1.7;
+      font-size:12px;
+    }
+    .badge-ok{color:var(--ok);font-weight:800}
+    .badge-bad{color:var(--bad);font-weight:800}
+    .badge-warn{color:var(--warn);font-weight:800}
+    .toast{
+      position:fixed; left:50%; transform: translateX(-50%);
+      bottom:16px; z-index:99;
+      background: rgba(7,10,18,.7);
+      border: 1px solid var(--line);
+      backdrop-filter: blur(14px);
+      box-shadow: var(--shadow);
+      padding:12px 14px;border-radius:16px; min-width: min(620px, calc(100vw - 24px));
+      display:none; gap:10px; align-items:flex-start;
+    }
+    .toast.show{display:flex}
+    .toast .msg{color:var(--text);line-height:1.6;font-size:13px}
+    .toast .close{margin-inline-start:auto}
+    .plans{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:10px}
+    @media(max-width:560px){.plans{grid-template-columns:1fr}}
+    .plan{
+      border:1px solid var(--line); border-radius:16px; padding:12px;
+      background: rgba(255,255,255,.03);
+      display:flex;flex-direction:column;gap:10px;
+    }
+    .plan .head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+    .plan .price{font-size:18px;font-weight:900}
+    .plan .tag{font-size:12px;color:var(--muted)}
+    .plan .mini{font-size:12px;color:var(--muted);line-height:1.6}
+    footer{margin:18px 0 4px;color:var(--muted);font-size:12px;line-height:1.7}
+    .mono{font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace}
+  </style>
 </head>
+
 <body>
-  <div class="wrap">
-    <header class="top">
+  <div class="container">
+    <div class="topbar">
+      <div class="brand">
+        <!-- Custom Logo (SVG) -->
+        <svg class="logo" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+          <defs>
+            <linearGradient id="g" x1="10" y1="6" x2="56" y2="58" gradientUnits="userSpaceOnUse">
+              <stop stop-color="#5B8CFF"/>
+              <stop offset="1" stop-color="#7C5CFF"/>
+            </linearGradient>
+          </defs>
+          <path d="M32 4c10 7 20 6 26 10v18c0 15-10 24-26 28C16 56 6 47 6 32V14c6-4 16-3 26-10Z" fill="url(#g)" opacity="0.95"/>
+          <path d="M22 30h20" stroke="white" stroke-width="4" stroke-linecap="round" opacity=".85"/>
+          <path d="M26 22h12" stroke="white" stroke-width="4" stroke-linecap="round" opacity=".85"/>
+          <path d="M26 38h12" stroke="white" stroke-width="4" stroke-linecap="round" opacity=".85"/>
+        </svg>
+
+        <div>
+          <h1>TIK-USDT</h1>
+          <p id="subbrand">اشتراكات رقمية + قناة تلغرام</p>
+        </div>
+      </div>
+
+      <div class="actions">
+        <span class="chip" id="statusChip">—</span>
+        <button class="btn ghost" id="langBtn">EN</button>
+        <a class="btn" href="https://t.me/TIK_USDT" target="_blank" rel="noopener">Telegram Support</a>
+        <a class="btn" href="https://t.me/+P2nKCspWsyNmYmFk" target="_blank" rel="noopener">Telegram Channel</a>
+        <button class="btn primary" id="authBtn">تسجيل / دخول</button>
+        <button class="btn" id="logoutBtn" style="display:none">تسجيل خروج</button>
+      </div>
+    </div>
+
+    <div class="grid">
+      <!-- Left -->
       <div>
-        <h1>TIK-USDT</h1>
-        <p class="sub" id="subtitle">اشتراك شهري للوصول إلى الموقع + قناة تلجرام</p>
-      </div>
-      <div class="row">
-        <button class="btn" id="langBtn">English</button>
-        <a class="btn" id="supportBtn" target="_blank" rel="noopener">الدعم</a>
-        <a class="btn" id="channelBtn" target="_blank" rel="noopener">القناة</a>
-      </div>
-    </header>
+        <div class="hero">
+          <h2 id="heroTitle">منصّة اشتراك رقمية مع نظام إحالة</h2>
+          <p id="heroDesc">
+            اشترك في المنصّة لتحصل على وصول للمحتوى وزر مباشر لقناة تلغرام. يمكنك مشاركة رابط الإحالة لتحصل على <b>رصيد داخل المنصّة</b> يمكن استخدامه لتجديد الاشتراك.
+          </p>
 
-    <section class="card">
-      <h2 id="pricingTitle">الخطط الشهرية</h2>
-      <div class="row" id="plans"></div>
-      <p class="note" id="legalNote">
-        هذا اشتراك رقمي لخدمة/محتوى. لا توجد أرباح مضمونة. العمولات هي عمولات إحالة من المبيعات فقط.
-      </p>
-    </section>
+          <div class="kpi">
+            <div class="box">
+              <div class="t" id="k1t">حالة الحساب</div>
+              <div class="v" id="k1v">—</div>
+            </div>
+            <div class="box">
+              <div class="t" id="k2t">الرصيد المتاح</div>
+              <div class="v"><span id="k2v">0</span> <span class="tag">USDT</span></div>
+            </div>
+            <div class="box">
+              <div class="t" id="k3t">رصيد الإحالات (معلّق)</div>
+              <div class="v"><span id="k3v">0</span> <span class="tag">USDT</span></div>
+            </div>
+          </div>
 
-    <section class="card">
-      <h2 id="authTitle">تسجيل الدخول / إنشاء حساب</h2>
-      <div class="grid2">
-        <div>
-          <h3 id="signupTitle">إنشاء حساب</h3>
-          <input id="suEmail" type="email" placeholder="Email" />
-          <input id="suPass" type="password" placeholder="Password" />
-          <button class="btn dark" id="signupBtn">إنشاء + إرسال كود تأكيد</button>
-          <p class="small" id="refInfo"></p>
-        </div>
-        <div>
-          <h3 id="signinTitle">تسجيل الدخول</h3>
-          <input id="siEmail" type="email" placeholder="Email" />
-          <input id="siPass" type="password" placeholder="Password" />
-          <button class="btn dark" id="signinBtn">دخول</button>
-          <button class="btn" id="googleBtn">Google</button>
-          <button class="btn" id="signoutBtn" style="display:none;">خروج</button>
-        </div>
-      </div>
-      <p class="msg" id="authMsg"></p>
-    </section>
+          <div class="hr"></div>
 
-    <section class="card" id="dash" style="display:none;">
-      <h2 id="dashTitle">لوحة المستخدم</h2>
+          <div class="note" id="disclaimer">
+            <span class="badge-warn">ملاحظة:</span>
+            هذه منصّة اشتراكات رقمية. أي رصيد إحالات هنا يُستخدم داخل المنصّة للاشتراك/التجديد ولا يمثّل وعدًا أو ضمانًا لأي أرباح مالية.
+          </div>
 
-      <div class="kv">
-        <div><b id="planLabel">الخطة:</b> <span id="myPlan">-</span></div>
-        <div><b id="untilLabel">ينتهي:</b> <span id="myUntil">-</span></div>
-        <div><b id="refLabel">رابط الإحالة:</b> <code id="refLink"></code></div>
-      </div>
+          <div class="hr"></div>
 
-      <div class="wallet">
-        <h3 id="walletTitle">المحفظة الافتراضية</h3>
-        <div class="row">
-          <div class="box"><b id="availLabel">متاح للسحب:</b> <span id="availBal">0</span> USDT</div>
-          <div class="box"><b id="lockedLabel">مقفول:</b> <span id="lockedBal">0</span> USDT</div>
-        </div>
-        <p class="small" id="walletHint">
-          يمكن أن تربح عمولات حتى لو غير مشترك (تُحفظ كمقفولة). لا تستطيع السحب حتى تشترك. ويمكنك الاشتراك من رصيدك.
-        </p>
-      </div>
+          <div class="row">
+            <div style="flex:1">
+              <div class="field">
+                <label id="refLabel">رابط الإحالة الخاص بك</label>
+                <input id="refLink" class="mono" readonly placeholder="—" />
+              </div>
+            </div>
+            <div style="display:flex;align-items:flex-end;gap:10px">
+              <button class="btn" id="copyRefBtn">نسخ</button>
+            </div>
+          </div>
 
-      <hr />
-
-      <div class="pay">
-        <h3 id="payTitle">تفعيل/تجديد الاشتراك بالدفع (USDT ERC-20)</h3>
-        <p class="small" id="payWarn">⚠️ شبكة Ethereum Mainnet فقط (USDT ERC-20).</p>
-
-        <div class="row">
-          <div class="box"><b id="toLabel">إلى:</b> <code id="receiver"></code></div>
         </div>
 
-        <div class="row">
-          <select id="planSelect"></select>
-          <input id="txHash" placeholder="Tx Hash (0x...)" />
-          <button class="btn dark" id="verifyBtn">تحقق + تفعيل تلقائي</button>
+        <div class="card" style="margin-top:16px">
+          <h3 id="plansTitle" style="margin:0 0 8px">خطط الاشتراك</h3>
+          <div class="plans" id="plans"></div>
+          <div class="hr"></div>
+
+          <div class="two">
+            <div class="field">
+              <label id="planSelectLabel">اختر خطة</label>
+              <select id="planSelect">
+                <option value="10">10 USDT</option>
+                <option value="20">20 USDT</option>
+                <option value="50">50 USDT</option>
+                <option value="100">100 USDT</option>
+                <option value="200">200 USDT</option>
+              </select>
+            </div>
+            <div class="field">
+              <label id="txLabel">TxHash (USDT ERC-20 على Ethereum)</label>
+              <input id="txHash" class="mono" placeholder="0x..." />
+            </div>
+          </div>
+
+          <div class="row" style="margin-top:12px">
+            <button class="btn primary" id="verifyBtn">تفعيل عبر TxHash</button>
+            <button class="btn" id="subBalanceBtn">الاشتراك باستخدام الرصيد</button>
+          </div>
+
+          <div style="margin-top:10px" class="note">
+            <div><b id="payHowTitle">طريقة الدفع:</b></div>
+            <div id="payHowText">
+              قم بتحويل قيمة الخطة (USDT ERC-20) إلى العنوان التالي ثم ضع TxHash هنا للتفعيل التلقائي.
+            </div>
+            <div class="mono" style="margin-top:8px;word-break:break-all" id="receiverWallet">—</div>
+          </div>
         </div>
-        <p class="msg" id="payMsg"></p>
       </div>
 
-      <div class="row">
-        <button class="btn" id="subWithBalBtn">اشترك من الرصيد</button>
-      </div>
-      <p class="msg" id="subMsg"></p>
+      <!-- Right -->
+      <div>
+        <div class="card">
+          <h3 id="authTitle" style="margin:0 0 8px">الحساب</h3>
 
-      <hr />
+          <div id="authBox">
+            <div class="two">
+              <div class="field">
+                <label id="emailLabel">البريد الإلكتروني</label>
+                <input id="email" type="email" placeholder="name@email.com" />
+              </div>
+              <div class="field">
+                <label id="passLabel">كلمة المرور</label>
+                <input id="password" type="password" placeholder="••••••••" />
+              </div>
+            </div>
 
-      <div class="withdraw">
-        <h3 id="wdTitle">السحب (مرة واحدة أسبوعيًا)</h3>
-        <div class="row">
-          <input id="wdAddress" placeholder="عنوان محفظتك (ERC-20)" />
-          <input id="wdAmount" placeholder="المبلغ USDT" />
-          <button class="btn dark" id="wdBtn">طلب سحب</button>
+            <div class="row" style="margin-top:12px">
+              <button class="btn primary" id="signupBtn">إنشاء حساب</button>
+              <button class="btn" id="signinBtn">تسجيل دخول</button>
+            </div>
+
+            <div class="note" style="margin-top:10px" id="refNote">
+              إذا دخلت عبر رابط إحالة، سيتم ربط الإحالة تلقائيًا عند إنشاء الحساب.
+            </div>
+          </div>
+
+          <div class="hr"></div>
+
+          <div class="note" id="accountInfo">
+            <div><b id="meTitle">بياناتك:</b></div>
+            <div id="meData">—</div>
+          </div>
         </div>
-        <p class="small" id="wdHint">سيتم التحويل يدويًا خلال 3–24 ساعة بعد طلب السحب.</p>
-        <p class="msg" id="wdMsg"></p>
+
+        <footer id="footer">
+          <b>نصيحة أمان:</b> لا تضع أي مفاتيح سرّية داخل GitHub. استخدم Back4App Environment Variables فقط.
+          <br/>
+          <span class="mono">TIK-USDT</span> • <span id="foot2">واجهة ثابتة على GitHub Pages + Backend على Back4App</span>
+        </footer>
       </div>
-    </section>
+    </div>
   </div>
 
-  <script src="./app.js"></script>
+  <div class="toast" id="toast">
+    <div class="msg" id="toastMsg">—</div>
+    <button class="btn close" id="toastClose">إغلاق</button>
+  </div>
+
+  <script>
+    /********************
+     * 1) CONFIG (Edit these 3)
+     ********************/
+    const APP_ID = "PUT_YOUR_APP_ID_HERE";
+    const JS_KEY = "PUT_YOUR_JS_KEY_OR_CLIENT_KEY_HERE";
+    const SERVER_URL = "https://parseapi.back4app.com/"; // usually correct on Back4App
+
+    // Your wallet (shown to users)
+    const RECEIVER_WALLET_UI = "0xb56a89f790060cbb0f08d02234921e5fefff11a6";
+
+    // Telegram
+    const SUPPORT_URL = "https://t.me/TIK_USDT";
+    const CHANNEL_URL = "https://t.me/+P2nKCspWsyNmYmFk";
+
+    /********************
+     * 2) i18n
+     ********************/
+    const i18n = {
+      ar: {
+        dir: "rtl",
+        langBtn: "EN",
+        subbrand: "اشتراكات رقمية + قناة تلغرام",
+        heroTitle: "منصّة اشتراك رقمية مع نظام إحالة",
+        heroDesc: "اشترك في المنصّة لتحصل على وصول للمحتوى وزر مباشر لقناة تلغرام. يمكنك مشاركة رابط الإحالة لتحصل على <b>رصيد داخل المنصّة</b> يمكن استخدامه لتجديد الاشتراك.",
+        disclaimer: "<span class='badge-warn'>ملاحظة:</span> هذه منصّة اشتراكات رقمية. أي رصيد إحالات هنا يُستخدم داخل المنصّة للاشتراك/التجديد ولا يمثّل وعدًا أو ضمانًا لأي أرباح مالية.",
+        k1t: "حالة الحساب",
+        k2t: "الرصيد المتاح",
+        k3t: "رصيد الإحالات (معلّق)",
+        refLabel: "رابط الإحالة الخاص بك",
+        copy: "نسخ",
+        plansTitle: "خطط الاشتراك",
+        planSelectLabel: "اختر خطة",
+        txLabel: "TxHash (USDT ERC-20 على Ethereum)",
+        verifyBtn: "تفعيل عبر TxHash",
+        subBalanceBtn: "الاشتراك باستخدام الرصيد",
+        payHowTitle: "طريقة الدفع:",
+        payHowText: "قم بتحويل قيمة الخطة (USDT ERC-20) إلى العنوان التالي ثم ضع TxHash هنا للتفعيل التلقائي.",
+        authBtn: "تسجيل / دخول",
+        logoutBtn: "تسجيل خروج",
+        authTitle: "الحساب",
+        emailLabel: "البريد الإلكتروني",
+        passLabel: "كلمة المرور",
+        signupBtn: "إنشاء حساب",
+        signinBtn: "تسجيل دخول",
+        refNote: "إذا دخلت عبر رابط إحالة، سيتم ربط الإحالة تلقائيًا عند إنشاء الحساب.",
+        meTitle: "بياناتك:",
+        footer2: "واجهة ثابتة على GitHub Pages + Backend على Back4App",
+        statusAnon: "غير مسجل",
+        statusOn: "مفعّل",
+        statusOff: "غير مفعّل",
+        toastClose: "إغلاق",
+        planCard: (a)=>`اشتراك ${a} USDT`,
+        planDesc: "وصول للمنصة + زر للقناة (التجديد شهريًا)",
+      },
+      en: {
+        dir: "ltr",
+        langBtn: "AR",
+        subbrand: "Digital subscriptions + Telegram channel",
+        heroTitle: "A subscription platform with referrals",
+        heroDesc: "Subscribe to access content and a direct Telegram channel button. Share your referral link to earn <b>platform credit</b> that can be used to renew subscriptions.",
+        disclaimer: "<span class='badge-warn'>Note:</span> This is a digital subscription platform. Referral credit is usable inside the platform for subscriptions/renewals and is not a promise of financial returns.",
+        k1t: "Account status",
+        k2t: "Available credit",
+        k3t: "Pending referral credit",
+        refLabel: "Your referral link",
+        copy: "Copy",
+        plansTitle: "Subscription plans",
+        planSelectLabel: "Choose a plan",
+        txLabel: "TxHash (USDT ERC-20 on Ethereum)",
+        verifyBtn: "Activate via TxHash",
+        subBalanceBtn: "Subscribe using credit",
+        payHowTitle: "How to pay:",
+        payHowText: "Send the plan amount (USDT ERC-20) to the address below, then paste the TxHash to activate automatically.",
+        authBtn: "Sign up / Sign in",
+        logoutBtn: "Logout",
+        authTitle: "Account",
+        emailLabel: "Email",
+        passLabel: "Password",
+        signupBtn: "Create account",
+        signinBtn: "Sign in",
+        refNote: "If you opened the site via a referral link, it will be linked automatically during signup.",
+        meTitle: "Your info:",
+        footer2: "Static UI on GitHub Pages + Backend on Back4App",
+        statusAnon: "Guest",
+        statusOn: "Active",
+        statusOff: "Inactive",
+        toastClose: "Close",
+        planCard: (a)=>`${a} USDT Plan`,
+        planDesc: "Platform access + Telegram channel button (monthly renewal)",
+      }
+    };
+
+    let LANG = "ar";
+
+    /********************
+     * 3) Helpers
+     ********************/
+    const $ = (id)=>document.getElementById(id);
+    function toast(msg){
+      $("toastMsg").innerHTML = msg;
+      $("toast").classList.add("show");
+    }
+    $("toastClose").onclick = ()=> $("toast").classList.remove("show");
+
+    function getRefFromUrl(){
+      const p = new URLSearchParams(location.search);
+      return p.get("ref");
+    }
+    function setLang(next){
+      LANG = next;
+      const t = i18n[LANG];
+      document.documentElement.lang = LANG;
+      document.documentElement.dir = t.dir;
+      // Flip dir-related UI lightly
+      $("langBtn").textContent = t.langBtn;
+      $("subbrand").textContent = t.subbrand;
+      $("heroTitle").textContent = t.heroTitle;
+      $("heroDesc").innerHTML = t.heroDesc;
+      $("disclaimer").innerHTML = t.disclaimer;
+      $("k1t").textContent = t.k1t;
+      $("k2t").textContent = t.k2t;
+      $("k3t").textContent = t.k3t;
+      $("refLabel").textContent = t.refLabel;
+      $("copyRefBtn").textContent = t.copy;
+      $("plansTitle").textContent = t.plansTitle;
+      $("planSelectLabel").textContent = t.planSelectLabel;
+      $("txLabel").textContent = t.txLabel;
+      $("verifyBtn").textContent = t.verifyBtn;
+      $("subBalanceBtn").textContent = t.subBalanceBtn;
+      $("payHowTitle").textContent = t.payHowTitle;
+      $("payHowText").textContent = t.payHowText;
+      $("authBtn").textContent = t.authBtn;
+      $("logoutBtn").textContent = t.logoutBtn;
+      $("authTitle").textContent = t.authTitle;
+      $("emailLabel").textContent = t.emailLabel;
+      $("passLabel").textContent = t.passLabel;
+      $("signupBtn").textContent = t.signupBtn;
+      $("signinBtn").textContent = t.signinBtn;
+      $("refNote").textContent = t.refNote;
+      $("meTitle").textContent = t.meTitle;
+      $("foot2").textContent = t.footer2;
+
+      // Build plans cards
+      buildPlans();
+      // refresh status text
+      renderStatusChip();
+    }
+
+    function renderStatusChip(text){
+      const t = i18n[LANG];
+      if(!Parse.User.current()){
+        $("statusChip").textContent = "• " + t.statusAnon;
+        $("statusChip").style.borderColor = "rgba(255,255,255,.12)";
+        return;
+      }
+      $("statusChip").textContent = "• " + (text || "—");
+    }
+
+    function buildPlans(){
+      const t = i18n[LANG];
+      const amounts = [10,20,50,100,200];
+      const wrap = $("plans");
+      wrap.innerHTML = "";
+      for(const a of amounts){
+        const el = document.createElement("div");
+        el.className = "plan";
+        el.innerHTML = `
+          <div class="head">
+            <div>
+              <div class="price">${a} <span class="tag">USDT</span></div>
+              <div class="tag">${t.planDesc}</div>
+            </div>
+            <div class="chip">${t.planCard(a)}</div>
+          </div>
+          <div class="mini">
+            • USDT ERC-20<br/>
+            • Monthly renewal (manual)<br/>
+            • Referral credit can be used for renewals
+          </div>
+          <button class="btn" data-plan="${a}">${LANG==="ar"?"اختيار":"Select"}</button>
+        `;
+        el.querySelector("button").onclick = ()=>{
+          $("planSelect").value = String(a);
+          toast(LANG==="ar" ? `تم اختيار خطة ${a} USDT` : `Selected ${a} USDT plan`);
+        };
+        wrap.appendChild(el);
+      }
+    }
+
+    /********************
+     * 4) Parse Init
+     ********************/
+    function initParse(){
+      Parse.initialize(APP_ID, JS_KEY);
+      Parse.serverURL = SERVER_URL;
+    }
+
+    /********************
+     * 5) Auth + Profile
+     ********************/
+    async function refreshProfile(){
+      const user = Parse.User.current();
+      if(!user){
+        $("logoutBtn").style.display = "none";
+        $("authBtn").style.display = "inline-flex";
+        $("meData").textContent = "—";
+        $("k1v").textContent = "—";
+        $("k2v").textContent = "0";
+        $("k3v").textContent = "0";
+        $("refLink").value = "";
+        renderStatusChip();
+        return;
+      }
+
+      $("logoutBtn").style.display = "inline-flex";
+      $("authBtn").style.display = "none";
+
+      try{
+        const res = await Parse.Cloud.run("getMyProfile");
+        const t = i18n[LANG];
+
+        const active = !!res.isActive;
+        $("k1v").innerHTML = active ? `<span class="badge-ok">${t.statusOn}</span>` : `<span class="badge-bad">${t.statusOff}</span>`;
+        $("k2v").textContent = Number(res.availableBalance || 0).toFixed(6).replace(/\.?0+$/,"");
+        $("k3v").textContent = Number(res.lockedBalance || 0).toFixed(6).replace(/\.?0+$/,"");
+
+        const until = res.accessUntil ? new Date(res.accessUntil).toLocaleString() : "—";
+        $("meData").innerHTML =
+          `<div class="mono">ID: ${user.id}</div>
+           <div class="mono">Email: ${user.get("email")||user.get("username")||"—"}</div>
+           <div class="mono">Plan: ${res.planAmount || 0} USDT</div>
+           <div class="mono">Access until: ${until}</div>`;
+
+        // referral link
+        const origin = location.origin + location.pathname;
+        $("refLink").value = `${origin}?ref=${encodeURIComponent(res.refCode)}`;
+
+        renderStatusChip(active ? t.statusOn : t.statusOff);
+
+      }catch(e){
+        toast((LANG==="ar"?"خطأ في جلب البيانات: ":"Profile load error: ") + (e.message || e));
+      }
+    }
+
+    async function signUp(){
+      const email = $("email").value.trim();
+      const pass = $("password").value.trim();
+      if(!email || !pass) return toast(LANG==="ar" ? "أدخل البريد وكلمة المرور" : "Enter email and password");
+
+      const user = new Parse.User();
+      user.set("username", email);
+      user.set("email", email);
+      user.set("password", pass);
+
+      // pass referral code from URL (if any)
+      const ref = getRefFromUrl();
+      if(ref) user.set("pendingRefCode", ref);
+
+      try{
+        await user.signUp();
+        toast(LANG==="ar" ? "تم إنشاء الحساب بنجاح" : "Account created successfully");
+        await refreshProfile();
+      }catch(e){
+        toast((LANG==="ar"?"تعذر إنشاء الحساب: ":"Signup failed: ") + (e.message || e));
+      }
+    }
+
+    async function signIn(){
+      const email = $("email").value.trim();
+      const pass = $("password").value.trim();
+      if(!email || !pass) return toast(LANG==="ar" ? "أدخل البريد وكلمة المرور" : "Enter email and password");
+      try{
+        await Parse.User.logIn(email, pass);
+        toast(LANG==="ar" ? "تم تسجيل الدخول" : "Signed in");
+        await refreshProfile();
+      }catch(e){
+        toast((LANG==="ar"?"فشل تسجيل الدخول: ":"Signin failed: ") + (e.message || e));
+      }
+    }
+
+    async function logout(){
+      await Parse.User.logOut();
+      toast(LANG==="ar" ? "تم تسجيل الخروج" : "Logged out");
+      await refreshProfile();
+    }
+
+    /********************
+     * 6) Subscription activation
+     ********************/
+    async function verifyTx(){
+      if(!Parse.User.current()) return toast(LANG==="ar"?"سجل دخول أولًا":"Sign in first");
+
+      const planAmount = Number($("planSelect").value);
+      const txHash = $("txHash").value.trim();
+
+      if(!txHash.startsWith("0x") || txHash.length < 20){
+        return toast(LANG==="ar" ? "TxHash غير صحيح" : "Invalid TxHash");
+      }
+
+      try{
+        toast(LANG==="ar" ? "جارٍ التحقق... قد يستغرق ذلك قليلًا" : "Verifying... this may take a moment");
+        const res = await Parse.Cloud.run("verifyUsdtPayment", { txHash, planAmount });
+        toast(LANG==="ar" ? "تم التفعيل بنجاح ✅" : "Activated ✅");
+        $("txHash").value = "";
+        await refreshProfile();
+      }catch(e){
+        toast((LANG==="ar"?"فشل التفعيل: ":"Activation failed: ") + (e.message || e));
+      }
+    }
+
+    async function subscribeWithBalance(){
+      if(!Parse.User.current()) return toast(LANG==="ar"?"سجل دخول أولًا":"Sign in first");
+      const planAmount = Number($("planSelect").value);
+      try{
+        const res = await Parse.Cloud.run("subscribeWithBalance", { planAmount });
+        toast(LANG==="ar" ? "تم الاشتراك باستخدام الرصيد ✅" : "Subscribed using credit ✅");
+        await refreshProfile();
+      }catch(e){
+        toast((LANG==="ar"?"لا يمكن الاشتراك: ":"Cannot subscribe: ") + (e.message || e));
+      }
+    }
+
+    /********************
+     * 7) UI wiring
+     ********************/
+    $("langBtn").onclick = ()=> setLang(LANG==="ar" ? "en" : "ar");
+    $("signupBtn").onclick = signUp;
+    $("signinBtn").onclick = signIn;
+    $("logoutBtn").onclick = logout;
+
+    $("verifyBtn").onclick = verifyTx;
+    $("subBalanceBtn").onclick = subscribeWithBalance;
+
+    $("copyRefBtn").onclick = async ()=>{
+      const v = $("refLink").value;
+      if(!v) return toast(LANG==="ar"?"لا يوجد رابط بعد":"No link yet");
+      try{
+        await navigator.clipboard.writeText(v);
+        toast(LANG==="ar"?"تم النسخ ✅":"Copied ✅");
+      }catch{
+        $("refLink").select();
+        toast(LANG==="ar"?"انسخ يدويًا من الحقل":"Copy manually from the field");
+      }
+    };
+
+    // replace telegram buttons href just in case
+    document.querySelectorAll('a[href*="t.me/TIK_USDT"]').forEach(a=>a.href = SUPPORT_URL);
+    document.querySelectorAll('a[href*="t.me/+P2nKCspWsyNmYmFk"]').forEach(a=>a.href = CHANNEL_URL);
+
+    // Init
+    initParse();
+    setLang("ar");
+    $("receiverWallet").textContent = RECEIVER_WALLET_UI;
+
+    // auto-show referral notice if ref exists
+    if(getRefFromUrl()){
+      toast(LANG==="ar" ? "تم فتح الموقع عبر رابط إحالة — أنشئ حسابًا لتفعيل الإحالة" : "Opened via referral link — create an account to link it");
+    }
+
+    refreshProfile();
+  </script>
 </body>
-               </html>
+  </html>
