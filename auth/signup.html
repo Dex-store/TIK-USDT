@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>إنشاء حساب • TIK-USDT</title>
+  <style>
+    body{margin:0;font-family:system-ui;background:radial-gradient(1200px 600px at 50% -10%, #1b255a, #060913);color:#eaf0ff}
+    .wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
+    .card{width:100%;max-width:520px;background:rgba(12,18,45,.75);border:1px solid rgba(255,255,255,.08);
+      border-radius:28px;padding:22px;box-shadow:0 20px 60px rgba(0,0,0,.4);backdrop-filter:blur(10px)}
+    .top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+    .logo{width:46px;height:46px;border-radius:16px;background:linear-gradient(135deg,#5b8cff,#7c5cff);
+      display:flex;align-items:center;justify-content:center;font-weight:900}
+    h2{margin:10px 0 6px}
+    .note{color:#a8b3cf;font-size:13px;line-height:1.8}
+    input{width:100%;padding:14px 14px;border-radius:16px;border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.04);color:#eaf0ff;margin-top:10px;outline:none}
+    .row{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+    .btn{padding:13px 16px;border-radius:16px;border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.04);color:#eaf0ff;font-weight:800;cursor:pointer;text-decoration:none;display:inline-block}
+    .btn.primary{background:linear-gradient(135deg,#5b8cff,#7c5cff);border-color:transparent}
+    .pill{display:inline-block;padding:6px 10px;border-radius:999px;border:1px dashed rgba(255,255,255,.16);color:#cfe0ff;font-size:12px;margin-top:10px}
+    a{color:#9fb0ff;text-decoration:none}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <div class="top">
+        <div style="display:flex;align-items:center;gap:10px">
+          <div class="logo">T</div>
+          <div>
+            <div style="font-weight:900">TIK-USDT</div>
+            <div class="note">إنشاء حساب</div>
+          </div>
+        </div>
+        <a class="btn" href="login.html">تسجيل الدخول</a>
+      </div>
+
+      <h2>إنشاء حساب</h2>
+      <div class="note">أدخل بريدك وكلمة المرور. سيتم ربط الإحالة تلقائيًا إذا دخلت من رابط إحالة.</div>
+
+      <div class="pill" id="refPill" style="display:none"></div>
+
+      <input id="email" type="email" placeholder="البريد الإلكتروني">
+      <input id="password" type="password" placeholder="كلمة المرور">
+
+      <div class="row">
+        <button class="btn primary" id="signupBtn">إنشاء حساب</button>
+        <a class="btn" href="../index.html">الرئيسية</a>
+      </div>
+
+      <div class="note" id="msg" style="margin-top:10px"></div>
+    </div>
+  </div>
+
+<script>
+  // عرض ref من الرابط إن وجد: ?ref=XXXX
+  const ref = new URLSearchParams(location.search).get("ref");
+  if(ref){
+    refPill.style.display = "inline-block";
+    refPill.textContent = "تم اكتشاف كود إحالة: " + ref;
+  }
+
+  // مؤقتًا: إنشاء حساب (واجهة فقط)
+  signupBtn.onclick = () => {
+    const email = document.getElementById("email").value.trim();
+    const pass  = document.getElementById("password").value.trim();
+    if(!email || !pass){
+      msg.textContent = "اكتب البريد وكلمة المرور أولاً.";
+      return;
+    }
+    msg.textContent = "تم ✅ (واجهة فقط) — سنربطه بـ Back4App في الخطوة القادمة.";
+    setTimeout(()=> location.href = "../app/dashboard.html", 1200);
+  };
+</script>
+</body>
+</html>
