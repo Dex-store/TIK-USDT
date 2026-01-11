@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>سجل السحوبات • TIK-USDT</title>
+  <style>
+    body{margin:0;font-family:system-ui;background:radial-gradient(1200px 600px at 50% -10%, #1b255a, #060913);color:#eaf0ff}
+    .wrap{max-width:1000px;margin:0 auto;padding:18px}
+    .topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;
+      background:rgba(12,18,45,.75);border:1px solid rgba(255,255,255,.08);border-radius:22px;padding:14px 16px;
+      box-shadow:0 20px 60px rgba(0,0,0,.35);backdrop-filter:blur(10px)}
+    .btn{padding:11px 14px;border-radius:16px;border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.04);color:#eaf0ff;font-weight:800;cursor:pointer;text-decoration:none;display:inline-block}
+    .btn.primary{background:linear-gradient(135deg,#5b8cff,#7c5cff);border-color:transparent}
+    .card{margin-top:14px;background:rgba(12,18,45,.75);border:1px solid rgba(255,255,255,.08);border-radius:22px;
+      padding:16px;box-shadow:0 20px 60px rgba(0,0,0,.25);backdrop-filter:blur(10px)}
+    .item{border:1px solid rgba(255,255,255,.10);border-radius:18px;padding:12px;background:rgba(255,255,255,.03);margin-top:10px}
+    .muted{color:#a8b3cf;font-size:13px;line-height:1.7}
+    .mono{font-family:ui-monospace,Menlo,Consolas,monospace;word-break:break-all}
+    .tag{display:inline-block;padding:4px 10px;border-radius:999px;font-weight:900;font-size:12px;border:1px solid rgba(255,255,255,.16)}
+    .pending{color:#ffcc66;border-color:rgba(255,204,102,.4)}
+    .paid{color:#2cff8f;border-color:rgba(44,255,143,.35)}
+    .rejected{color:#ff5a78;border-color:rgba(255,90,120,.35)}
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <div>
+      <div style="font-weight:900">سجل السحوبات</div>
+      <div class="muted">عرض آخر 50 طلب</div>
+    </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <a class="btn" href="./dashboard.html">لوحة التحكم</a>
+      <a class="btn primary" href="./withdraw-request.html">طلب سحب</a>
+      <button class="btn" id="refreshBtn">تحديث</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="muted" id="msg">—</div>
+    <div id="list"></div>
+  </div>
+</div>
+
+<script src="https://unpkg.com/parse/dist/parse.min.js"></script>
+<script src="./config.js"></script>
+<script>
+  Parse.initialize(window.TIK.PARSE_APP_ID, window.TIK.PARSE_JS_KEY);
+  Parse.serverURL = window.TIK.PARSE_SERVER_URL;
+
+  const user = Parse.User.current();
+  if(!user) location.href = "../auth/login.html";
+
+  const msg = (t)=> document.getElementById("msg").textContent = t;
+  function esc(s){ return String(s||"").replace(/[&<>"']/g, c=>({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c])); }
+  function fmtDate(d){
+    if(!d) return "—";
+    try{ return new Date(d).toLocaleString("ar", {year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit"}); }
+    catch{ return "—"; }
+  }
+  function tag(status){
+    status = (status||"pending").toLowerCase();
+    if(status==="paid") return `<span class="tag paid">PAID</span>`;
+    if(status==="rejected") return `<span class="tag rejected">REJECTED</span>`;
+    return `<span class="tag pending">PENDING</span>`;
+  }
+
+  async function load(){
+    msg("جاري التحميل...");
+    list.innerHTML = "";
+
+    const WithdrawRequests = Parse.Object.extend("WithdrawRequests");
+    const q = new Parse.Query(WithdrawRequests);
+    q.equalTo("user", user);
+    q.descending("createdAt");
+    q.limit(50);
+
+    const rows = await q.find().catch(e=>{ msg(e.message||"خطأ"); return []; });
+
+    if(!rows.length){ msg("لا توجد طلبات سحب بعد."); return; }
+    msg("عدد الطلبات: " + rows.length);
+
+    rows.forEach(r=>{
+      const el = document.createElement("div");
+      const st = r.get("status") || "pending";
+      el.className = "item";
+      el.innerHTML = `
+        <div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap">
+          <div><b>الحالة:</b> ${tag(st)}</div>
+          <div class="muted"><b>التاريخ:</b> ${esc(fmtDate(r.createdAt))}</div>
+        </div>
+        <div style="margin-top:6px"><b>المبلغ:</b> ${esc(r.get("amount"))} USDT</div>
+        <div style="margin-top:6px"><b>المحفظة:</b> <span class="mono">${esc(r.get("wallet"))}</span></div>
+        ${r.get("txHash") ? `<div style="margin-top:6px"><b>TxHash:</b> <span class="mono">${esc(r.get("txHash"))}</span></div>` : ``}
+        ${r.get("note") ? `<div style="margin-top:6px"><b>ملاحظة:</b> ${esc(r.get("note"))}</div>` : ``}
+      `;
+      list.appendChild(el);
+    });
+  }
+
+  refreshBtn.onclick = load;
+  load();
+</script>
+</body>
+</html>
