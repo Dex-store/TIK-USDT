@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>إحالاتي • TIK-USDT</title>
+  <style>
+    body{margin:0;font-family:system-ui;background:radial-gradient(1200px 600px at 50% -10%, #1b255a, #060913);color:#eaf0ff}
+    .wrap{max-width:1000px;margin:0 auto;padding:18px}
+    .topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;
+      background:rgba(12,18,45,.75);border:1px solid rgba(255,255,255,.08);border-radius:22px;padding:14px 16px;
+      box-shadow:0 20px 60px rgba(0,0,0,.35);backdrop-filter:blur(10px)}
+    .btn{padding:11px 14px;border-radius:16px;border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.04);color:#eaf0ff;font-weight:800;cursor:pointer;text-decoration:none;display:inline-block}
+    .card{margin-top:14px;background:rgba(12,18,45,.75);border:1px solid rgba(255,255,255,.08);border-radius:22px;
+      padding:16px;box-shadow:0 20px 60px rgba(0,0,0,.25);backdrop-filter:blur(10px)}
+    .item{border:1px solid rgba(255,255,255,.10);border-radius:18px;padding:12px;background:rgba(255,255,255,.03);margin-top:10px}
+    .muted{color:#a8b3cf;font-size:13px;line-height:1.7}
+    .mono{font-family:ui-monospace,Menlo,Consolas,monospace;word-break:break-all}
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <div>
+      <div style="font-weight:900">إحالاتي</div>
+      <div class="muted">الأشخاص الذين سجلوا عبر رابطك</div>
+    </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <a class="btn" href="./dashboard.html">لوحة التحكم</a>
+      <a class="btn" href="./commissions.html">عمولاتي</a>
+      <button class="btn" id="refreshBtn">تحديث</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="muted" id="msg">—</div>
+    <div id="list"></div>
+  </div>
+</div>
+
+<script src="https://unpkg.com/parse/dist/parse.min.js"></script>
+<script src="./config.js"></script>
+<script>
+  Parse.initialize(window.TIK.PARSE_APP_ID, window.TIK.PARSE_JS_KEY);
+  Parse.serverURL = window.TIK.PARSE_SERVER_URL;
+
+  const user = Parse.User.current();
+  if(!user) location.href = "../auth/login.html";
+
+  const msg = (t)=> document.getElementById("msg").textContent = t;
+  function esc(s){ return String(s||"").replace(/[&<>"']/g, c=>({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c])); }
+
+  async function load(){
+    msg("جاري التحميل...");
+    list.innerHTML = "";
+
+    const Referrals = Parse.Object.extend("Referrals");
+    const q = new Parse.Query(Referrals);
+    q.equalTo("referrer", user);
+    q.descending("createdAt");
+    q.limit(100);
+    q.include("referred");
+
+    const rows = await q.find().catch(e=>{ msg(e.message||"خطأ"); return []; });
+    if(!rows.length){ msg("لا توجد إحالات بعد."); return; }
+
+    msg("عدد الإحالات: " + rows.length);
+
+    rows.forEach(r=>{
+      const referred = r.get("referred");
+      const email = referred ? (referred.get("email") || referred.get("username") || "—") : "—";
+      const st = r.get("status") || "active";
+
+      const el = document.createElement("div");
+      el.className = "item";
+      el.innerHTML = `
+        <div><b>المستخدم:</b> ${esc(email)}</div>
+        <div class="muted"><b>الحالة:</b> ${esc(st)} | <b>التاريخ:</b> ${esc(r.createdAt ? r.createdAt.toISOString() : "")}</div>
+      `;
+      list.appendChild(el);
+    });
+  }
+
+  refreshBtn.onclick = load;
+  load();
+</script>
+</body>
+</html>
