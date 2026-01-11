@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>لوحة التحكم • TIK-USDT</title>
+  <style>
+    body{margin:0;font-family:system-ui;background:radial-gradient(1200px 600px at 50% -10%, #1b255a, #060913);color:#eaf0ff}
+    .wrap{max-width:1100px;margin:0 auto;padding:18px}
+    .topbar{
+      display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;
+      background:rgba(12,18,45,.75);border:1px solid rgba(255,255,255,.08);border-radius:22px;
+      padding:14px 16px;box-shadow:0 20px 60px rgba(0,0,0,.35);backdrop-filter:blur(10px)
+    }
+    .brand{display:flex;align-items:center;gap:10px}
+    .logo{width:44px;height:44px;border-radius:16px;background:linear-gradient(135deg,#5b8cff,#7c5cff);
+      display:flex;align-items:center;justify-content:center;font-weight:900}
+    .muted{color:#a8b3cf;font-size:13px;line-height:1.7}
+    .btn{
+      padding:11px 14px;border-radius:16px;border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.04);color:#eaf0ff;font-weight:800;cursor:pointer;text-decoration:none;display:inline-block
+    }
+    .btn.primary{background:linear-gradient(135deg,#5b8cff,#7c5cff);border-color:transparent}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
+    @media(max-width:900px){.grid{grid-template-columns:1fr}}
+    .card{
+      background:rgba(12,18,45,.75);border:1px solid rgba(255,255,255,.08);border-radius:22px;
+      padding:16px;box-shadow:0 20px 60px rgba(0,0,0,.25);backdrop-filter:blur(10px)
+    }
+    .kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:10px}
+    @media(max-width:650px){.kpis{grid-template-columns:1fr}}
+    .kpi{border:1px solid rgba(255,255,255,.10);border-radius:18px;padding:12px;background:rgba(255,255,255,.03)}
+    .kpi .t{color:#a8b3cf;font-size:12px}
+    .kpi .v{font-size:18px;font-weight:900;margin-top:6px}
+    .links{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+    a{color:#9fb0ff;text-decoration:none}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="topbar">
+      <div class="brand">
+        <div class="logo">T</div>
+        <div>
+          <div style="font-weight:900">TIK-USDT</div>
+          <div class="muted">لوحة التحكم (واجهة فقط الآن)</div>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <a class="btn" href="../index.html">الرئيسية</a>
+        <a class="btn" href="../auth/login.html">تسجيل الدخول</a>
+        <a class="btn primary" href="../auth/signup.html">إنشاء حساب</a>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <h3 style="margin:0 0 6px">ملخص الحساب</h3>
+        <div class="muted">
+          في الخطوة القادمة سنجعل هذه الصفحة تقرأ بياناتك الحقيقية من Back4App
+          (الرصيد، حالة الاشتراك، كود الإحالة…).
+        </div>
+
+        <div class="kpis">
+          <div class="kpi">
+            <div class="t">حالة الاشتراك</div>
+            <div class="v">—</div>
+          </div>
+          <div class="kpi">
+            <div class="t">الرصيد المتاح</div>
+            <div class="v">0 USDT</div>
+          </div>
+          <div class="kpi">
+            <div class="t">كود الإحالة</div>
+            <div class="v">—</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3 style="margin:0 0 6px">روابط سريعة</h3>
+        <div class="muted">هذه الروابط ستبقى ثابتة داخل المنصّة.</div>
+        <div class="links">
+          <a class="btn" href="https://t.me/TIK_USDT" target="_blank">الدعم على تلجرام</a>
+          <a class="btn" href="https://t.me/+P2nKCspWsyNmYmFk" target="_blank">قناة تلجرام</a>
+        </div>
+
+        <div style="margin-top:14px" class="muted">
+          الصفحات القادمة (سنضيفها بعد الربط): الاشتراكات، الإحالات، الرصيد، طلب الصرف، سجل الطلبات…
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+  </html>
