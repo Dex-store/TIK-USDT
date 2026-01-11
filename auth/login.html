@@ -22,6 +22,8 @@
     .btn.primary{background:linear-gradient(135deg,#5b8cff,#7c5cff);border-color:transparent}
     .links{margin-top:14px;display:flex;gap:12px;flex-wrap:wrap}
     a{color:#9fb0ff;text-decoration:none}
+    .ok{color:#7CFFB2}
+    .err{color:#FF8FA3}
   </style>
 </head>
 <body>
@@ -39,7 +41,7 @@
       </div>
 
       <h2>تسجيل الدخول</h2>
-      <div class="note">أدخل البريد وكلمة المرور (سنربطها بـ Back4App في الخطوة القادمة).</div>
+      <div class="note">سجّل دخولك بالبريد الإلكتروني وكلمة المرور.</div>
 
       <input id="email" type="email" placeholder="البريد الإلكتروني">
       <input id="password" type="password" placeholder="كلمة المرور">
@@ -58,18 +60,42 @@
     </div>
   </div>
 
+  <!-- Parse SDK + config -->
+  <script src="https://unpkg.com/parse/dist/parse.min.js"></script>
+  <script src="../app/config.js"></script>
+
 <script>
-  // مؤقتًا: زر الدخول ينقلك لصفحة داخل التطبيق (سنضيفها لاحقًا)
-  loginBtn.onclick = () => {
+  // لو المستخدم مسجل دخول بالفعل → ارسله للوحة التحكم
+  if (Parse.User.current()) {
+    location.href = "../app/dashboard.html";
+  }
+
+  Parse.initialize(window.TIK.PARSE_APP_ID, window.TIK.PARSE_JS_KEY);
+  Parse.serverURL = window.TIK.PARSE_SERVER_URL;
+
+  loginBtn.onclick = async () => {
+    msg.className = "note";
+    msg.textContent = "جاري تسجيل الدخول...";
+
     const email = document.getElementById("email").value.trim();
     const pass  = document.getElementById("password").value.trim();
+
     if(!email || !pass){
+      msg.className = "note err";
       msg.textContent = "اكتب البريد وكلمة المرور أولاً.";
       return;
     }
-    msg.textContent = "تم ✅ (واجهة فقط) — سنربطه بـ Back4App في الخطوة القادمة.";
-    // بعد ثانيتين ننقلك (صفحة سنبنيها لاحقًا)
-    setTimeout(()=> location.href = "../app/dashboard.html", 1200);
+
+    try{
+      // نحن نستخدم email كـ username
+      await Parse.User.logIn(email, pass);
+      msg.className = "note ok";
+      msg.textContent = "تم تسجيل الدخول ✅";
+      setTimeout(()=> location.href = "../app/dashboard.html", 700);
+    }catch(e){
+      msg.className = "note err";
+      msg.textContent = (e && e.message) ? e.message : "فشل تسجيل الدخول.";
+    }
   };
 </script>
 </body>
