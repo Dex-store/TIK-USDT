@@ -47,7 +47,7 @@
       <input id="password" type="password" placeholder="كلمة المرور">
 
       <div class="row">
-        <button class="btn primary" id="loginBtn">تسجيل دخول</button>
+        <button class="btn primary" id="loginBtn" type="button">تسجيل دخول</button>
         <a class="btn" href="signup.html">إنشاء حساب</a>
       </div>
 
@@ -64,39 +64,51 @@
   <script src="https://unpkg.com/parse/dist/parse.min.js"></script>
   <script src="../app/config.js"></script>
 
-<script>
-  // لو المستخدم مسجل دخول بالفعل → ارسله للوحة التحكم
-  if (Parse.User.current()) {
-    location.href = "../app/dashboard.html";
-  }
+  <script>
+    // تهيئة Parse
+    Parse.initialize(window.TIK.PARSE_APP_ID, window.TIK.PARSE_JS_KEY);
+    Parse.serverURL = window.TIK.PARSE_SERVER_URL;
 
-  Parse.initialize(window.TIK.PARSE_APP_ID, window.TIK.PARSE_JS_KEY);
-  Parse.serverURL = window.TIK.PARSE_SERVER_URL;
-
-  loginBtn.onclick = async () => {
-    msg.className = "note";
-    msg.textContent = "جاري تسجيل الدخول...";
-
-    const email = document.getElementById("email").value.trim();
-    const pass  = document.getElementById("password").value.trim();
-
-    if(!email || !pass){
-      msg.className = "note err";
-      msg.textContent = "اكتب البريد وكلمة المرور أولاً.";
-      return;
+    // لو المستخدم مسجل دخول بالفعل → ارسله للوحة التحكم
+    if (Parse.User.current()) {
+      location.href = "../app/dashboard.html";
     }
 
-    try{
-      // نحن نستخدم email كـ username
-      await Parse.User.logIn(email, pass);
-      msg.className = "note ok";
-      msg.textContent = "تم تسجيل الدخول ✅";
-      setTimeout(()=> location.href = "../app/dashboard.html", 700);
-    }catch(e){
-      msg.className = "note err";
-      msg.textContent = (e && e.message) ? e.message : "فشل تسجيل الدخول.";
+    const emailEl = document.getElementById("email");
+    const passEl  = document.getElementById("password");
+    const msgEl   = document.getElementById("msg");
+    const btnEl   = document.getElementById("loginBtn");
+
+    async function doLogin(){
+      msgEl.className = "note";
+      msgEl.textContent = "جاري تسجيل الدخول...";
+
+      const email = (emailEl.value || "").trim();
+      const pass  = (passEl.value  || "").trim();
+
+      if(!email || !pass){
+        msgEl.className = "note err";
+        msgEl.textContent = "اكتب البريد وكلمة المرور أولاً.";
+        return;
+      }
+
+      try{
+        await Parse.User.logIn(email, pass); // نستخدم البريد كـ username
+        msgEl.className = "note ok";
+        msgEl.textContent = "تم تسجيل الدخول ✅";
+        setTimeout(()=> location.href = "../app/dashboard.html", 400);
+      }catch(e){
+        msgEl.className = "note err";
+        msgEl.textContent = (e && e.message) ? e.message : "فشل تسجيل الدخول.";
+      }
     }
-  };
-</script>
+
+    btnEl.addEventListener("click", doLogin);
+
+    // Enter يعمل
+    passEl.addEventListener("keydown", (ev)=>{
+      if(ev.key === "Enter") doLogin();
+    });
+  </script>
 </body>
 </html>
