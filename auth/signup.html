@@ -22,6 +22,8 @@
     .btn.primary{background:linear-gradient(135deg,#5b8cff,#7c5cff);border-color:transparent}
     .pill{display:inline-block;padding:6px 10px;border-radius:999px;border:1px dashed rgba(255,255,255,.16);color:#cfe0ff;font-size:12px;margin-top:10px}
     a{color:#9fb0ff;text-decoration:none}
+    .ok{color:#7CFFB2}
+    .err{color:#FF8FA3}
   </style>
 </head>
 <body>
@@ -46,7 +48,6 @@
       <input id="email" type="email" placeholder="البريد الإلكتروني">
       <input id="password" type="password" placeholder="كلمة المرور">
 
-      <!-- ✅ حقل كود الدعوة -->
       <input id="refCode" type="text" placeholder="كود الدعوة (اختياري)">
       <div class="note" id="refHint" style="margin-top:8px"></div>
 
@@ -59,10 +60,16 @@
     </div>
   </div>
 
-<script>
-  // ✅ قراءة كود الدعوة من الرابط: signup.html?ref=XXXX
-  const ref = new URLSearchParams(window.location.search).get("ref");
+  <!-- Parse SDK + config -->
+  <script src="https://unpkg.com/parse/dist/parse.min.js"></script>
+  <script src="../app/config.js"></script>
 
+<script>
+  Parse.initialize(window.TIK.PARSE_APP_ID, window.TIK.PARSE_JS_KEY);
+  Parse.serverURL = window.TIK.PARSE_SERVER_URL;
+
+  // تعبئة ref من الرابط
+  const ref = new URLSearchParams(window.location.search).get("ref");
   const refInput = document.getElementById("refCode");
   const refHint  = document.getElementById("refHint");
   const refPill  = document.getElementById("refPill");
@@ -76,24 +83,62 @@
     refHint.textContent = "إذا كان لديك كود دعوة اكتبه هنا (اختياري).";
   }
 
-  // ✅ مؤقتًا: إنشاء حساب (واجهة فقط) — سنربطه بـ Back4App لاحقًا
-  signupBtn.onclick = () => {
+  // توليد refCode خاص بالمستخدم (مبدئيًا)
+  async function generateRefCode() {
+    const chars = "ABCDEFGHJKMNPQRSTUVWXYZ23456789";
+    for (let attempt = 0; attempt < 10; attempt++) {
+      let code = "TIK-";
+      for (let i=0;i<6;i++) code += chars[Math.floor(Math.random()*chars.length)];
+
+      // تحقق بسيط من عدم التكرار
+      const q = new Parse.Query(Parse.User);
+      q.equalTo("refCode", code);
+      const exists = await q.first({ useMasterKey: false }).catch(()=>null);
+      if (!exists) return code;
+    }
+    // fallback
+    return "TIK-" + Date.now().toString(36).toUpperCase();
+  }
+
+  signupBtn.onclick = async () => {
+    msg.className = "note";
+    msg.textContent = "جاري إنشاء الحساب...";
+
     const email = document.getElementById("email").value.trim();
     const pass  = document.getElementById("password").value.trim();
     const refCode = document.getElementById("refCode").value.trim();
 
     if(!email || !pass){
+      msg.className = "note err";
       msg.textContent = "اكتب البريد وكلمة المرور أولاً.";
       return;
     }
 
-    if(refCode){
-      msg.textContent = "تم ✅ (واجهة فقط) — كود الدعوة: " + refCode + " — سنربطه بـ Back4App قريبًا.";
-    } else {
-      msg.textContent = "تم ✅ (واجهة فقط) — بدون كود دعوة — سنربطه بـ Back4App قريبًا.";
-    }
+    try{
+      const myRef = await generateRefCode();
 
-    setTimeout(()=> location.href = "../app/dashboard.html", 1200);
+      const user = new Parse.User();
+      user.set("username", email); // مهم: نستخدم البريد كـ username
+      user.set("email", email);
+      user.set("password", pass);
+
+      // كود المستخدم الخاص
+      user.set("refCode", myRef);
+
+      // كود الدعوة الذي أدخله (مؤقتًا)
+      // (لاحقًا سنحوّله إلى علاقة referrer + حساب عمولات)
+      if (refCode) user.set("pendingRefCode", refCode);
+
+      await user.signUp();
+
+      msg.className = "note ok";
+      msg.textContent = "تم إنشاء الحساب ✅";
+      setTimeout(()=> location.href = "../app/dashboard.html", 800);
+
+    }catch(e){
+      msg.className = "note err";
+      msg.textContent = (e && e.message) ? e.message : "فشل إنشاء الحساب.";
+    }
   };
 </script>
 </body>
