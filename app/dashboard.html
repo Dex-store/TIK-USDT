@@ -1,148 +1,81 @@
 <!doctype html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>لوحة التحكم • TIK-USDT</title>
-<style>
-body{margin:0;font-family:system-ui;background:radial-gradient(1200px 600px at 50% -10%, #1b255a, #060913);color:#eaf0ff}
-.wrap{max-width:1150px;margin:0 auto;padding:18px}
-.topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;
-background:rgba(12,18,45,.75);border:1px solid rgba(255,255,255,.08);border-radius:22px;padding:14px 16px}
-.brand{display:flex;align-items:center;gap:10px}
-.logo{width:44px;height:44px;border-radius:16px;background:linear-gradient(135deg,#5b8cff,#7c5cff);
-display:flex;align-items:center;justify-content:center;font-weight:900}
-.btn{padding:11px 14px;border-radius:16px;border:1px solid rgba(255,255,255,.12);
-background:rgba(255,255,255,.04);color:#eaf0ff;font-weight:800;cursor:pointer;text-decoration:none}
-.btn.primary{background:linear-gradient(135deg,#5b8cff,#7c5cff);border-color:transparent}
-.btn.danger{background:rgba(255,90,120,.14);border-color:rgba(255,90,120,.35)}
-.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:14px}
-@media(max-width:900px){.grid{grid-template-columns:1fr}}
-.card{background:rgba(12,18,45,.75);border:1px solid rgba(255,255,255,.08);border-radius:22px;padding:16px}
-.h{font-weight:900}
-.v{font-weight:900;font-size:22px;margin-top:6px}
-.muted{color:#a8b3cf;font-size:13px}
-.pill{display:inline-flex;gap:8px;padding:7px 10px;border-radius:999px;border:1px dashed rgba(255,255,255,.16);margin-top:10px}
-.dot{width:10px;height:10px;border-radius:99px;background:#999}
-.ok{background:#2cff8f}
-.warn{background:#ffcc66}
-.mono{font-family:ui-monospace,Menlo,Consolas,monospace}
-input{width:100%;padding:12px;border-radius:16px;border:1px solid rgba(255,255,255,.12);
-background:rgba(255,255,255,.04);color:#eaf0ff;margin-top:10px}
-</style>
+  <meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>GOLDX | لوحة التحكم</title>
+  <style>
+    :root { --gold: #ffd700; --dark: #060913; --card-bg: rgba(255,255,255,0.04); }
+    body { margin: 0; font-family: system-ui; background: var(--dark); color: #fff; line-height: 1.6; }
+    .navbar { background: rgba(0,0,0,0.5); padding: 15px 25px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--gold); backdrop-filter: blur(10px); sticky; top: 0; z-index: 100; }
+    .brand { display: flex; align-items: center; gap: 12px; font-weight: 900; font-size: 20px; color: var(--gold); }
+    .logo-s { width: 35px; height: 35px; background: var(--gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #000; font-size: 22px; }
+    .logout-btn { background: none; border: 1px solid #ff5a78; color: #ff5a78; padding: 7px 15px; border-radius: 10px; cursor: pointer; transition: 0.3s; }
+    .logout-btn:hover { background: #ff5a78; color: #fff; }
+    .main-grid { max-width: 1100px; margin: 30px auto; padding: 0 20px; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+    .card { background: var(--card-bg); border: 1px solid rgba(255,255,255,0.08); border-radius: 25px; padding: 30px; text-align: center; }
+    .label { color: #a8b3cf; font-size: 14px; margin-bottom: 10px; }
+    .value { font-size: 36px; font-weight: 900; color: var(--gold); margin-bottom: 15px; }
+    .action-btn { display: inline-block; padding: 12px 25px; background: var(--gold); color: #000; text-decoration: none; border-radius: 15px; font-weight: bold; transition: 0.3s; }
+    .action-btn:hover { transform: scale(1.05); }
+    .ref-section { max-width: 1100px; margin: 0 auto 30px; padding: 0 20px; }
+    .ref-box { background: rgba(255,215,0,0.05); border: 1px dashed var(--gold); border-radius: 20px; padding: 25px; display: flex; flex-direction: column; gap: 15px; }
+    .link-display { background: #000; padding: 15px; border-radius: 12px; font-family: monospace; font-size: 13px; color: var(--gold); word-break: break-all; text-align: center; }
+    .copy-btn { background: var(--gold); border: none; padding: 12px; border-radius: 12px; font-weight: bold; cursor: pointer; }
+  </style>
 </head>
-
 <body>
-<div class="wrap">
+  <nav class="navbar">
+    <div class="brand"><div class="logo-s">G</div> GOLDX PANEL</div>
+    <button class="logout-btn" onclick="doLogout()">خروج</button>
+  </nav>
 
-<!-- ===== TOP BAR ===== -->
-<div class="topbar">
-  <div class="brand">
-    <div class="logo">T</div>
-    <div>
-      <div style="font-weight:900">TIK-USDT</div>
-      <div class="muted">لوحة التحكم</div>
+  <div class="main-grid">
+    <div class="card">
+      <div class="label">الرصيد المتاح (ذهب)</div>
+      <div class="value" id="bal">0.00</div>
+      <a href="#" class="action-btn">طلب سحب أرباح</a>
+    </div>
+    <div class="card">
+      <div class="label">مهام اليوم المكتملة</div>
+      <div class="value" id="tsk">0</div>
+      <a href="#" class="action-btn" style="background:none; border:1px solid var(--gold); color:var(--gold)">ابدأ المهام</a>
     </div>
   </div>
 
-  <div style="display:flex;gap:10px;flex-wrap:wrap">
-    <a class="btn" href="./plans.html">الاشتراكات</a>
-    <a class="btn" href="./referrals.html">إحالاتي</a>
-    <a class="btn" href="./commissions.html">عمولاتي</a>
-    <a class="btn" href="./withdraw-history.html">سجل السحوبات</a>
-    <a class="btn" href="https://t.me/TIK_USDT" target="_blank">الدعم</a>
-    <button class="btn danger" id="logoutBtn">خروج</button>
-  </div>
-</div>
-
-<!-- ===== INFO GRID ===== -->
-<div class="grid">
-
-  <div class="card">
-    <div class="h">حالة الاشتراك</div>
-    <div class="pill">
-      <span class="dot warn" id="subDot"></span>
-      <span id="subTxt">جارٍ التحميل…</span>
+  <div class="ref-section">
+    <div class="ref-box">
+      <h3 style="margin:0; color:var(--gold)">نظام الفريق الذهبي</h3>
+      <p style="margin:0; font-size:14px; color:#a8b3cf">انسخ رابطك وشاركه. ستحصل على عمولة ذهبية عن كل مهمة ينجزها أصدقاؤك.</p>
+      <div class="link-display" id="refUrl">جاري التحميل...</div>
+      <button class="copy-btn" onclick="copyLink()">نسخ رابط الدعوة</button>
     </div>
-    <div class="muted" id="subInfo"></div>
   </div>
 
-  <div class="card">
-    <div class="h">الخطة الحالية</div>
-    <div class="v" id="planTxt">—</div>
-    <div class="muted" id="planInfo">—</div>
-  </div>
+  <script src="https://unpkg.com/parse/dist/parse.min.js"></script>
+  <script src="config.js"></script>
+  <script>
+    Parse.initialize(window.TIK.PARSE_APP_ID, window.TIK.PARSE_JS_KEY);
+    Parse.serverURL = window.TIK.PARSE_SERVER_URL;
 
-  <div class="card">
-    <div class="h">رصيدك</div>
-    <div class="v" id="balTxt">0.00</div>
-    <div class="muted">USDT (رصيد افتراضي)</div>
-  </div>
+    const user = Parse.User.current();
+    if(!user) location.href = "../auth/login.html";
 
-</div>
+    // تعبئة البيانات
+    document.getElementById('bal').textContent = (user.get('balance') || 0).toFixed(2);
+    document.getElementById('tsk').textContent = user.get('completedTasks') || 0;
+    
+    const myLink = window.location.origin + "/auth/signup.html?ref=" + user.get('refCode');
+    document.getElementById('refUrl').textContent = myLink;
 
-<!-- ===== REFERRAL ===== -->
-<div class="card" style="margin-top:14px">
-  <div class="h">رابط الدعوة</div>
-  <div class="pill"><b>refCode:</b> <span class="mono" id="refCodeTxt">—</span></div>
-  <input id="refLink" readonly class="mono">
-  <div style="margin-top:10px;display:flex;gap:10px;flex-wrap:wrap">
-    <button class="btn primary" id="copyRefBtn">نسخ الرابط</button>
-    <a class="btn" id="openRefBtn" target="_blank">فتح الرابط</a>
-  </div>
-</div>
+    function copyLink() {
+      navigator.clipboard.writeText(myLink);
+      alert("✅ تم نسخ رابطك الخاص بنجاح!");
+    }
 
-<!-- ===== WITHDRAW ===== -->
-<div class="card" style="margin-top:14px">
-  <div class="h">السحب</div>
-  <div class="muted" id="wdHint">جارٍ التحميل…</div>
-  <div style="margin-top:10px;display:flex;gap:10px;flex-wrap:wrap">
-    <a class="btn primary" id="withdrawBtn" href="./withdraw-request.html">طلب سحب</a>
-  </div>
-</div>
-
-</div>
-
-<script src="https://unpkg.com/parse/dist/parse.min.js"></script>
-<script src="./config.js"></script>
-
-<script>
-Parse.initialize(window.TIK.PARSE_APP_ID, window.TIK.PARSE_JS_KEY);
-Parse.serverURL = window.TIK.PARSE_SERVER_URL;
-
-const user = Parse.User.current();
-if(!user) location.href="../auth/login.html";
-
-refCodeTxt.textContent = user.get("refCode");
-const link = location.origin + "/TIK-USDT/auth/signup.html?ref=" + user.get("refCode");
-refLink.value = link;
-openRefBtn.href = link;
-copyRefBtn.onclick = ()=>navigator.clipboard.writeText(link);
-
-logoutBtn.onclick = async ()=>{
-  await Parse.User.logOut();
-  location.href="../auth/login.html";
-};
-
-// Profile
-(async()=>{
-  const Profile = Parse.Object.extend("Profile");
-  const q = new Parse.Query(Profile);
-  q.equalTo("user", user);
-  const p = await q.first();
-
-  if(p && p.get("isActive")){
-    subTxt.textContent="نشط";
-    subDot.className="dot ok";
-    planTxt.textContent=p.get("planAmount")+" USDT";
-    wdHint.textContent="يمكنك السحب مرة واحدة أسبوعيًا";
-  }else{
-    subTxt.textContent="غير مفعل";
-    wdHint.textContent="لا يمكن السحب قبل التفعيل";
-    withdrawBtn.style.pointerEvents="none";
-    withdrawBtn.style.opacity=.5;
-  }
-})();
-</script>
+    async function doLogout() {
+      await Parse.User.logOut();
+      location.href = "../auth/login.html";
+    }
+  </script>
 </body>
 </html>
