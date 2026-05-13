@@ -1,49 +1,94 @@
-<!-- التغييرات المقترحة داخل ملف signup.html -->
-<style>
-  /* تغيير لون اللوجو والزر للون الذهبي */
-  .logo {
-    background: linear-gradient(135deg, #ffd700, #b8860b) !important;
-    color: #000 !important;
-  }
-  .btn.primary {
-    background: linear-gradient(135deg, #ffd700, #b8860b) !important;
-    color: #000 !important;
-    border-color: transparent;
-  }
-  .google-btn {
-    width: 100%;
-    background: #fff;
-    color: #000;
-    border: none;
-    padding: 13px;
-    border-radius: 16px;
-    font-weight: 800;
-    margin-top: 15px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-  }
-</style>
-
-<!-- استبدال جزء الـ Logo والنصوص -->
-<div class="top">
-  <div style="display:flex;align-items:center;gap:10px">
-    <div class="logo">G</div>
-    <div>
-      <div style="font-weight:900">GOLDX</div>
-      <div class="note">بوابة الأرباح والمهام</div>
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>انضم إلى GOLDX</title>
+  <style>
+    :root { --gold: #ffd700; --bg: #060913; }
+    body { margin: 0; font-family: system-ui; background: var(--bg); color: #fff; display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 20px; }
+    .card { width: 100%; max-width: 420px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,215,0,0.1); border-radius: 30px; padding: 30px; backdrop-filter: blur(10px); box-sizing: border-box; }
+    h2 { text-align: center; color: var(--gold); margin-bottom: 25px; }
+    .input-group { margin-bottom: 15px; }
+    label { display: block; margin-bottom: 8px; font-size: 14px; color: #a8b3cf; }
+    input { width: 100%; padding: 15px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.3); color: #fff; outline: none; font-size: 16px; box-sizing: border-box; transition: 0.3s; }
+    input:focus { border-color: var(--gold); background: rgba(0,0,0,0.5); }
+    .submit-btn { width: 100%; padding: 16px; border-radius: 15px; border: none; background: linear-gradient(135deg, var(--gold), #b8860b); color: #000; font-weight: 800; font-size: 17px; cursor: pointer; margin-top: 10px; transition: 0.3s; }
+    .submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    #msg { text-align: center; margin-top: 15px; font-size: 14px; min-height: 20px; }
+    .login-link { text-align: center; margin-top: 20px; font-size: 14px; color: #a8b3cf; }
+    .login-link a { color: var(--gold); text-decoration: none; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>فتح حساب GOLDX</h2>
+    <div class="input-group">
+      <label>البريد الإلكتروني</label>
+      <input type="email" id="email" placeholder="example@mail.com">
     </div>
+    <div class="input-group">
+      <label>كلمة المرور</label>
+      <input type="password" id="pass" placeholder="6 أحرف على الأقل">
+    </div>
+    <div class="input-group">
+      <label>كود الدعوة (اختياري)</label>
+      <input type="text" id="ref" placeholder="ABC123">
+    </div>
+    <button class="submit-btn" id="signupBtn">إنشاء الحساب فوراً</button>
+    <div id="msg"></div>
+    <div class="login-link">لديك حساب بالفعل؟ <a href="login.html">تسجيل دخول</a></div>
   </div>
-</div>
 
-<!-- إضافة زر جوجل تحت زر إنشاء الحساب -->
-<div class="row">
-  <button class="btn primary" id="signupBtn" type="button">إنشاء حساب GOLDX</button>
-</div>
+  <script src="https://unpkg.com/parse/dist/parse.min.js"></script>
+  <script src="../app/config.js"></script>
+  <script>
+    Parse.initialize(window.TIK.PARSE_APP_ID, window.TIK.PARSE_JS_KEY);
+    Parse.serverURL = window.TIK.PARSE_SERVER_URL;
 
-<button class="google-btn" id="googleBtn">
-  <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" width="18">
-  سجل بواسطة Google
-</button>
+    // جلب الكود من الرابط تلقائياً
+    const params = new URLSearchParams(window.location.search);
+    if(params.has('ref')) document.getElementById('ref').value = params.get('ref');
+
+    function createRefCode() {
+      return Math.random().toString(36).substring(2, 8).toUpperCase();
+    }
+
+    document.getElementById('signupBtn').onclick = async function() {
+      const btn = this;
+      const email = document.getElementById('email').value.trim();
+      const pass = document.getElementById('pass').value.trim();
+      const ref = document.getElementById('ref').value.trim();
+      const msg = document.getElementById('msg');
+
+      if(!email || pass.length < 6) {
+        msg.innerHTML = "<span style='color:#ff5a78'>تأكد من البريد وكلمة المرور (6+)</span>";
+        return;
+      }
+
+      btn.disabled = true;
+      msg.style.color = "#ffd700";
+      msg.textContent = "جاري إنشاء حسابك الذهبي...";
+
+      try {
+        const user = new Parse.User();
+        user.set("username", email);
+        user.set("email", email);
+        user.set("password", pass);
+        user.set("refCode", createRefCode());
+        user.set("pendingRefCode", ref);
+        user.set("balance", 0.00);
+        user.set("completedTasks", 0);
+
+        await user.signUp();
+        msg.style.color = "#2cff8f";
+        msg.textContent = "نجح التسجيل! جاري الدخول...";
+        setTimeout(() => location.href = "../app/dashboard.html", 1000);
+      } catch (e) {
+        btn.disabled = false;
+        msg.style.color = "#ff5a78";
+        msg.textContent = "خطأ: " + (e.message || "فشل التسجيل");
+      }
+    };
+  </script>
+</body>
+</html>
