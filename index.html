@@ -1,92 +1,81 @@
 <!doctype html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>TIK-USDT</title>
-
+  <meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>GOLDX | لوحة التحكم</title>
   <style>
-    body{
-      margin:0;
-      font-family:system-ui,-apple-system;
-      background:radial-gradient(1200px 600px at 50% -10%, #1b255a, #060913);
-      color:#eaf0ff;
-    }
-    .wrap{
-      min-height:100vh;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      padding:24px;
-    }
-    .card{
-      width:100%;
-      max-width:420px;
-      background:rgba(12,18,45,.75);
-      border:1px solid rgba(255,255,255,.08);
-      border-radius:28px;
-      padding:32px;
-      box-shadow:0 20px 60px rgba(0,0,0,.4);
-      text-align:center;
-      backdrop-filter:blur(10px);
-    }
-    .logo{
-      width:80px;
-      height:80px;
-      margin:0 auto 16px;
-      border-radius:22px;
-      background:linear-gradient(135deg,#5b8cff,#7c5cff);
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      font-size:34px;
-      font-weight:900;
-    }
-    h1{margin:8px 0 6px}
-    p{color:#a8b3cf;line-height:1.8;margin:0 0 20px}
-    .btn{
-      display:block;
-      padding:14px 18px;
-      border-radius:18px;
-      background:linear-gradient(135deg,#5b8cff,#7c5cff);
-      color:#fff;
-      font-weight:800;
-      text-decoration:none;
-      margin-top:12px;
-    }
-    .links{
-      margin-top:18px;
-      display:flex;
-      gap:12px;
-      justify-content:center;
-      flex-wrap:wrap;
-    }
-    .link{
-      color:#9fb0ff;
-      text-decoration:none;
-      font-size:14px;
-    }
+    :root { --gold: #ffd700; --dark: #060913; --card-bg: rgba(255,255,255,0.04); }
+    body { margin: 0; font-family: system-ui; background: var(--dark); color: #fff; line-height: 1.6; }
+    .navbar { background: rgba(0,0,0,0.5); padding: 15px 25px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--gold); backdrop-filter: blur(10px); sticky; top: 0; z-index: 100; }
+    .brand { display: flex; align-items: center; gap: 12px; font-weight: 900; font-size: 20px; color: var(--gold); }
+    .logo-s { width: 35px; height: 35px; background: var(--gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #000; font-size: 22px; }
+    .logout-btn { background: none; border: 1px solid #ff5a78; color: #ff5a78; padding: 7px 15px; border-radius: 10px; cursor: pointer; transition: 0.3s; }
+    .logout-btn:hover { background: #ff5a78; color: #fff; }
+    .main-grid { max-width: 1100px; margin: 30px auto; padding: 0 20px; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+    .card { background: var(--card-bg); border: 1px solid rgba(255,255,255,0.08); border-radius: 25px; padding: 30px; text-align: center; }
+    .label { color: #a8b3cf; font-size: 14px; margin-bottom: 10px; }
+    .value { font-size: 36px; font-weight: 900; color: var(--gold); margin-bottom: 15px; }
+    .action-btn { display: inline-block; padding: 12px 25px; background: var(--gold); color: #000; text-decoration: none; border-radius: 15px; font-weight: bold; transition: 0.3s; }
+    .action-btn:hover { transform: scale(1.05); }
+    .ref-section { max-width: 1100px; margin: 0 auto 30px; padding: 0 20px; }
+    .ref-box { background: rgba(255,215,0,0.05); border: 1px dashed var(--gold); border-radius: 20px; padding: 25px; display: flex; flex-direction: column; gap: 15px; }
+    .link-display { background: #000; padding: 15px; border-radius: 12px; font-family: monospace; font-size: 13px; color: var(--gold); word-break: break-all; text-align: center; }
+    .copy-btn { background: var(--gold); border: none; padding: 12px; border-radius: 12px; font-weight: bold; cursor: pointer; }
   </style>
 </head>
-
 <body>
-  <div class="wrap">
+  <nav class="navbar">
+    <div class="brand"><div class="logo-s">G</div> GOLDX PANEL</div>
+    <button class="logout-btn" onclick="doLogout()">خروج</button>
+  </nav>
+
+  <div class="main-grid">
     <div class="card">
-      <div class="logo">T</div>
-      <h1>TIK-USDT</h1>
-      <p>
-        منصّة اشتراكات رقمية مع نظام إحالات قائم على رصيد داخلي
-        وسحب يدوي بإشراف الإدارة.
-      </p>
-
-      <a class="btn" href="auth/login.html">الدخول إلى المنصّة</a>
-
-      <div class="links">
-        <a class="link" href="https://t.me/TIK_USDT" target="_blank">الدعم على تلجرام</a>
-        <a class="link" href="https://t.me/+P2nKCspWsyNmYmFk" target="_blank">قناة تلجرام</a>
-      </div>
+      <div class="label">الرصيد المتاح (ذهب)</div>
+      <div class="value" id="bal">0.00</div>
+      <a href="#" class="action-btn">طلب سحب أرباح</a>
+    </div>
+    <div class="card">
+      <div class="label">مهام اليوم المكتملة</div>
+      <div class="value" id="tsk">0</div>
+      <a href="#" class="action-btn" style="background:none; border:1px solid var(--gold); color:var(--gold)">ابدأ المهام</a>
     </div>
   </div>
+
+  <div class="ref-section">
+    <div class="ref-box">
+      <h3 style="margin:0; color:var(--gold)">نظام الفريق الذهبي</h3>
+      <p style="margin:0; font-size:14px; color:#a8b3cf">انسخ رابطك وشاركه. ستحصل على عمولة ذهبية عن كل مهمة ينجزها أصدقاؤك.</p>
+      <div class="link-display" id="refUrl">جاري التحميل...</div>
+      <button class="copy-btn" onclick="copyLink()">نسخ رابط الدعوة</button>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/parse/dist/parse.min.js"></script>
+  <script src="config.js"></script>
+  <script>
+    Parse.initialize(window.TIK.PARSE_APP_ID, window.TIK.PARSE_JS_KEY);
+    Parse.serverURL = window.TIK.PARSE_SERVER_URL;
+
+    const user = Parse.User.current();
+    if(!user) location.href = "../auth/login.html";
+
+    // تعبئة البيانات
+    document.getElementById('bal').textContent = (user.get('balance') || 0).toFixed(2);
+    document.getElementById('tsk').textContent = user.get('completedTasks') || 0;
+    
+    const myLink = window.location.origin + "/auth/signup.html?ref=" + user.get('refCode');
+    document.getElementById('refUrl').textContent = myLink;
+
+    function copyLink() {
+      navigator.clipboard.writeText(myLink);
+      alert("✅ تم نسخ رابطك الخاص بنجاح!");
+    }
+
+    async function doLogout() {
+      await Parse.User.logOut();
+      location.href = "../auth/login.html";
+    }
+  </script>
 </body>
 </html>
-<a href="./legal.html">إخلاء المسؤولية</a>
