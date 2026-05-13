@@ -1,81 +1,34 @@
 <!doctype html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-  <title>GOLDX | لوحة التحكم</title>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>GOLDX | منصة الأرباح الرقمية</title>
   <style>
-    :root { --gold: #ffd700; --dark: #060913; --card-bg: rgba(255,255,255,0.04); }
-    body { margin: 0; font-family: system-ui; background: var(--dark); color: #fff; line-height: 1.6; }
-    .navbar { background: rgba(0,0,0,0.5); padding: 15px 25px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--gold); backdrop-filter: blur(10px); sticky; top: 0; z-index: 100; }
-    .brand { display: flex; align-items: center; gap: 12px; font-weight: 900; font-size: 20px; color: var(--gold); }
-    .logo-s { width: 35px; height: 35px; background: var(--gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #000; font-size: 22px; }
-    .logout-btn { background: none; border: 1px solid #ff5a78; color: #ff5a78; padding: 7px 15px; border-radius: 10px; cursor: pointer; transition: 0.3s; }
-    .logout-btn:hover { background: #ff5a78; color: #fff; }
-    .main-grid { max-width: 1100px; margin: 30px auto; padding: 0 20px; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
-    .card { background: var(--card-bg); border: 1px solid rgba(255,255,255,0.08); border-radius: 25px; padding: 30px; text-align: center; }
-    .label { color: #a8b3cf; font-size: 14px; margin-bottom: 10px; }
-    .value { font-size: 36px; font-weight: 900; color: var(--gold); margin-bottom: 15px; }
-    .action-btn { display: inline-block; padding: 12px 25px; background: var(--gold); color: #000; text-decoration: none; border-radius: 15px; font-weight: bold; transition: 0.3s; }
-    .action-btn:hover { transform: scale(1.05); }
-    .ref-section { max-width: 1100px; margin: 0 auto 30px; padding: 0 20px; }
-    .ref-box { background: rgba(255,215,0,0.05); border: 1px dashed var(--gold); border-radius: 20px; padding: 25px; display: flex; flex-direction: column; gap: 15px; }
-    .link-display { background: #000; padding: 15px; border-radius: 12px; font-family: monospace; font-size: 13px; color: var(--gold); word-break: break-all; text-align: center; }
-    .copy-btn { background: var(--gold); border: none; padding: 12px; border-radius: 12px; font-weight: bold; cursor: pointer; }
+    :root { --gold: #ffd700; --dark-gold: #b8860b; --bg: #060913; }
+    body { margin: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: radial-gradient(circle at top, #1a1a00, var(--bg)); color: #fff; min-height: 100vh; display: flex; align-items: center; justify-content: center; overflow-x: hidden; }
+    .hero-card { width: 90%; max-width: 450px; background: rgba(12, 18, 45, 0.85); border: 1px solid rgba(255, 215, 0, 0.2); border-radius: 35px; padding: 40px; text-align: center; backdrop-filter: blur(20px); box-shadow: 0 25px 60px rgba(0,0,0,0.6); position: relative; }
+    .hero-card::before { content: ''; position: absolute; top: -2px; left: -2px; right: -2px; bottom: -2px; background: linear-gradient(45deg, transparent, rgba(255, 215, 0, 0.3), transparent); border-radius: 35px; z-index: -1; }
+    .main-logo { width: 90px; height: 90px; background: linear-gradient(135deg, var(--gold), var(--dark-gold)); margin: 0 auto 25px; border-radius: 24px; display: flex; align-items: center; justify-content: center; font-size: 42px; font-weight: 900; color: #000; box-shadow: 0 0 30px rgba(255, 215, 0, 0.4); }
+    h1 { font-size: 32px; color: var(--gold); margin: 0 0 15px; letter-spacing: 1px; }
+    p { color: #a8b3cf; line-height: 1.8; font-size: 16px; margin-bottom: 35px; }
+    .cta-btn { display: block; width: 100%; padding: 18px; border-radius: 20px; background: linear-gradient(135deg, var(--gold), var(--dark-gold)); color: #000; font-weight: 800; text-decoration: none; font-size: 18px; transition: 0.4s; box-sizing: border-box; }
+    .cta-btn:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(255, 215, 0, 0.3); }
+    .nav-links { margin-top: 25px; display: flex; justify-content: center; gap: 20px; font-size: 14px; }
+    .nav-links a { color: var(--gold); text-decoration: none; opacity: 0.8; transition: 0.3s; }
+    .nav-links a:hover { opacity: 1; text-decoration: underline; }
   </style>
 </head>
 <body>
-  <nav class="navbar">
-    <div class="brand"><div class="logo-s">G</div> GOLDX PANEL</div>
-    <button class="logout-btn" onclick="doLogout()">خروج</button>
-  </nav>
-
-  <div class="main-grid">
-    <div class="card">
-      <div class="label">الرصيد المتاح (ذهب)</div>
-      <div class="value" id="bal">0.00</div>
-      <a href="#" class="action-btn">طلب سحب أرباح</a>
-    </div>
-    <div class="card">
-      <div class="label">مهام اليوم المكتملة</div>
-      <div class="value" id="tsk">0</div>
-      <a href="#" class="action-btn" style="background:none; border:1px solid var(--gold); color:var(--gold)">ابدأ المهام</a>
+  <div class="hero-card">
+    <div class="main-logo">G</div>
+    <h1>GOLDX</h1>
+    <p>مرحباً بك في المنصة الرائدة لجمع الذهب الرقمي. نفذ المهام البسيطة، ابنِ فريقك الخاص، واسحب أرباحك بكل سهولة وأمان.</p>
+    <a href="auth/login.html" class="cta-btn">ابدأ رحلة الربح الآن</a>
+    <div class="nav-links">
+      <a href="auth/signup.html">إنشاء حساب جديد</a>
+      <a href="#">مركز الدعم</a>
     </div>
   </div>
-
-  <div class="ref-section">
-    <div class="ref-box">
-      <h3 style="margin:0; color:var(--gold)">نظام الفريق الذهبي</h3>
-      <p style="margin:0; font-size:14px; color:#a8b3cf">انسخ رابطك وشاركه. ستحصل على عمولة ذهبية عن كل مهمة ينجزها أصدقاؤك.</p>
-      <div class="link-display" id="refUrl">جاري التحميل...</div>
-      <button class="copy-btn" onclick="copyLink()">نسخ رابط الدعوة</button>
-    </div>
-  </div>
-
-  <script src="https://unpkg.com/parse/dist/parse.min.js"></script>
-  <script src="config.js"></script>
-  <script>
-    Parse.initialize(window.TIK.PARSE_APP_ID, window.TIK.PARSE_JS_KEY);
-    Parse.serverURL = window.TIK.PARSE_SERVER_URL;
-
-    const user = Parse.User.current();
-    if(!user) location.href = "../auth/login.html";
-
-    // تعبئة البيانات
-    document.getElementById('bal').textContent = (user.get('balance') || 0).toFixed(2);
-    document.getElementById('tsk').textContent = user.get('completedTasks') || 0;
-    
-    const myLink = window.location.origin + "/auth/signup.html?ref=" + user.get('refCode');
-    document.getElementById('refUrl').textContent = myLink;
-
-    function copyLink() {
-      navigator.clipboard.writeText(myLink);
-      alert("✅ تم نسخ رابطك الخاص بنجاح!");
-    }
-
-    async function doLogout() {
-      await Parse.User.logOut();
-      location.href = "../auth/login.html";
-    }
-  </script>
 </body>
 </html>
