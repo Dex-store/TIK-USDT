@@ -3,34 +3,130 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>عمولاتي • TIK-USDT</title>
+  <title>عمولاتي • GOLD-X</title>
   <style>
-    body{margin:0;font-family:system-ui;background:radial-gradient(1200px 600px at 50% -10%, #1b255a, #060913);color:#eaf0ff}
-    .wrap{max-width:1050px;margin:0 auto;padding:18px}
-    .topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;
-      background:rgba(12,18,45,.75);border:1px solid rgba(255,255,255,.08);border-radius:22px;padding:14px 16px;
-      box-shadow:0 20px 60px rgba(0,0,0,.35);backdrop-filter:blur(10px)}
-    .btn{padding:11px 14px;border-radius:16px;border:1px solid rgba(255,255,255,.12);
-      background:rgba(255,255,255,.04);color:#eaf0ff;font-weight:800;cursor:pointer;text-decoration:none;display:inline-block}
-    .btn.primary{background:linear-gradient(135deg,#5b8cff,#7c5cff);border-color:transparent}
-    .grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:14px}
-    @media(max-width:900px){.grid{grid-template-columns:1fr}}
-    .card{background:rgba(12,18,45,.75);border:1px solid rgba(255,255,255,.08);border-radius:22px;
-      padding:16px;box-shadow:0 20px 60px rgba(0,0,0,.25);backdrop-filter:blur(10px)}
-    .h{font-weight:900;font-size:16px}
-    .v{font-weight:900;font-size:22px;margin-top:6px}
-    .muted{color:#a8b3cf;font-size:13px;line-height:1.7}
-    .list{margin-top:12px}
-    .item{border:1px solid rgba(255,255,255,.10);border-radius:18px;padding:12px;background:rgba(255,255,255,.03);margin-top:10px}
-    .mono{font-family:ui-monospace,Menlo,Consolas,monospace;word-break:break-all}
-    .tag{display:inline-block;padding:4px 10px;border-radius:999px;font-weight:900;font-size:12px;border:1px solid rgba(255,255,255,.16);color:#cfe0ff}
+    :root {
+      --gold: #ffd700;
+      --bg: #0b0c10; /* أسود داكن فخم */
+      --card-bg: #1f2128; /* رمادي داكن لبروز الكروت */
+      --border-color: rgba(255, 215, 0, 0.15);
+    }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, sans-serif;
+      background: radial-gradient(1200px 600px at 50% -10%, #2e2600, var(--bg)); /* تدرج مشع بلون ذهبي خافت جداً وعميق */
+      color: #eaf0ff;
+    }
+    .wrap {
+      max-width: 1050px;
+      margin: 0 auto;
+      padding: 18px;
+    }
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      background: rgba(31, 33, 40, 0.85);
+      border: 1px solid var(--border-color);
+      border-radius: 22px;
+      padding: 14px 16px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(10px);
+    }
+    .btn {
+      padding: 11px 14px;
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(255, 255, 255, 0.04);
+      color: #eaf0ff;
+      font-weight: 800;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      transition: 0.3s;
+    }
+    .btn:hover {
+      background: rgba(255, 255, 255, 0.08);
+    }
+    .btn.primary {
+      background: linear-gradient(135deg, var(--gold), #b8860b);
+      border-color: transparent;
+      color: #000;
+    }
+    .btn.primary:hover {
+      background: linear-gradient(135deg, #ffe033, var(--gold));
+      transform: translateY(-1px);
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 12px;
+      margin-top: 14px;
+    }
+    @media(max-width:900px){
+      .grid { grid-template-columns: 1fr; }
+    }
+    .card {
+      background: rgba(31, 33, 40, 0.85);
+      border: 1px solid var(--border-color);
+      border-radius: 22px;
+      padding: 16px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(10px);
+    }
+    .h {
+      font-weight: 900;
+      font-size: 16px;
+      color: var(--gold);
+    }
+    .v {
+      font-weight: 900;
+      font-size: 22px;
+      margin-top: 6px;
+    }
+    .muted {
+      color: #a8b3cf;
+      font-size: 13px;
+      line-height: 1.7;
+    }
+    .list {
+      margin-top: 12px;
+    }
+    .item {
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 18px;
+      padding: 14px;
+      background: rgba(255, 255, 255, 0.02);
+      margin-top: 10px;
+      transition: 0.2s;
+    }
+    .item:hover {
+      border-color: rgba(255, 215, 0, 0.3);
+      background: rgba(255, 215, 0, 0.02);
+    }
+    .mono {
+      font-family: ui-monospace, Menlo, Consolas, monospace;
+      word-break: break-all;
+    }
+    .tag {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-weight: 900;
+      font-size: 12px;
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      background: rgba(255, 215, 0, 0.05);
+    }
   </style>
 </head>
 <body>
 <div class="wrap">
   <div class="topbar">
     <div>
-      <div style="font-weight:900">عمولاتي</div>
+      <div style="font-weight: 900; color: var(--gold);">عمولاتي</div>
       <div class="muted">الرصيد وسجل العمولات</div>
     </div>
     <div style="display:flex;gap:10px;flex-wrap:wrap">
@@ -44,15 +140,15 @@
     <div class="card">
       <div class="h">الرصيد المتاح</div>
       <div class="v" id="avail">0.00</div>
-      <div class="muted">USDT (رصيد افتراضي)</div>
+      <div class="muted">GOLD-X (رصيد افتراضي)</div>
     </div>
     <div class="card">
       <div class="h">الرصيد المعلق</div>
       <div class="v" id="locked">0.00</div>
-      <div class="muted">USDT</div>
+      <div class="muted">GOLD-X</div>
     </div>
     <div class="card">
-      <div class="h">ملخص</div>
+      <div class="h">ملخص المنصة</div>
       <div class="muted" id="sum">—</div>
       <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px">
         <a class="btn" href="./plans.html">الاشتراكات</a>
@@ -71,8 +167,9 @@
 <script src="https://unpkg.com/parse/dist/parse.min.js"></script>
 <script src="./config.js"></script>
 <script>
-  Parse.initialize(window.TIK.PARSE_APP_ID, window.TIK.PARSE_JS_KEY);
-  Parse.serverURL = window.TIK.PARSE_SERVER_URL;
+  // تحديث التهيئة للربط بالكائن الجديد GOLDX
+  Parse.initialize(window.GOLDX.PARSE_APP_ID, window.GOLDX.PARSE_JS_KEY);
+  Parse.serverURL = window.GOLDX.PARSE_SERVER_URL;
 
   const user = Parse.User.current();
   if(!user) location.href = "../auth/login.html";
@@ -92,7 +189,6 @@
     q.equalTo("user", user);
     let b = await q.first();
     if(!b){
-      // إذا لم توجد Balance (لأسباب قديمة)، أنشئها
       b = new Balances();
       b.set("user", user);
       b.set("available", 0);
@@ -136,7 +232,7 @@
           <div><b>من:</b> ${esc(fromEmail)}</div>
           <div class="tag">${esc(status)}</div>
         </div>
-        <div style="margin-top:6px"><b>العمولة:</b> ${esc(amt.toFixed(2))} USDT (${esc(percent)}%)</div>
+        <div style="margin-top:6px"><b>العمولة:</b> ${esc(amt.toFixed(2))} GOLD-X (${esc(percent)}%)</div>
         <div class="muted" style="margin-top:6px">خطة المشتري: ${esc(plan)} | التاريخ: ${esc(fmtDate(r.createdAt))}</div>
       `;
       list.appendChild(el);
