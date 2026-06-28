@@ -149,6 +149,7 @@
 <body>
 
 <div class="wrap">
+  <!-- شريط المستخدم العلوي النظيف -->
   <div class="topbar">
     <div class="user-profile">
       <div class="avatar" id="userInitial">U</div>
@@ -160,6 +161,7 @@
     <button class="btn-logout" id="logoutBtn">خروج</button>
   </div>
 
+  <!-- الحساب المالي الحقيقي للمنصة -->
   <div class="main-card">
     <div class="balance-title">الرصيد المتاح الحالي (USDT)</div>
     <div class="balance-num" id="balanceTxt">0.00</div>
@@ -168,20 +170,22 @@
     </div>
   </div>
 
+  <!-- روابط واجهات الحساب الحقيقية فقط -->
   <div class="navigation-links">
-    <a class="link-item" href="./subscriptions.html">
+    <!-- تم تصحيح مسار رابط الاشتراكات ليتطابق مع بنية ملفك البرمجي الفعلي -->
+    <a class="link-item" href="subscriptions.html">
       <span>💳 خطط الاشتراك وتفعيل الحساب</span>
       <span class="arrow">←</span>
     </a>
-    <a class="link-item" href="./withdraw-request.html">
+    <a class="link-item" href="withdraw-request.html">
       <span>💰 تقديم طلب سحب جديد</span>
       <span class="arrow">←</span>
     </a>
-    <a class="link-item" href="./withdraw-history.html">
+    <a class="link-item" href="withdraw-history.html">
       <span>📜 عرض سجل السحوبات المالي</span>
       <span class="arrow">←</span>
     </a>
-    <a class="link-item" href="./referrals.html">
+    <a class="link-item" href="referrals.html">
       <span>👥 إدارة شبكة الإحالات الخاصة بك</span>
       <span class="arrow">←</span>
     </a>
@@ -191,14 +195,12 @@
 <script src="https://unpkg.com/parse/dist/parse.min.js"></script>
 <script src="./config.js"></script>
 <script>
-  // إعدادات قواعد البيانات الموحدة
   Parse.initialize(window.GOLDX.PARSE_APP_ID, window.GOLDX.PARSE_JS_KEY);
   Parse.serverURL = window.GOLDX.PARSE_SERVER_URL;
 
   const user = Parse.User.current();
   if(!user) location.href = "../auth/login.html";
 
-  // تعيين بيانات المستخدم العلوي الحقيقية
   const name = user.get("username") || "User";
   document.getElementById("usernameTxt").textContent = name;
   document.getElementById("userInitial").textContent = name.charAt(0).toUpperCase();
@@ -217,7 +219,6 @@
     try {
       const profile = await getProfile();
       
-      // قراءة القيم المالية الحقيقية المتطابقة مع بقية كود المنصة
       const bal = profile ? safeNum(profile.get("virtualBalance")) || safeNum(profile.get("balance")) || 0 : 0;
       const isActive = !!(profile && profile.get("isActive"));
 
