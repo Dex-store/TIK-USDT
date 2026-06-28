@@ -3,33 +3,102 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>إحالاتي • TIK-USDT</title>
+  <title>إحالاتي • GOLD-X</title>
   <style>
-    body{margin:0;font-family:system-ui;background:radial-gradient(1200px 600px at 50% -10%, #1b255a, #060913);color:#eaf0ff}
-    .wrap{max-width:1000px;margin:0 auto;padding:18px}
-    .topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;
-      background:rgba(12,18,45,.75);border:1px solid rgba(255,255,255,.08);border-radius:22px;padding:14px 16px;
-      box-shadow:0 20px 60px rgba(0,0,0,.35);backdrop-filter:blur(10px)}
-    .btn{padding:11px 14px;border-radius:16px;border:1px solid rgba(255,255,255,.12);
-      background:rgba(255,255,255,.04);color:#eaf0ff;font-weight:800;cursor:pointer;text-decoration:none;display:inline-block}
-    .card{margin-top:14px;background:rgba(12,18,45,.75);border:1px solid rgba(255,255,255,.08);border-radius:22px;
-      padding:16px;box-shadow:0 20px 60px rgba(0,0,0,.25);backdrop-filter:blur(10px)}
-    .item{border:1px solid rgba(255,255,255,.10);border-radius:18px;padding:12px;background:rgba(255,255,255,.03);margin-top:10px}
-    .muted{color:#a8b3cf;font-size:13px;line-height:1.7}
-    .mono{font-family:ui-monospace,Menlo,Consolas,monospace;word-break:break-all}
+    :root {
+      --gold: #ffd700;
+      --bg: #0b0c10; /* أسود داكن فخم */
+      --card-bg: #1f2128; /* رمادي داكن لبروز بطاقات الإحالات */
+      --border-color: rgba(255, 215, 0, 0.15);
+      --text-gray: #a8b3cf;
+    }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, sans-serif;
+      background: radial-gradient(1200px 600px at 50% -10%, #2e2600, var(--bg)); /* التدرج الذهبي الفخم المشع */
+      color: #eaf0ff;
+    }
+    .wrap {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 18px;
+    }
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      background: rgba(31, 33, 40, 0.85);
+      border: 1px solid var(--border-color);
+      border-radius: 22px;
+      padding: 14px 16px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(10px);
+    }
+    .btn {
+      padding: 11px 14px;
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(255, 255, 255, 0.04);
+      color: #eaf0ff;
+      font-weight: 800;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      transition: 0.3s;
+    }
+    .btn:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: var(--gold);
+    }
+    .card {
+      margin-top: 14px;
+      background: rgba(31, 33, 40, 0.85);
+      border: 1px solid var(--border-color);
+      border-radius: 22px;
+      padding: 18px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(10px);
+    }
+    .item {
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 18px;
+      padding: 14px;
+      background: rgba(255, 255, 255, 0.02);
+      margin-top: 12px;
+      transition: 0.3s;
+    }
+    .item:hover {
+      border-color: rgba(255, 215, 0, 0.3);
+      background: rgba(255, 215, 0, 0.01);
+    }
+    .muted {
+      color: var(--text-gray);
+      font-size: 13px;
+      line-height: 1.7;
+    }
+    .mono {
+      font-family: ui-monospace, Menlo, Consolas, monospace;
+      word-break: break-all;
+    }
+    .highlight-gold {
+      color: var(--gold);
+      font-weight: 900;
+    }
   </style>
 </head>
 <body>
 <div class="wrap">
   <div class="topbar">
     <div>
-      <div style="font-weight:900">إحالاتي</div>
+      <div style="font-weight:900; font-size: 18px; color: var(--gold);">إحالاتي</div>
       <div class="muted">الأشخاص الذين سجلوا عبر رابطك</div>
     </div>
     <div style="display:flex;gap:10px;flex-wrap:wrap">
       <a class="btn" href="./dashboard.html">لوحة التحكم</a>
       <a class="btn" href="./commissions.html">عمولاتي</a>
-      <button class="btn" id="refreshBtn">تحديث</button>
+      <button class="btn" id="refreshBtn" style="background: rgba(255,215,0,0.1); color: var(--gold); border-color: rgba(255,215,0,0.2);">تحديث</button>
     </div>
   </div>
 
@@ -42,8 +111,9 @@
 <script src="https://unpkg.com/parse/dist/parse.min.js"></script>
 <script src="./config.js"></script>
 <script>
-  Parse.initialize(window.TIK.PARSE_APP_ID, window.TIK.PARSE_JS_KEY);
-  Parse.serverURL = window.TIK.PARSE_SERVER_URL;
+  // تهيئة الاتصال باستخدام كائن المنصة الجديد GOLDX
+  Parse.initialize(window.GOLDX.PARSE_APP_ID, window.GOLDX.PARSE_JS_KEY);
+  Parse.serverURL = window.GOLDX.PARSE_SERVER_URL;
 
   const user = Parse.User.current();
   if(!user) location.href = "../auth/login.html";
@@ -62,10 +132,10 @@
     q.limit(100);
     q.include("referred");
 
-    const rows = await q.find().catch(e=>{ msg(e.message||"خطأ"); return []; });
+    const rows = await q.find().catch(e=>{ msg(e.message||"خطأ أثناء التحميل"); return []; });
     if(!rows.length){ msg("لا توجد إحالات بعد."); return; }
 
-    msg("عدد الإحالات: " + rows.length);
+    msg("عدد الإحالات النشطة: " + rows.length);
 
     rows.forEach(r=>{
       const referred = r.get("referred");
@@ -75,8 +145,8 @@
       const el = document.createElement("div");
       el.className = "item";
       el.innerHTML = `
-        <div><b>المستخدم:</b> ${esc(email)}</div>
-        <div class="muted"><b>الحالة:</b> ${esc(st)} | <b>التاريخ:</b> ${esc(r.createdAt ? r.createdAt.toISOString() : "")}</div>
+        <div><b class="highlight-gold">المستخدم:</b> <span class="mono">${esc(email)}</span></div>
+        <div class="muted"><b style="color: #fff;">الحالة:</b> ${esc(st)} | <b>التاريخ:</b> ${esc(r.createdAt ? r.createdAt.toISOString().split('T')[0] : "")}</div>
       `;
       list.appendChild(el);
     });
