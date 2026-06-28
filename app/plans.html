@@ -3,250 +3,231 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>الاشتراكات • GOLD-X</title>
+  <title>خطط الاشتراك • GOLD-X</title>
   <style>
     :root {
       --gold: #ffd700;
-      --bg: #0b0c10; /* أسود داكن فخم */
-      --card-bg: #1f2128; /* رمادي داكن لبروز الكروت والخطط */
+      --bg: #0b0c10;
+      --card-bg: #1f2128;
       --border-color: rgba(255, 215, 0, 0.15);
       --text-gray: #a8b3cf;
     }
     body {
       margin: 0;
       font-family: system-ui, -apple-system, sans-serif;
-      background: radial-gradient(1200px 600px at 50% -10%, #2e2600, var(--bg)); /* تدرج مشع ذهبي خافت وعميق */
+      background: radial-gradient(1200px 600px at 50% -10%, #2e2600, var(--bg));
       color: #eaf0ff;
     }
     .wrap {
-      max-width: 1100px;
+      max-width: 800px;
       margin: 0 auto;
-      padding: 18px;
+      padding: 24px 18px;
     }
     .topbar {
       display: flex;
       justify-content: space-between;
       align-items: center;
       gap: 12px;
-      flex-wrap: wrap;
       background: rgba(31, 33, 40, 0.85);
       border: 1px solid var(--border-color);
       border-radius: 22px;
-      padding: 14px 16px;
+      padding: 14px 20px;
       box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
       backdrop-filter: blur(10px);
     }
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .logo {
-      width: 44px;
-      height: 44px;
-      border-radius: 16px;
-      background: linear-gradient(135deg, var(--gold), #b8860b);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 900;
-      color: #000;
-    }
-    .muted {
-      color: var(--text-gray);
-      font-size: 13px;
-      line-height: 1.7;
-    }
     .btn {
-      padding: 11px 14px;
-      border-radius: 16px;
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      background: rgba(255, 255, 255, 0.04);
-      color: #eaf0ff;
-      font-weight: 800;
-      cursor: pointer;
+      padding: 10px 16px;
+      border-radius: 14px;
+      border: 1px solid var(--border-color);
+      background: rgba(255, 215, 0, 0.05);
+      color: var(--gold);
+      font-weight: 700;
       text-decoration: none;
-      display: inline-block;
+      font-size: 14px;
+      cursor: pointer;
       transition: 0.3s;
+      display: inline-block;
     }
     .btn:hover {
-      background: rgba(255, 255, 255, 0.08);
+      background: rgba(255, 215, 0, 0.15);
+      border-color: var(--gold);
     }
     .btn.primary {
       background: linear-gradient(135deg, var(--gold), #b8860b);
       border-color: transparent;
       color: #000;
+      font-weight: 800;
     }
     .btn.primary:hover {
       background: linear-gradient(135deg, #ffe033, var(--gold));
       transform: translateY(-1px);
     }
     .btn[disabled] {
-      opacity: .4;
+      opacity: .3;
       cursor: not-allowed;
       background: rgba(255, 255, 255, 0.02) !important;
       color: var(--text-gray) !important;
       border-color: rgba(255, 255, 255, 0.05) !important;
       transform: none !important;
     }
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
-      margin-top: 14px;
-    }
-    @media(max-width:900px){
-      .grid { grid-template-columns: 1fr; }
-    }
-    .card {
+    .main-card {
       background: rgba(31, 33, 40, 0.85);
       border: 1px solid var(--border-color);
-      border-radius: 22px;
-      padding: 18px;
+      border-radius: 24px;
+      padding: 24px;
+      margin-top: 20px;
       box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
       backdrop-filter: blur(10px);
     }
-    .price {
-      font-size: 24px;
+    .kpi-container {
+      display: flex;
+      gap: 12px;
+      margin: 16px 0;
+    }
+    .kpi-box {
+      flex: 1;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 16px;
+      padding: 14px;
+      text-align: center;
+    }
+    .kpi-val {
+      font-size: 22px;
       font-weight: 900;
-      margin-top: 6px;
-      color: var(--gold);
+      margin-top: 4px;
+      font-family: ui-monospace, Menlo, Consolas, monospace;
     }
     .pill {
       display: inline-block;
-      padding: 4px 12px;
-      border-radius: 999px;
-      border: 1px dashed rgba(255, 215, 0, 0.3);
+      padding: 6px 14px;
+      border-radius: 12px;
       color: var(--gold);
-      font-size: 12px;
-      margin-top: 5px;
-      background: rgba(255, 215, 0, 0.05);
+      background: rgba(255, 215, 0, 0.06);
+      border: 1px solid rgba(255, 215, 0, 0.15);
+      font-size: 13px;
     }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+      margin-top: 20px;
+    }
+    @media(max-width: 600px) {
+      .grid { grid-template-columns: 1fr; }
+    }
+    .plan-card {
+      background: rgba(31, 33, 40, 0.6);
+      border: 1px solid rgba(255, 215, 0, 0.1);
+      border-radius: 20px;
+      padding: 20px;
+      text-align: center;
+      transition: 0.3s;
+    }
+    .plan-card.selected {
+      border-color: var(--gold);
+      background: rgba(255, 215, 0, 0.02);
+      box-shadow: 0 10px 30px rgba(255, 215, 0, 0.05);
+    }
+    .price {
+      font-size: 32px;
+      font-weight: 900;
+      color: var(--gold);
+      margin: 10px 0;
+      font-family: ui-monospace, Menlo, Consolas, monospace;
+    }
+    .price span { font-size: 14px; color: #fff; }
     input {
       width: 100%;
-      padding: 13px;
+      padding: 14px;
       border-radius: 16px;
-      border: 1px solid rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.1);
       background: #12141c;
       color: #eaf0ff;
-      margin-top: 12px;
+      margin-top: 14px;
       outline: none;
       box-sizing: border-box;
       transition: 0.3s;
     }
     input:focus {
       border-color: var(--gold);
-      box-shadow: 0 0 8px rgba(255, 215, 0, 0.2);
+      box-shadow: 0 0 10px rgba(255, 215, 0, 0.15);
     }
-    .ok { color: #2cff8f; }
-    .err { color: #FF8FA3; }
+    .row { display: flex; gap: 10px; margin-top: 14px; flex-wrap: wrap; }
+    .ok { color: #2cff8f; font-weight: bold; }
+    .err { color: #ff5a78; font-weight: bold; }
     .mono { font-family: ui-monospace, Menlo, Consolas, monospace; word-break: break-all; }
-    .disabledNote {
-      margin-top: 14px;
-      padding: 12px;
-      border-radius: 16px;
-      border: 1px dashed rgba(255, 215, 0, 0.2);
-      background: rgba(255, 215, 0, 0.02);
-      color: #ffe875;
-      font-size: 13px;
-      line-height: 1.6;
-    }
-    .row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 12px; }
-    .kpi { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 12px; }
-    .kpi .box {
-      flex: 1;
-      min-width: 120px;
-      border: 1px solid rgba(255, 255, 255, 0.06);
-      border-radius: 18px;
-      padding: 12px;
-      background: rgba(255, 255, 255, 0.02);
-    }
+    .muted { color: var(--text-gray); font-size: 13px; line-height: 1.6; }
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <div class="topbar">
-      <div class="brand">
-        <div class="logo">G</div>
-        <div>
-          <div style="font-weight:900; color: var(--gold);">GOLD-X</div>
-          <div class="muted">الاشتراكات الشهرية</div>
-        </div>
-      </div>
 
-      <div style="display:flex;gap:10px;flex-wrap:wrap">
-        <a class="btn" href="./dashboard.html">لوحة التحكم</a>
-        <a class="btn" href="../index.html">الرئيسية</a>
-        <button class="btn primary" id="logoutBtn">تسجيل خروج</button>
-      </div>
+<div class="wrap">
+  <div class="topbar">
+    <div style="display:flex; flex-direction:column;">
+      <div style="font-weight:900; color: #fff; font-size: 16px;">خطط الاشتراك والترقية</div>
+      <div class="muted" style="font-size: 11px;">شحن الحساب وتفعيل العضوية</div>
     </div>
-
-    <div class="card" style="margin-top:14px">
-      <div style="font-weight:900;font-size:16px;color: var(--gold);">طريقة الدفع</div>
-      <div class="muted">
-        يمكنك الدفع بطريقتين:
-        <br>1) تحويل الرصيد اليدوي وإرسال المعاملة ثم إدخال TX Hash.
-        <br>2) الاشتراك مباشرة من الرصيد (عمولات الإحالات) إذا كان رصيدك المتاح كافيًا.
-      </div>
-
-      <div class="kpi">
-        <div class="box">
-          <div class="muted">رصيدك المتاح</div>
-          <div style="font-weight:900;font-size:20px;color: var(--gold);" id="availTxt">0.00</div>
-        </div>
-        <div class="box">
-          <div class="muted">رصيد معلّق</div>
-          <div style="font-weight:900;font-size:20px;" id="lockedTxt">0.00</div>
-        </div>
-      </div>
-
-      <div class="muted" style="margin-top:8px">GOLD-X (رصيد افتراضي)</div>
-
-      <hr style="border:none;border-top:1px solid rgba(255,255,255,.08);margin:14px 0">
-
-      <div class="muted">للتحويل اليدوي (TX Hash):</div>
-      <div class="pill mono" id="walletTxt"></div>
-      <div class="row">
-        <button class="btn" id="copyWalletBtn">نسخ العنوان</button>
-        <a class="btn" href="https://etherscan.io/" target="_blank">فتح Etherscan</a>
-      </div>
-
-      <div class="disabledNote">
-        ملاحظة: خطة <b>200 GOLD-X</b> غير متاحة حاليًا (مقفولة). سيتم تفعيلها لاحقًا إن رغبت.
-      </div>
-    </div>
-
-    <div class="grid" id="plans"></div>
-
-    <div class="card" style="margin-top:14px">
-      <div style="font-weight:900; color: var(--gold);">تسجيل TX Hash (بعد الدفع)</div>
-      <div class="muted">اختر الخطة أولًا ثم ضع TX Hash.</div>
-      <input id="txHash" class="mono" placeholder="TX Hash مثل: 0x....">
-      <div class="row">
-        <button class="btn primary" id="submitTxBtn">تسجيل الطلب</button>
-        <a class="btn" href="https://t.me/TIK_USDT" target="_blank">الدعم</a>
-      </div>
-      <div class="muted" id="msg" style="margin-top:10px"></div>
+    <div>
+      <a class="btn" href="dashboard.html">📊 لوحة التحكم</a>
     </div>
   </div>
 
-  <script src="https://unpkg.com/parse/dist/parse.min.js"></script>
-  <script src="./config.js"></script>
+  <div class="main-card">
+    <div style="font-weight:900; font-size:16px; color: var(--gold); margin-bottom: 6px;">خيارات تفعيل الحساب</div>
+    <div class="muted">
+      يمكنك تفعيل الاشتراك عبر طريقتين: إما بالتحويل المباشر لعنوان المحفظة أدناه وإدخال رقم المعاملة (TX Hash)، أو السحب الفوري من أرباح وعمولات إحالاتك المتاحة.
+    </div>
 
+    <div class="kpi-container">
+      <div class="kpi-box">
+        <div class="muted" style="font-size:12px;">رصيدك المتاح الحالي</div>
+        <div class="kpi-val" style="color: var(--gold);" id="availTxt">0.00</div>
+      </div>
+      <div class="kpi-box">
+        <div class="muted" style="font-size:12px;">الرصيد المعلق</div>
+        <div class="kpi-val" id="lockedTxt">0.00</div>
+      </div>
+    </div>
+
+    <hr style="border:none; border-top:1px solid rgba(255,255,255,.06); margin:16px 0;">
+
+    <div class="muted" style="margin-bottom: 8px;">عنوان محفظة الاستقبال المعتمد (USDT):</div>
+    <div class="pill mono" id="walletTxt" style="font-size: 12px;"></div>
+    <div class="row">
+      <button class="btn" id="copyWalletBtn">📋 نسخ العنوان</button>
+    </div>
+  </div>
+
+  <div class="grid" id="plans"></div>
+
+  <div class="main-card" style="margin-top: 14px;">
+    <div style="font-weight:900; color: var(--gold);">تأكيد الدفع اليدوي (TX Hash)</div>
+    <div class="muted" style="margin-top: 4px;">يرجى تحديد الخطة المناسبة من الأعلى أولاً، ثم إدخال رقم المعاملة بدقة لتوثيق الطلب.</div>
+    <input id="txHash" class="mono" placeholder="أدخل هنا الـ TX Hash الخاص بالتحويل: 0x...">
+    
+    <div class="row">
+      <button class="btn primary" id="submitTxBtn">🚀 تسجيل وإرسال الطلب</button>
+      <a class="btn" href="https://t.me/TIK_USDT" target="_blank" style="border-color: rgba(255,255,255,0.08);">💬 الدعم الفني</a>
+    </div>
+    <div class="muted" id="msg" style="margin-top:14px;"></div>
+  </div>
+</div>
+
+<script src="https://unpkg.com/parse/dist/parse.min.js"></script>
+<script src="./config.js"></script>
 <script>
   const RECEIVER_WALLET = "0xb56a89f790060cbb0f08d02234921e5fefff11a6";
+  const PLAN_OPTIONS = [10, 20, 50, 100, 200];
+  const DISABLED_PLANS = [200]; // الخطة المغلقة حسب ملفك الأصلي
 
-  const PLAN_OPTIONS = [10,20,50,100,200];
-  const DISABLED_PLANS = [200];
-
-  // ربط التهيئة بكائن المنصة الجديد GOLDX
   Parse.initialize(window.GOLDX.PARSE_APP_ID, window.GOLDX.PARSE_JS_KEY);
   Parse.serverURL = window.GOLDX.PARSE_SERVER_URL;
 
   const user = Parse.User.current();
   if (!user) location.href = "../auth/login.html";
 
-  walletTxt.textContent = RECEIVER_WALLET;
+  document.getElementById("walletTxt").textContent = RECEIVER_WALLET;
 
   let selectedPlan = null;
   let balances = { available: 0, locked: 0 };
@@ -254,55 +235,50 @@
   function safeNum(n){ n=Number(n); return Number.isFinite(n)?n:0; }
 
   async function loadBalances(){
-    const Balances = Parse.Object.extend("Balances");
-    const q = new Parse.Query(Balances);
-    q.equalTo("user", user);
-    let b = await q.first();
-    if(!b){
-      b = new Balances();
-      b.set("user", user);
-      b.set("available", 0);
-      b.set("locked", 0);
-      await b.save();
+    try {
+      const Balances = Parse.Object.extend("Balances");
+      const q = new Parse.Query(Balances);
+      q.equalTo("user", user);
+      let b = await q.first();
+      if(!b){
+        b = new Balances();
+        b.set("user", user);
+        b.set("available", 0);
+        b.set("locked", 0);
+        await b.save();
+      }
+      balances.available = safeNum(b.get("available"));
+      balances.locked = safeNum(b.get("locked"));
+      document.getElementById("availTxt").textContent = balances.available.toFixed(2);
+      document.getElementById("lockedTxt").textContent = balances.locked.toFixed(2);
+    } catch(e) {
+      console.error("Error loading balances:", e);
     }
-    balances.available = safeNum(b.get("available"));
-    balances.locked = safeNum(b.get("locked"));
-    availTxt.textContent = balances.available.toFixed(2);
-    lockedTxt.textContent = balances.locked.toFixed(2);
   }
 
   function render(){
-    plans.innerHTML = PLAN_OPTIONS.map(p=>{
+    const plansDiv = document.getElementById("plans");
+    plansDiv.innerHTML = PLAN_OPTIONS.map(p => {
       const disabled = DISABLED_PLANS.includes(p);
       const isSelected = selectedPlan === p;
       const canPayFromBalance = !disabled && balances.available >= p;
 
       return `
-        <div class="card">
-          <div class="pill">اشتراك شهري</div>
-          <div style="font-weight:900;margin-top:8px">الخطة</div>
-          <div class="price">${p} GOLD-X</div>
-
-          <div class="muted">
-            ${disabled ? "هذه الخطة غير متاحة الآن." : "اختر طريقة الدفع: تحويل + TX أو من الرصيد."}
-          </div>
-
-          <div class="row">
-            ${
-              disabled
-                ? `<button class="btn" disabled>غير متاحة الآن</button>`
-                : `<button class="btn ${isSelected?'primary':''}" onclick="selectPlan(${p})">
-                    ${isSelected?'مختارة ✅':'اختيار للخطة (TX)'}
-                   </button>`
-            }
-
-            ${
-              disabled
-                ? ``
-                : `<button class="btn ${canPayFromBalance?'primary':''}" ${canPayFromBalance?'':'disabled'}
-                     onclick="subscribeFromBalance(${p})">
-                     ${canPayFromBalance ? 'اشترك من الرصيد' : 'رصيد غير كاف'}
-                   </button>`
+        <div class="plan-card ${isSelected ? 'selected' : ''}">
+          <div style="font-weight:900; font-size:15px; margin-bottom: 4px; color:#fff;">خطة ترقية الحساب</div>
+          <div class="price">${p} <span>USDT</span></div>
+          <p class="muted" style="font-size:12px; margin-bottom:14px;">
+            ${disabled ? "هذه الخطة غير متاحة مؤقتاً." : "اختر الدفع عبر التحويل الخارجي أو من خلال رصيد إحالاتك المتاح."}
+          </p>
+          <div style="display:flex; flex-direction:column; gap:8px;">
+            ${disabled 
+              ? `<button class="btn" disabled style="width:100%">❌ مغلقة حالياً</button>`
+              : `<button class="btn ${isSelected ? 'primary' : ''}" onclick="selectPlan(${p})" style="width:100%">
+                  ${isSelected ? '✅ تم اختيار الخطة' : '📥 اختيار الدفع بـ TX'}
+                 </button>
+                 <button class="btn" ${canPayFromBalance ? '' : 'disabled'} onclick="subscribeFromBalance(${p})" style="width:100%; border-color: ${canPayFromBalance ? 'var(--gold)' : 'rgba(255,255,255,0.05)'}">
+                  ${canPayFromBalance ? '💎 اشترك فوراً من الرصيد' : 'رصيد المحفظة غير كاف'}
+                 </button>`
             }
           </div>
         </div>
@@ -310,75 +286,68 @@
     }).join("");
   }
 
-  window.selectPlan = (p)=>{
+  window.selectPlan = (p) => {
     if (DISABLED_PLANS.includes(p)) return;
     selectedPlan = p;
     render();
-    msg.className="muted";
-    msg.textContent = "تم اختيار خطة (TX): " + p + " GOLD-X";
+    const msg = document.getElementById("msg");
+    msg.className = "muted";
+    msg.textContent = "تم تحديد الخطة المرجوة: " + p + " USDT. يرجى ملء الـ Hash أسفله لتأكيد الإرسال.";
   };
 
-  window.subscribeFromBalance = async (p)=>{
+  window.subscribeFromBalance = async (p) => {
     if (DISABLED_PLANS.includes(p)) return;
+    const msg = document.getElementById("msg");
+    msg.className = "muted";
+    msg.textContent = "جاري تفعيل خطة الاشتراك من رصيد العمولات المتاح...";
 
-    msg.className="muted";
-    msg.textContent = "جاري تفعيل الاشتراك من الرصيد...";
-
-    try{
+    try {
       const res = await Parse.Cloud.run("subscribeWithBalance", { planAmount: p });
-      msg.className="muted ok";
-      msg.textContent = `✅ تم تفعيل الاشتراك من الرصيد. رصيدك المتاح الآن: ${Number(res.newAvailable).toFixed(2)} GOLD-X`;
+      msg.className = "muted ok";
+      msg.textContent = `✅ تم تفعيل العضوية بنجاح. رصيدك المتاح الحالي: ${Number(res.newAvailable).toFixed(2)} USDT`;
       await loadBalances();
       selectedPlan = null;
       render();
-      setTimeout(()=>{ location.href="./dashboard.html"; }, 600);
-    }catch(e){
-      msg.className="muted err";
-      msg.textContent = (e && e.message) ? e.message : "تعذر الاشتراك من الرصيد.";
+      setTimeout(() => { location.href = "dashboard.html"; }, 1000);
+    } catch(e) {
+      msg.className = "muted err";
+      msg.textContent = (e && e.message) ? e.message : "حدث خطأ غير متوقع أثناء معالجة الاشتراك من الرصيد.";
     }
   };
 
-  copyWalletBtn.onclick = async ()=>{
-    try{
+  document.getElementById("copyWalletBtn").onclick = async () => {
+    const msg = document.getElementById("msg");
+    try {
       await navigator.clipboard.writeText(RECEIVER_WALLET);
-      msg.className="muted ok";
-      msg.textContent="تم نسخ العنوان ✅";
-    }catch{
-      msg.className="muted err";
-      msg.textContent="لم أستطع النسخ تلقائيًا — انسخه يدويًا.";
+      msg.className = "muted ok";
+      msg.textContent = "تم نسخ عنوان المحفظة بنجاح ✅";
+    } catch {
+      msg.className = "muted err";
+      msg.textContent = "فشل النسخ التلقائي، يرجى نسخه يدوياً.";
     }
   };
 
-  logoutBtn.onclick = async ()=>{
-    await Parse.User.logOut();
-    location.href="../auth/login.html";
-  };
-
-  function isTxHashLike(h){
+  function isTxHashLike(h) {
     return /^0x([A-Fa-f0-9]{64})$/.test(h);
   }
 
-  submitTxBtn.onclick = async ()=>{
-    msg.className="muted";
-    const hash = (txHash.value||"").trim();
+  document.getElementById("submitTxBtn").onclick = async () => {
+    const msg = document.getElementById("msg");
+    const txInput = document.getElementById("txHash");
+    const hash = txInput.value.trim();
 
-    if(!selectedPlan){
-      msg.className="muted err";
-      msg.textContent="اختر الخطة (TX) أولًا.";
+    if(!selectedPlan) {
+      msg.className = "muted err";
+      msg.textContent = "يرجى اختيار الخطة المستهدفة من الأعلى أولاً.";
       return;
     }
-    if (DISABLED_PLANS.includes(selectedPlan)) {
-      msg.className="muted err";
-      msg.textContent="هذه الخطة غير متاحة الآن.";
-      return;
-    }
-    if(!isTxHashLike(hash)){
-      msg.className="muted err";
-      msg.textContent="TX Hash غير صحيح (يجب أن يكون 0x ثم 64 حرف/رقم).";
+    if(!isTxHashLike(hash)) {
+      msg.className = "muted err";
+      msg.textContent = "صيغة المعاملة TX Hash غير صالحة. يجب أن تبدأ بـ 0x متبوعة بـ 64 رمزًا.";
       return;
     }
 
-    try{
+    try {
       const Payments = Parse.Object.extend("Payments");
       const pay = new Payments();
       pay.set("user", user);
@@ -388,16 +357,16 @@
       pay.set("status", "pending");
       await pay.save();
 
-      msg.className="muted ok";
-      msg.textContent="تم تسجيل الطلب ✅ سيتم المراجعة وتفعيل الاشتراك.";
-      txHash.value="";
-    }catch(e){
-      msg.className="muted err";
-      msg.textContent = (e && e.message) ? e.message : "تعذر تسجيل الطلب.";
+      msg.className = "muted ok";
+      msg.textContent = "تم إرسال الطلب بنجاح مراجعته وتنشيط الحساب فور التحقق العيني للمعاملة الحسابية.";
+      txInput.value = "";
+    } catch(e) {
+      msg.className = "muted err";
+      msg.textContent = (e && e.message) ? e.message : "تعذر تسجيل وثيقة الدفع اليدوية.";
     }
   };
 
-  (async ()=>{
+  (async () => {
     await loadBalances();
     render();
   })();
