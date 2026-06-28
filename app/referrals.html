@@ -119,11 +119,11 @@
   <div class="main-card">
     <div style="font-weight:900; font-size:16px; color: var(--gold); margin-bottom: 6px;">رابط الإحالة الخاص بك</div>
     <div class="muted">
-      قم بنسخ الرابط أدناه ومشاركته لتلقي العمولات الفورية عند تسجيل الحسابات وتفعيلها من خلالك.
+      قم بنسخ الرابط الاحترافي المشفر أدناه ومشاركته لتلقي العمولات الفورية بأمان.
     </div>
     
     <div class="ref-input-wrapper">
-      <input id="refLinkInput" readonly value="جاري توليد الرابط...">
+      <input id="refLinkInput" readonly value="جاري توليد معرف الإحالة الرقمي...">
       <button class="btn" id="copyLinkBtn" style="white-space: nowrap;">📋 نسخ الرابط</button>
     </div>
     <div id="copyMsg" class="msg" style="display:none;"></div>
@@ -162,25 +162,24 @@
     location.href = "../auth/login.html";
   }
 
-  // دالة توليد الرابط التي تم تعديلها لتشير لملف signup.html بدقة
+  // دالة توليد الرابط باستخدام الـ ID الفريد للمستخدم من الباكيند (user.id)
   function generateReferralLink() {
     if(!user) return;
     
-    const refCode = user.get("username") || user.id;
+    // سحب الـ objectId الفريد للحساب لحفظ خصوصية العميل ومنع ظهور البيانات الحساسة
+    const refCode = user.id; 
     const currentUrl = window.location.href;
     
-    // قطع الرابط عند مجلد /app/ للحصول على المسار الرئيسي للموقع
     const baseDir = currentUrl.substring(0, currentUrl.lastIndexOf("/app/"));
-    
-    // الربط الصحيح والمطابق لملفاتك الحالية لتفادي خطأ 404 وظهور صفحة الـ Signup
     const fullRefLink = `${baseDir}/auth/signup.html?ref=${refCode}`;
     document.getElementById("refLinkInput").value = fullRefLink;
   }
 
+  // جلب إحصائيات الإحالات من خلال البحث بالـ ID الفريد
   async function loadReferralStats() {
     if(!user) return;
     try {
-      const refCode = user.get("username") || user.id;
+      const refCode = user.id;
 
       const userQuery = new Parse.Query(Parse.User);
       userQuery.equalTo("referredBy", refCode);
@@ -207,7 +206,7 @@
       await navigator.clipboard.writeText(input.value);
       msg.style.display = "block";
       msg.className = "msg";
-      msg.textContent = "تم نسخ رابط الإحالة الخاص بك بنجاح! ✅";
+      msg.textContent = "تم نسخ رابط الإحالة المشفر بنجاح! ✅";
       setTimeout(() => { msg.style.display = "none"; }, 3000);
     } catch (err) {
       msg.style.display = "block";
