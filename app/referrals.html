@@ -119,11 +119,11 @@
   <div class="main-card">
     <div style="font-weight:900; font-size:16px; color: var(--gold); margin-bottom: 6px;">رابط الإحالة الخاص بك</div>
     <div class="muted">
-      قم بنسخ الرابط الاحترافي المشفر أدناه ومشاركته لتلقي العمولات الفورية بأمان.
+      قم بنسخ الرابط المدمج برمز الإحالة الفريد والخاص بك المعتمد من النظام.
     </div>
     
     <div class="ref-input-wrapper">
-      <input id="refLinkInput" readonly value="جاري توليد معرف الإحالة الرقمي...">
+      <input id="refLinkInput" readonly value="جاري قراءة الـ refCode من حسابك...">
       <button class="btn" id="copyLinkBtn" style="white-space: nowrap;">📋 نسخ الرابط</button>
     </div>
     <div id="copyMsg" class="msg" style="display:none;"></div>
@@ -154,7 +154,7 @@
       Parse.serverURL = window.GOLDX.PARSE_SERVER_URL;
     }
   } catch(e) {
-    console.error("Parse init fail:", e);
+    console.error("Parse initialization error:", e);
   }
 
   const user = Parse.User.current();
@@ -162,40 +162,51 @@
     location.href = "../auth/login.html";
   }
 
-  // دالة توليد الرابط باستخدام الـ ID الفريد للمستخدم من الباكيند (user.id)
+  // دالة توليد الرابط بناءً على حقل refCode الحقيقي الموضح في لقطات الشاشة
   function generateReferralLink() {
     if(!user) return;
     
-    // سحب الـ objectId الفريد للحساب لحفظ خصوصية العميل ومنع ظهور البيانات الحساسة
-    const refCode = user.id; 
-    const currentUrl = window.location.href;
+    // سحب الـ refCode الأصلي والفريد المخزن في جدول المستخدم (مثل MKDB56)
+    const dbRefCode = user.get("refCode"); 
     
+    if(!dbRefCode) {
+      document.getElementById("refLinkInput").value = "خطأ: لم يتم العثور على refCode في حسابك.";
+      return;
+    }
+    
+    const currentUrl = window.location.href;
     const baseDir = currentUrl.substring(0, currentUrl.lastIndexOf("/app/"));
-    const fullRefLink = `${baseDir}/auth/signup.html?ref=${refCode}`;
+    
+    // دمج الـ refCode المتطابق تماماً مع الباكيند
+    const fullRefLink = `${baseDir}/auth/signup.html?ref=${dbRefCode}`;
     document.getElementById("refLinkInput").value = fullRefLink;
   }
 
-  // جلب إحصائيات الإحالات من خلال البحث بالـ ID الفريد
+  // جلب إحصائيات الإحالات من خلال مطابقة الـ refCode مع الـ pendingRefCode للمسجلين الجدد
   async function loadReferralStats() {
     if(!user) return;
     try {
-      const refCode = user.id;
+      const dbRefCode = user.get("refCode");
+      if(!dbRefCode) return;
 
       const userQuery = new Parse.Query(Parse.User);
-      userQuery.equalTo("referredBy", refCode);
+      // البحث عن الأعضاء الذين تم تخزين الـ refCode الخاص بك في حقل pendingRefCode لديهم
+      userQuery.equalTo("pendingRefCode", dbRefCode);
       const referredUsers = await userQuery.find();
 
       document.getElementById("totalRefsTxt").textContent = referredUsers.length;
 
+      // حساب الأعضاء النشطين بناءً على خطة الاشتراك المكتملة أو قيمة الـ balance
       let activeCount = 0;
       for (let u of referredUsers) {
-        if (u.get("isActive") === true) {
+        // إذا كان الحساب يمتلك رصيد تفعيل أو مسجل به قيمة خطة في الباكيند
+        if (u.get("Plans") || u.get("balance") > 0) {
           activeCount++;
         }
       }
       document.getElementById("activeRefsTxt").textContent = activeCount;
     } catch (e) {
-      console.error("Error fetching network stats:", e);
+      console.error("Error fetching network stats from Back4App:", e);
     }
   }
 
@@ -206,7 +217,7 @@
       await navigator.clipboard.writeText(input.value);
       msg.style.display = "block";
       msg.className = "msg";
-      msg.textContent = "تم نسخ رابط الإحالة المشفر بنجاح! ✅";
+      msg.textContent = "تم نسخ رابط الإحالة الرسمي والمتطابق بنجاح! ✅";
       setTimeout(() => { msg.style.display = "none"; }, 3000);
     } catch (err) {
       msg.style.display = "block";
@@ -215,9 +226,16 @@
     }
   };
 
+  // التنفيذ المباشر فور التحقق من وجود المستخدم
   if (user) {
-    generateReferralLink();
-    loadReferralStats();
+    // نقوم بعمل تحديث لبيانات جلسة المستخدم الحالية لضمان جلب الـ refCode فوراً من الباكيند
+    user.fetch().then(() => {
+      generateReferralLink();
+      loadReferralStats();
+    }).catch(() => {
+      generateReferralLink();
+      loadReferralStats();
+    });
   }
 </script>
 </body>
