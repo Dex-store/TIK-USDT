@@ -119,11 +119,11 @@
   <div class="main-card">
     <div style="font-weight:900; font-size:16px; color: var(--gold); margin-bottom: 6px;">رابط الإحالة الخاص بك</div>
     <div class="muted">
-      قم بنسخ الرابط أدناه ومشاركته. ستحصل على عمولات فورية عند قيام أي عضو بالتسجيل وتفعيل حسابه من خلالك.
+      قم بنسخ الرابط أدناه ومشاركته لتلقي العمولات الفورية عند تفعيل الحسابات من خلالك.
     </div>
     
     <div class="ref-input-wrapper">
-      <input id="refLinkInput" readonly value="جاري إنشاء الرابط...">
+      <input id="refLinkInput" readonly value="جاري توليد الرابط الحقيقي...">
       <button class="btn" id="copyLinkBtn" style="white-space: nowrap;">📋 نسخ الرابط</button>
     </div>
     <div id="copyMsg" class="msg" style="display:none;"></div>
@@ -148,35 +148,48 @@
 <script src="https://unpkg.com/parse/dist/parse.min.js"></script>
 <script src="./config.js"></script>
 <script>
-  Parse.initialize(window.GOLDX.PARSE_APP_ID, window.GOLDX.PARSE_JS_KEY);
-  Parse.serverURL = window.GOLDX.PARSE_SERVER_URL;
+  // إعدادات اتصال الباكيند
+  try {
+    if (window.GOLDX && window.GOLDX.PARSE_APP_ID) {
+      Parse.initialize(window.GOLDX.PARSE_APP_ID, window.GOLDX.PARSE_JS_KEY);
+      Parse.serverURL = window.GOLDX.PARSE_SERVER_URL;
+    }
+  } catch(e) {
+    console.error("Parse init fail:", e);
+  }
 
   const user = Parse.User.current();
-  if (!user) location.href = "../auth/login.html";
+  if (!user) {
+    location.href = "../auth/login.html";
+  }
 
-  // توليد رابط الإحالة تلقائياً بناءً على موقع المنصة الحالي واسم المستخدم
+  // آلية إنتاج رابط الإحالة المضمون دون فراغات
   function generateReferralLink() {
-    const username = user.get("username") || user.id;
-    // يقوم بجلب مسار الموقع الرئيسي تلقائياً ليناسب الاستضافة الحالية
-    const baseUrl = window.location.origin + window.location.pathname.replace("app/referrals.html", "");
-    const fullRefLink = `${baseUrl}auth/register.html?ref=${username}`;
+    if(!user) return;
+    
+    // الفحص الجذري: استخدام الـ username، وإذا كان فارغاً نستخدم الـ Object ID الثابت للحساب كوداً للإحالة
+    const refCode = user.get("username") || user.id;
+    
+    // استخراج رابط الدومين الرئيسي الفعلي تلقائياً وديناميكياً
+    const currentUrl = window.location.href;
+    const baseUrl = currentUrl.substring(0, currentUrl.indexOf("/app/"));
+    
+    const fullRefLink = `${baseUrl}/auth/register.html?ref=${refCode}`;
     document.getElementById("refLinkInput").value = fullRefLink;
   }
 
-  // جلب إحصائيات الإحالات من قاعدة البيانات بشكل حقيقي
   async function loadReferralStats() {
+    if(!user) return;
     try {
-      const username = user.get("username");
-      if (!username) return;
+      const refCode = user.get("username") || user.id;
 
-      // استعلام لجلب المستخدمين الذين تم تسجيلهم بواسطة هذا المستخدم
+      // البحث في قاعدة البيانات عن الحسابات المستدعاة بواسطة هذا الكود المعين
       const userQuery = new Parse.Query(Parse.User);
-      userQuery.equalTo("referredBy", username); // تأكد أن الحقل في الـ DB لديك يسمى referredBy
+      userQuery.equalTo("referredBy", refCode);
       const referredUsers = await userQuery.find();
 
       document.getElementById("totalRefsTxt").textContent = referredUsers.length;
 
-      // تصفية الأعضاء النشطين (الذين يملكون حقل isActive مساوي لـ true في جدول الـ Profile الخاص بهم أو الـ User)
       let activeCount = 0;
       for (let u of referredUsers) {
         if (u.get("isActive") === true) {
@@ -185,29 +198,32 @@
       }
       document.getElementById("activeRefsTxt").textContent = activeCount;
     } catch (e) {
-      console.error("Error loading referral stats:", e);
+      console.error("Error fetching network stats:", e);
     }
   }
 
-  // تفعيل كود زر النسخ
+  // منطق عمل زر نسخ الرابط للمحفظة
   document.getElementById("copyLinkBtn").onclick = async () => {
     const input = document.getElementById("refLinkInput");
     const msg = document.getElementById("copyMsg");
     try {
       await navigator.clipboard.writeText(input.value);
       msg.style.display = "block";
+      msg.className = "msg";
       msg.textContent = "تم نسخ رابط الإحالة الخاص بك بنجاح! ✅";
       setTimeout(() => { msg.style.display = "none"; }, 3000);
     } catch (err) {
       msg.style.display = "block";
       msg.style.color = "#ff5a78";
-      msg.textContent = "فشل النسخ التلقائي، يرجى نسخه يدوياً.";
+      msg.textContent = "يرجى تحديد النص ونسخه يدوياً.";
     }
   };
 
-  // التنفيذ عند فتح الصفحة
-  generateReferralLink();
-  loadReferralStats();
+  // تشغيل العمليات فور تحميل الصفحة
+  if (user) {
+    generateReferralLink();
+    loadReferralStats();
+  }
 </script>
 </body>
 </html>
