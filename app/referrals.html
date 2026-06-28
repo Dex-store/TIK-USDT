@@ -119,7 +119,7 @@
   <div class="main-card">
     <div style="font-weight:900; font-size:16px; color: var(--gold); margin-bottom: 6px;">رابط الإحالة الخاص بك</div>
     <div class="muted">
-      قم بنسخ الرابط أدناه ومشاركته لتلقي العمولات الفورية عند تفعيل الحسابات من خلالك.
+      قم بنسخ الرابط أدناه ومشاركته لتلقي العمولات الفورية عند تسجيل الحسابات وتفعيلها من خلالك.
     </div>
     
     <div class="ref-input-wrapper">
@@ -162,20 +162,18 @@
     location.href = "../auth/login.html";
   }
 
-  // دالة توليد الرابط المصلحة والمطابقة تماماً لبنية جيت هب المرفوعة
+  // دالة توليد الرابط التي تم تعديلها لتشير لملف signup.html بدقة
   function generateReferralLink() {
     if(!user) return;
     
     const refCode = user.get("username") || user.id;
-    
-    // جلب الرابط الحالي بدقة
     const currentUrl = window.location.href;
     
-    // قص الجزء الخاص بـ /app/referrals.html والحصول على رابط المجلد الرئيسي النظيف
+    // قطع الرابط عند مجلد /app/ للحصول على المسار الرئيسي للموقع
     const baseDir = currentUrl.substring(0, currentUrl.lastIndexOf("/app/"));
     
-    // دمج المسار بطريقة تمنع تكرار المائلات الزائدة لتلافي خطأ 404
-    const fullRefLink = `${baseDir}/auth/register.html?ref=${refCode}`;
+    // الربط الصحيح والمطابق لملفاتك الحالية لتفادي خطأ 404 وظهور صفحة الـ Signup
+    const fullRefLink = `${baseDir}/auth/signup.html?ref=${refCode}`;
     document.getElementById("refLinkInput").value = fullRefLink;
   }
 
