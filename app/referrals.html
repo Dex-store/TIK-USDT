@@ -123,7 +123,7 @@
     </div>
     
     <div class="ref-input-wrapper">
-      <input id="refLinkInput" readonly value="جاري قراءة الـ refCode من حسابك...">
+      <input id="refLinkInput" readonly value="جاري استدعاء الـ refCode من قاعدة البيانات...">
       <button class="btn" id="copyLinkBtn" style="white-space: nowrap;">📋 نسخ الرابط</button>
     </div>
     <div id="copyMsg" class="msg" style="display:none;"></div>
@@ -157,49 +157,38 @@
     console.error("Parse initialization error:", e);
   }
 
-  const user = Parse.User.current();
+  let user = Parse.User.current();
   if (!user) {
     location.href = "../auth/login.html";
   }
 
-  // دالة توليد الرابط بناءً على حقل refCode الحقيقي الموضح في لقطات الشاشة
-  function generateReferralLink() {
-    if(!user) return;
-    
-    // سحب الـ refCode الأصلي والفريد المخزن في جدول المستخدم (مثل MKDB56)
-    const dbRefCode = user.get("refCode"); 
-    
+  // دالة توليد الرابط بناءً على حقل refCode الفعلي من قاعدة البيانات
+  function generateReferralLink(dbRefCode) {
     if(!dbRefCode) {
-      document.getElementById("refLinkInput").value = "خطأ: لم يتم العثور على refCode في حسابك.";
+      document.getElementById("refLinkInput").value = "تنبيه: لم يتم العثور على refCode في الباكيند.";
       return;
     }
     
     const currentUrl = window.location.href;
     const baseDir = currentUrl.substring(0, currentUrl.lastIndexOf("/app/"));
     
-    // دمج الـ refCode المتطابق تماماً مع الباكيند
+    // ربط الـ refCode المستدعى مباشرة من الـ Row الخاص بالمستخدم في السيرفر
     const fullRefLink = `${baseDir}/auth/signup.html?ref=${dbRefCode}`;
     document.getElementById("refLinkInput").value = fullRefLink;
   }
 
-  // جلب إحصائيات الإحالات من خلال مطابقة الـ refCode مع الـ pendingRefCode للمسجلين الجدد
-  async function loadReferralStats() {
-    if(!user) return;
+  // جلب إحصائيات الإحالات بمطابقة الـ refCode مع الـ pendingRefCode
+  async function loadReferralStats(dbRefCode) {
+    if(!dbRefCode) return;
     try {
-      const dbRefCode = user.get("refCode");
-      if(!dbRefCode) return;
-
       const userQuery = new Parse.Query(Parse.User);
-      // البحث عن الأعضاء الذين تم تخزين الـ refCode الخاص بك في حقل pendingRefCode لديهم
       userQuery.equalTo("pendingRefCode", dbRefCode);
       const referredUsers = await userQuery.find();
 
       document.getElementById("totalRefsTxt").textContent = referredUsers.length;
 
-      // حساب الأعضاء النشطين بناءً على خطة الاشتراك المكتملة أو قيمة الـ balance
       let activeCount = 0;
       for (let u of referredUsers) {
-        // إذا كان الحساب يمتلك رصيد تفعيل أو مسجل به قيمة خطة في الباكيند
         if (u.get("Plans") || u.get("balance") > 0) {
           activeCount++;
         }
@@ -217,7 +206,7 @@
       await navigator.clipboard.writeText(input.value);
       msg.style.display = "block";
       msg.className = "msg";
-      msg.textContent = "تم نسخ رابط الإحالة الرسمي والمتطابق بنجاح! ✅";
+      msg.textContent = "تم نسخ رابط الإحالة المتطابق مع قاعدة البيانات بنجاح! ✅";
       setTimeout(() => { msg.style.display = "none"; }, 3000);
     } catch (err) {
       msg.style.display = "block";
@@ -226,17 +215,28 @@
     }
   };
 
-  // التنفيذ المباشر فور التحقق من وجود المستخدم
-  if (user) {
-    // نقوم بعمل تحديث لبيانات جلسة المستخدم الحالية لضمان جلب الـ refCode فوراً من الباكيند
-    user.fetch().then(() => {
-      generateReferralLink();
-      loadReferralStats();
-    }).catch(() => {
-      generateReferralLink();
-      loadReferralStats();
-    });
+  // المزامنة الحية والإجبارية مع السيرفر لتلافي جلب أكواد عشوائية محلياً
+  async function initPage() {
+    if (user) {
+      try {
+        // إجبار النظام على عمل تحديث (Fetch) لجلب أحدث البيانات الحقيقية من السيرفر مباشرة
+        const refreshedUser = await user.fetch();
+        const realRefCode = refreshedUser.get("refCode");
+        
+        generateReferralLink(realRefCode);
+        loadReferralStats(realRefCode);
+      } catch (error) {
+        console.error("Failed to fetch fresh user data:", error);
+        // في حال فشل الفيتش نعتمد على الكود المخزن محلياً كخطة بديلة
+        const localRefCode = user.get("refCode");
+        generateReferralLink(localRefCode);
+        loadReferralStats(localRefCode);
+      }
+    }
   }
+
+  // تشغيل الصفحة
+  initPage();
 </script>
 </body>
 </html>
