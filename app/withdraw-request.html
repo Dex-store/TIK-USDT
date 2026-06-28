@@ -3,22 +3,99 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>طلب سحب • TIK-USDT</title>
+  <title>طلب سحب • GOLD-X</title>
   <style>
-    body{margin:0;font-family:system-ui;background:radial-gradient(1200px 600px at 50% -10%, #1b255a, #060913);color:#eaf0ff}
-    .wrap{max-width:900px;margin:0 auto;padding:18px}
-    .card{background:rgba(12,18,45,.75);border:1px solid rgba(255,255,255,.08);border-radius:22px;
-      padding:16px;box-shadow:0 20px 60px rgba(0,0,0,.25);backdrop-filter:blur(10px)}
-    .top{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
-    .btn{padding:11px 14px;border-radius:16px;border:1px solid rgba(255,255,255,.12);
-      background:rgba(255,255,255,.04);color:#eaf0ff;font-weight:800;cursor:pointer;text-decoration:none;display:inline-block}
-    .btn.primary{background:linear-gradient(135deg,#5b8cff,#7c5cff);border-color:transparent}
-    input{width:100%;padding:12px;border-radius:16px;border:1px solid rgba(255,255,255,.12);
-      background:rgba(255,255,255,.04);color:#eaf0ff;margin-top:10px;outline:none}
-    .muted{color:#a8b3cf;font-size:13px;line-height:1.7}
-    .ok{color:#7CFFB2}
-    .err{color:#FF8FA3}
-    .mono{font-family:ui-monospace,Menlo,Consolas,monospace;word-break:break-all}
+    :root {
+      --gold: #ffd700;
+      --bg: #0b0c10; /* أسود داكن فخم */
+      --card-bg: #1f2128; /* رمادي داكن لبروز النوافذ */
+      --border-color: rgba(255, 215, 0, 0.15);
+      --text-gray: #a8b3cf;
+    }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, sans-serif;
+      background: radial-gradient(1200px 600px at 50% -10%, #2e2600, var(--bg)); /* تدرج مشع ذهبي خافت وعميق */
+      color: #eaf0ff;
+    }
+    .wrap {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 18px;
+    }
+    .card {
+      background: rgba(31, 33, 40, 0.85);
+      border: 1px solid var(--border-color);
+      border-radius: 22px;
+      padding: 20px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(10px);
+    }
+    .top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .btn {
+      padding: 11px 14px;
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(255, 255, 255, 0.04);
+      color: #eaf0ff;
+      font-weight: 800;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      transition: 0.3s;
+    }
+    .btn:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: var(--gold);
+    }
+    .btn.primary {
+      background: linear-gradient(135deg, var(--gold), #b8860b);
+      border-color: transparent;
+      color: #000;
+    }
+    .btn.primary:hover {
+      background: linear-gradient(135deg, #ffe033, var(--gold));
+      transform: translateY(-1px);
+    }
+    .btn[disabled] {
+      opacity: .4;
+      cursor: not-allowed;
+      background: rgba(255, 255, 255, 0.02) !important;
+      color: var(--text-gray) !important;
+      border-color: rgba(255, 255, 255, 0.05) !important;
+      transform: none !important;
+    }
+    input {
+      width: 100%;
+      padding: 13px;
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: #12141c;
+      color: #eaf0ff;
+      margin-top: 10px;
+      outline: none;
+      box-sizing: border-box;
+      transition: 0.3s;
+    }
+    input:focus {
+      border-color: var(--gold);
+      box-shadow: 0 0 8px rgba(255, 215, 0, 0.2);
+    }
+    .muted {
+      color: var(--text-gray);
+      font-size: 13px;
+      line-height: 1.7;
+    }
+    .ok { color: #2cff8f; }
+    .err { color: #FF8FA3; }
+    .mono { font-family: ui-monospace, Menlo, Consolas, monospace; word-break: break-all; }
+    .highlight-gold { color: var(--gold); }
   </style>
 </head>
 <body>
@@ -26,28 +103,28 @@
     <div class="card">
       <div class="top">
         <div>
-          <div style="font-weight:900;font-size:18px">طلب سحب</div>
-          <div class="muted">السحب مرة واحدة أسبوعيًا — يتم التنفيذ خلال 3–24 ساعة.</div>
+          <div style="font-weight:900;font-size:20px; color: var(--gold);">طلب سحب أموال</div>
+          <div class="muted">السحب متاح مرة واحدة أسبوعيًا — يتم المعالجة والتنفيذ خلال 3–24 ساعة.</div>
         </div>
         <div style="display:flex;gap:10px;flex-wrap:wrap">
           <a class="btn" href="./dashboard.html">رجوع للوحة</a>
-          <a class="btn" href="https://t.me/TIK_USDT" target="_blank">الدعم</a>
+          <a class="btn" href="https://t.me/TIK_USDT" target="_blank" style="background: rgba(255,215,0,0.05); color: var(--gold); border-color: rgba(255,215,0,0.15);">الدعم الفني</a>
         </div>
       </div>
 
-      <div class="muted" id="statusLine" style="margin-top:10px">جارٍ التحميل...</div>
+      <div class="muted" id="statusLine" style="margin-top:14px; background: rgba(255,255,255,0.02); padding: 10px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05);">جارٍ التحميل...</div>
 
-      <label class="muted" style="display:block;margin-top:12px">المبلغ المطلوب (USDT)</label>
+      <label class="muted" style="display:block;margin-top:16px; font-weight: 700;">المبلغ المطلوب سحبه (<span class="highlight-gold">GOLD-X</span>)</label>
       <input id="amount" type="number" step="0.01" min="0" placeholder="مثال: 25">
 
-      <label class="muted" style="display:block;margin-top:12px">عنوان محفظتك (ERC-20)</label>
+      <label class="muted" style="display:block;margin-top:14px; font-weight: 700;">عنوان محفظتك الرقمية (ERC-20)</label>
       <input id="wallet" class="mono" placeholder="0x....">
 
-      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px">
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px">
         <button class="btn primary" id="submitBtn">إرسال طلب السحب</button>
       </div>
 
-      <div class="muted" id="msg" style="margin-top:10px"></div>
+      <div class="muted" id="msg" style="margin-top:12px"></div>
     </div>
   </div>
 
@@ -55,8 +132,9 @@
   <script src="./config.js"></script>
 
 <script>
-  Parse.initialize(window.TIK.PARSE_APP_ID, window.TIK.PARSE_JS_KEY);
-  Parse.serverURL = window.TIK.PARSE_SERVER_URL;
+  // تهيئة الاتصال بكائن المنصة الجديد GOLDX لتوحيد بيئة عمل قواعد البيانات
+  Parse.initialize(window.GOLDX.PARSE_APP_ID, window.GOLDX.PARSE_JS_KEY);
+  Parse.serverURL = window.GOLDX.PARSE_SERVER_URL;
 
   const user = Parse.User.current();
   if(!user) location.href = "../auth/login.html";
@@ -90,12 +168,12 @@
     const bal = profile ? safeNum(profile.get("virtualBalance")) || safeNum(profile.get("balance")) || 0 : 0;
 
     if(!isActive){
-      statusLine.innerHTML = `<span class="err">⛔ حسابك غير مفعل. لا يمكنك السحب قبل التفعيل.</span>`;
+      statusLine.innerHTML = `<span class="err">⛔ حسابك غير مفعل. لا يمكنك السحب قبل تفعيل الحساب والاشتراك أولاً.</span>`;
       submitBtn.disabled = true;
       return;
     }
 
-    // فحص "مرة أسبوعيًا" (هذا فحص واجهة فقط)
+    // فحص "مرة أسبوعيًا" (فحص واجهة العميل للتحقق من المهلة الزمنية)
     const lastW = await getLastWithdraw();
     if(lastW){
       const lastDate = lastW.createdAt;
@@ -103,13 +181,13 @@
       const sevenDays = 7*24*60*60*1000;
       if(diff < sevenDays){
         const remaining = Math.ceil((sevenDays - diff)/(24*60*60*1000));
-        statusLine.innerHTML = `✅ اشتراكك نشط. <br><span class="err">⛔ لا يمكنك طلب سحب جديد الآن. متبقي تقريبًا: ${remaining} يوم</span>`;
+        statusLine.innerHTML = `✅ اشتراكك نشط. <br><span class="err">⛔ متبقي على إمكانية طلب سحب جديد تقريبًا: ${remaining} يوم.</span>`;
         submitBtn.disabled = true;
         return;
       }
     }
 
-    statusLine.innerHTML = `✅ اشتراكك نشط. رصيدك الافتراضي: <b>${bal.toFixed(2)} USDT</b>`;
+    statusLine.innerHTML = `✅ حسابك نشط ومؤهل للسحب. رصيدك الحالي المتاح: <b class="highlight-gold">${bal.toFixed(2)} GOLD-X</b>`;
   }
 
   submitBtn.onclick = async ()=>{
@@ -119,12 +197,12 @@
 
     if(!amt || amt <= 0){
       msg.className = "muted err";
-      msg.textContent = "أدخل مبلغ صحيح.";
+      msg.textContent = "يرجى إدخال مبلغ سحب صحيح.";
       return;
     }
     if(!isEthAddress(w)){
       msg.className = "muted err";
-      msg.textContent = "عنوان المحفظة غير صحيح (يجب أن يكون ERC-20 ويبدأ بـ 0x وطوله 42).";
+      msg.textContent = "عنوان المحفظة غير صحيح (يجب أن يكون تابع لشبكة ERC-20 ويبدأ بـ 0x بطول 42 حرف).";
       return;
     }
 
@@ -138,16 +216,16 @@
       await req.save();
 
       msg.className = "muted ok";
-      msg.textContent = "✅ تم إرسال طلب السحب. سيتم التنفيذ خلال 3–24 ساعة.";
+      msg.textContent = "✅ تم إرسال طلب السحب بنجاح. سيتم المراجعة والتنفيذ خلال 3–24 ساعة.";
       submitBtn.disabled = true;
     }catch(e){
       msg.className = "muted err";
-      msg.textContent = (e && e.message) ? e.message : "تعذر إرسال الطلب.";
+      msg.textContent = (e && e.message) ? e.message : "تعذر إرسال الطلب، يرجى المحاولة لاحقاً.";
     }
   };
 
   init().catch(e=>{
-    statusLine.innerHTML = `<span class="err">خطأ: ${(e && e.message) ? e.message : "غير معروف"}</span>`;
+    statusLine.innerHTML = `<span class="err">خطأ أثناء التحميل: ${(e && e.message) ? e.message : "غير معروف"}</span>`;
   });
 </script>
 </body>
