@@ -3,157 +3,211 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>إحالاتي • GOLD-X</title>
+  <title>شبكة الإحالات • GOLD-X</title>
   <style>
     :root {
       --gold: #ffd700;
-      --bg: #0b0c10; /* أسود داكن فخم */
-      --card-bg: #1f2128; /* رمادي داكن لبروز بطاقات الإحالات */
+      --bg: #0b0c10;
+      --card-bg: #1f2128;
       --border-color: rgba(255, 215, 0, 0.15);
       --text-gray: #a8b3cf;
     }
     body {
       margin: 0;
       font-family: system-ui, -apple-system, sans-serif;
-      background: radial-gradient(1200px 600px at 50% -10%, #2e2600, var(--bg)); /* التدرج الذهبي الفخم المشع */
+      background: radial-gradient(1200px 600px at 50% -10%, #2e2600, var(--bg));
       color: #eaf0ff;
     }
     .wrap {
-      max-width: 1000px;
+      max-width: 600px;
       margin: 0 auto;
-      padding: 18px;
+      padding: 24px 18px;
     }
     .topbar {
       display: flex;
       justify-content: space-between;
       align-items: center;
       gap: 12px;
-      flex-wrap: wrap;
       background: rgba(31, 33, 40, 0.85);
       border: 1px solid var(--border-color);
       border-radius: 22px;
-      padding: 14px 16px;
+      padding: 14px 20px;
       box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
       backdrop-filter: blur(10px);
     }
     .btn {
-      padding: 11px 14px;
-      border-radius: 16px;
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      background: rgba(255, 255, 255, 0.04);
-      color: #eaf0ff;
-      font-weight: 800;
-      cursor: pointer;
+      padding: 10px 16px;
+      border-radius: 14px;
+      border: 1px solid var(--border-color);
+      background: rgba(255, 215, 0, 0.05);
+      color: var(--gold);
+      font-weight: 700;
       text-decoration: none;
-      display: inline-block;
+      font-size: 14px;
+      cursor: pointer;
       transition: 0.3s;
     }
     .btn:hover {
-      background: rgba(255, 255, 255, 0.08);
+      background: rgba(255, 215, 0, 0.15);
       border-color: var(--gold);
     }
-    .card {
-      margin-top: 14px;
+    .main-card {
       background: rgba(31, 33, 40, 0.85);
       border: 1px solid var(--border-color);
-      border-radius: 22px;
-      padding: 18px;
+      border-radius: 24px;
+      padding: 24px;
+      margin-top: 20px;
       box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
       backdrop-filter: blur(10px);
     }
-    .item {
-      border: 1px solid rgba(255, 255, 255, 0.06);
-      border-radius: 18px;
-      padding: 14px;
+    .kpi-container {
+      display: flex;
+      gap: 12px;
+      margin: 16px 0;
+    }
+    .kpi-box {
+      flex: 1;
       background: rgba(255, 255, 255, 0.02);
-      margin-top: 12px;
-      transition: 0.3s;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 16px;
+      padding: 14px;
+      text-align: center;
     }
-    .item:hover {
-      border-color: rgba(255, 215, 0, 0.3);
-      background: rgba(255, 215, 0, 0.01);
-    }
-    .muted {
-      color: var(--text-gray);
-      font-size: 13px;
-      line-height: 1.7;
-    }
-    .mono {
-      font-family: ui-monospace, Menlo, Consolas, monospace;
-      word-break: break-all;
-    }
-    .highlight-gold {
-      color: var(--gold);
+    .kpi-val {
+      font-size: 24px;
       font-weight: 900;
+      margin-top: 4px;
+      font-family: ui-monospace, Menlo, Consolas, monospace;
     }
+    .ref-input-wrapper {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+    }
+    input {
+      flex: 1;
+      padding: 14px;
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: #12141c;
+      color: #eaf0ff;
+      outline: none;
+      box-sizing: border-box;
+      font-family: ui-monospace, Menlo, Consolas, monospace;
+      font-size: 13px;
+    }
+    input:focus {
+      border-color: var(--gold);
+    }
+    .muted { color: var(--text-gray); font-size: 13px; line-height: 1.6; }
+    .msg { margin-top: 10px; font-size: 13px; font-weight: bold; color: #2cff8f; }
   </style>
 </head>
 <body>
+
 <div class="wrap">
   <div class="topbar">
-    <div>
-      <div style="font-weight:900; font-size: 18px; color: var(--gold);">إحالاتي</div>
-      <div class="muted">الأشخاص الذين سجلوا عبر رابطك</div>
+    <div style="display:flex; flex-direction:column;">
+      <div style="font-weight:900; color: #fff; font-size: 16px;">شبكة الإحالات والشركاء</div>
+      <div class="muted" style="font-size: 11px;">تتبع أرباحك وتكبير فريقك</div>
     </div>
-    <div style="display:flex;gap:10px;flex-wrap:wrap">
-      <a class="btn" href="./dashboard.html">لوحة التحكم</a>
-      <a class="btn" href="./commissions.html">عمولاتي</a>
-      <button class="btn" id="refreshBtn" style="background: rgba(255,215,0,0.1); color: var(--gold); border-color: rgba(255,215,0,0.2);">تحديث</button>
+    <div>
+      <a class="btn" href="dashboard.html">📊 لوحة التحكم</a>
     </div>
   </div>
 
-  <div class="card">
-    <div class="muted" id="msg">—</div>
-    <div id="list"></div>
+  <div class="main-card">
+    <div style="font-weight:900; font-size:16px; color: var(--gold); margin-bottom: 6px;">رابط الإحالة الخاص بك</div>
+    <div class="muted">
+      قم بنسخ الرابط أدناه ومشاركته. ستحصل على عمولات فورية عند قيام أي عضو بالتسجيل وتفعيل حسابه من خلالك.
+    </div>
+    
+    <div class="ref-input-wrapper">
+      <input id="refLinkInput" readonly value="جاري إنشاء الرابط...">
+      <button class="btn" id="copyLinkBtn" style="white-space: nowrap;">📋 نسخ الرابط</button>
+    </div>
+    <div id="copyMsg" class="msg" style="display:none;"></div>
+  </div>
+
+  <div class="main-card">
+    <div style="font-weight:900; font-size:16px; color: #fff; margin-bottom: 12px;">ملخص الشبكة</div>
+    
+    <div class="kpi-container">
+      <div class="kpi-box">
+        <div class="muted" style="font-size:12px;">إجمالي الإحالات</div>
+        <div class="kpi-val" style="color: var(--gold);" id="totalRefsTxt">0</div>
+      </div>
+      <div class="kpi-box">
+        <div class="muted" style="font-size:12px;">الأعضاء النشطين</div>
+        <div class="kpi-val" style="color: #2cff8f;" id="activeRefsTxt">0</div>
+      </div>
+    </div>
   </div>
 </div>
 
 <script src="https://unpkg.com/parse/dist/parse.min.js"></script>
 <script src="./config.js"></script>
 <script>
-  // تهيئة الاتصال باستخدام كائن المنصة الجديد GOLDX
   Parse.initialize(window.GOLDX.PARSE_APP_ID, window.GOLDX.PARSE_JS_KEY);
   Parse.serverURL = window.GOLDX.PARSE_SERVER_URL;
 
   const user = Parse.User.current();
-  if(!user) location.href = "../auth/login.html";
+  if (!user) location.href = "../auth/login.html";
 
-  const msg = (t)=> document.getElementById("msg").textContent = t;
-  function esc(s){ return String(s||"").replace(/[&<>"']/g, c=>({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c])); }
-
-  async function load(){
-    msg("جاري التحميل...");
-    list.innerHTML = "";
-
-    const Referrals = Parse.Object.extend("Referrals");
-    const q = new Parse.Query(Referrals);
-    q.equalTo("referrer", user);
-    q.descending("createdAt");
-    q.limit(100);
-    q.include("referred");
-
-    const rows = await q.find().catch(e=>{ msg(e.message||"خطأ أثناء التحميل"); return []; });
-    if(!rows.length){ msg("لا توجد إحالات بعد."); return; }
-
-    msg("عدد الإحالات النشطة: " + rows.length);
-
-    rows.forEach(r=>{
-      const referred = r.get("referred");
-      const email = referred ? (referred.get("email") || referred.get("username") || "—") : "—";
-      const st = r.get("status") || "active";
-
-      const el = document.createElement("div");
-      el.className = "item";
-      el.innerHTML = `
-        <div><b class="highlight-gold">المستخدم:</b> <span class="mono">${esc(email)}</span></div>
-        <div class="muted"><b style="color: #fff;">الحالة:</b> ${esc(st)} | <b>التاريخ:</b> ${esc(r.createdAt ? r.createdAt.toISOString().split('T')[0] : "")}</div>
-      `;
-      list.appendChild(el);
-    });
+  // توليد رابط الإحالة تلقائياً بناءً على موقع المنصة الحالي واسم المستخدم
+  function generateReferralLink() {
+    const username = user.get("username") || user.id;
+    // يقوم بجلب مسار الموقع الرئيسي تلقائياً ليناسب الاستضافة الحالية
+    const baseUrl = window.location.origin + window.location.pathname.replace("app/referrals.html", "");
+    const fullRefLink = `${baseUrl}auth/register.html?ref=${username}`;
+    document.getElementById("refLinkInput").value = fullRefLink;
   }
 
-  refreshBtn.onclick = load;
-  load();
+  // جلب إحصائيات الإحالات من قاعدة البيانات بشكل حقيقي
+  async function loadReferralStats() {
+    try {
+      const username = user.get("username");
+      if (!username) return;
+
+      // استعلام لجلب المستخدمين الذين تم تسجيلهم بواسطة هذا المستخدم
+      const userQuery = new Parse.Query(Parse.User);
+      userQuery.equalTo("referredBy", username); // تأكد أن الحقل في الـ DB لديك يسمى referredBy
+      const referredUsers = await userQuery.find();
+
+      document.getElementById("totalRefsTxt").textContent = referredUsers.length;
+
+      // تصفية الأعضاء النشطين (الذين يملكون حقل isActive مساوي لـ true في جدول الـ Profile الخاص بهم أو الـ User)
+      let activeCount = 0;
+      for (let u of referredUsers) {
+        if (u.get("isActive") === true) {
+          activeCount++;
+        }
+      }
+      document.getElementById("activeRefsTxt").textContent = activeCount;
+    } catch (e) {
+      console.error("Error loading referral stats:", e);
+    }
+  }
+
+  // تفعيل كود زر النسخ
+  document.getElementById("copyLinkBtn").onclick = async () => {
+    const input = document.getElementById("refLinkInput");
+    const msg = document.getElementById("copyMsg");
+    try {
+      await navigator.clipboard.writeText(input.value);
+      msg.style.display = "block";
+      msg.textContent = "تم نسخ رابط الإحالة الخاص بك بنجاح! ✅";
+      setTimeout(() => { msg.style.display = "none"; }, 3000);
+    } catch (err) {
+      msg.style.display = "block";
+      msg.style.color = "#ff5a78";
+      msg.textContent = "فشل النسخ التلقائي، يرجى نسخه يدوياً.";
+    }
+  };
+
+  // التنفيذ عند فتح الصفحة
+  generateReferralLink();
+  loadReferralStats();
 </script>
 </body>
 </html>
