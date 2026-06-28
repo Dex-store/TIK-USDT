@@ -2,323 +2,277 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-  <title>GOLD-X | لوحة التحكم</title>
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>لوحة التحكم • GOLD-X</title>
   <style>
     :root {
       --gold: #ffd700;
-      --bg: #0b0c10; /* أسود داكن فخم */
-      --card-bg: #1f2128; /* رمادي داكن لبروز الكروت */
-      --text-light: #eaf0ff;
-      --text-gray: #a8b3cf;
+      --bg: #0b0c10;
+      --card-bg: #1f2128;
       --border-color: rgba(255, 215, 0, 0.15);
+      --text-gray: #a8b3cf;
     }
-
     body {
       margin: 0;
-      font-family: 'Cairo', sans-serif;
-      background-color: var(--bg);
-      color: var(--text-light);
-      padding-bottom: 90px; /* لترك مساحة للقائمة السفلية */
+      font-family: system-ui, -apple-system, sans-serif;
+      background: radial-gradient(1200px 600px at 50% -10%, #2e2600, var(--bg));
+      color: #eaf0ff;
     }
-
-    /* الجزء العلوي - الخلفية المتدرجة للعمق الذهبي */
-    .header-section {
-      background: linear-gradient(180deg, #2e2600 0%, var(--bg) 100%);
-      padding: 25px 20px 110px;
-      border-bottom-left-radius: 40px;
-      border-bottom-right-radius: 40px;
-      color: white;
-      text-align: center;
+    .wrap {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 18px;
     }
-
-    .top-bar {
+    .topbar {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 30px;
+      gap: 12px;
+      flex-wrap: wrap;
+      background: rgba(31, 33, 40, 0.85);
+      border: 1px solid var(--border-color);
+      border-radius: 22px;
+      padding: 14px 16px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(10px);
     }
-
-    .user-profile {
+    .brand {
       display: flex;
       align-items: center;
       gap: 10px;
-      text-align: right;
     }
-
-    .avatar {
-      width: 45px;
-      height: 45px;
-      background: #12141c;
-      border-radius: 50%;
-      border: 2px solid var(--gold);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .avatar i {
-      color: var(--gold);
-      font-size: 20px;
-    }
-
-    /* بطاقة الرصيد الرئيسية */
-    .balance-card {
-      background: var(--card-bg);
-      border: 1px solid var(--border-color);
-      border-radius: 25px;
-      margin: -90px 20px 20px;
-      padding: 22px;
-      display: flex;
-      flex-direction: column;
-      box-shadow: 0 15px 35px rgba(0,0,0,0.5);
-      backdrop-filter: blur(10px);
-    }
-
-    .stats-row {
-      display: flex;
-      justify-content: space-between;
-      padding-bottom: 20px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    }
-
-    .stat-item { text-align: center; flex: 1; }
-    .stat-label { font-size: 13px; color: var(--text-gray); margin-bottom: 4px; }
-    .stat-value { font-size: 22px; font-weight: 900; color: var(--gold); }
-
-    .card-actions {
-      display: flex;
-      gap: 12px;
-      margin-top: 18px;
-    }
-
-    .btn-main {
-      flex: 1;
-      padding: 13px;
+    .logo {
+      width: 40px;
+      height: 40px;
       border-radius: 14px;
-      border: none;
-      font-weight: bold;
-      font-family: 'Cairo', sans-serif;
-      cursor: pointer;
+      background: linear-gradient(135deg, var(--gold), #b8860b);
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
+      font-weight: 900;
+      color: #000;
+      font-size: 18px;
+    }
+    .btn {
+      padding: 11px 14px;
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(255, 255, 255, 0.04);
+      color: #eaf0ff;
+      font-weight: 800;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
       transition: 0.3s;
     }
-
-    .btn-gold { 
-      background: linear-gradient(135deg, var(--gold), #b8860b); 
-      color: #000; 
-    }
-    .btn-gold:hover {
-      background: linear-gradient(135deg, #ffe033, var(--gold));
-      transform: translateY(-1px);
-    }
-    
-    .btn-outline { 
-      background: rgba(255, 255, 255, 0.04); 
-      border: 1px solid rgba(255, 255, 255, 0.12); 
-      color: var(--text-light); 
-    }
-    .btn-outline:hover {
+    .btn:hover {
       background: rgba(255, 255, 255, 0.08);
       border-color: var(--gold);
     }
-
-    /* شبكة الإحصائيات الصغيرة */
-    .mini-stats {
+    .btn.danger {
+      background: rgba(255, 90, 120, 0.05);
+      border-color: rgba(255, 90, 120, 0.2);
+      color: #ff5a78;
+    }
+    .btn.danger:hover {
+      background: rgba(255, 90, 120, 0.12);
+      border-color: #ff5a78;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+      margin-top: 14px;
+    }
+    @media(max-width: 768px) {
+      .grid { grid-template-columns: 1fr; }
+    }
+    .card {
+      background: rgba(31, 33, 40, 0.85);
+      border: 1px solid var(--border-color);
+      border-radius: 22px;
+      padding: 20px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(10px);
+    }
+    .card-title {
+      font-weight: 900;
+      font-size: 16px;
+      color: var(--gold);
+      margin-bottom: 4px;
+    }
+    .big-num {
+      font-size: 28px;
+      font-weight: 900;
+      margin-top: 8px;
+      font-family: ui-monospace, Menlo, Consolas, monospace;
+    }
+    .nav-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 10px;
-      padding: 0 20px;
-      margin-bottom: 20px;
+      margin-top: 14px;
     }
-
-    .mini-card {
-      background: var(--card-bg);
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      padding: 15px 5px;
+    @media(max-width: 768px) {
+      .nav-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    .nav-card {
+      background: rgba(255, 215, 0, 0.02);
+      border: 1px solid rgba(255, 215, 0, 0.08);
       border-radius: 18px;
+      padding: 16px;
       text-align: center;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      text-decoration: none;
+      color: #eaf0ff;
+      font-weight: 800;
+      font-size: 14px;
+      transition: 0.3s;
     }
-
-    .mini-card i { font-size: 18px; margin-bottom: 8px; }
-    .mini-card .val { display: block; font-weight: bold; font-size: 14px; color: #fff; }
-    .mini-card .lbl { font-size: 10px; color: var(--text-gray); }
-
-    /* أيقونات الخدمات الدائرية */
-    .services-grid {
-      display: flex;
-      justify-content: space-around;
-      padding: 20px;
-      background: var(--card-bg);
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      margin: 0 20px 20px;
-      border-radius: 20px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    .nav-card:hover {
+      background: rgba(255, 215, 0, 0.06);
+      border-color: var(--gold);
+      transform: translateY(-2px);
     }
-
-    .service-item { text-align: center; cursor: pointer; transition: 0.2s; }
-    .service-item:hover { transform: scale(1.05); }
-    
-    .icon-circle {
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #000;
-      margin-bottom: 8px;
-      font-size: 20px;
-      background: linear-gradient(135deg, var(--gold), #b8860b);
+    .muted {
+      color: var(--text-gray);
+      font-size: 13px;
+      line-height: 1.7;
     }
-
-    /* شريط التنقل السفلي */
-    .bottom-nav {
-      position: fixed;
-      bottom: 0;
-      width: 100%;
-      background: #1f2128;
-      border-top: 1px solid rgba(255, 215, 0, 0.1);
-      display: flex;
-      justify-content: space-around;
-      padding: 12px 0;
-      box-shadow: 0 -5px 25px rgba(0,0,0,0.6);
-      border-top-left-radius: 25px;
-      border-top-right-radius: 25px;
-      box-sizing: border-box;
-      z-index: 100;
+    .status-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-weight: 900;
+      font-size: 12px;
+      margin-top: 8px;
     }
-
-    .nav-item { text-align: center; color: var(--text-gray); font-size: 11px; flex: 1; text-decoration: none; transition: 0.3s; }
-    .nav-item.active { color: var(--gold); }
-    .nav-item i { display: block; font-size: 19px; margin-bottom: 5px; }
-
-    .center-nav {
-      position: relative;
-      top: -26px;
-      background: linear-gradient(135deg, var(--gold), #b8860b);
-      width: 58px;
-      height: 58px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #000 !important;
-      box-shadow: 0 8px 20px rgba(255, 215, 0, 0.3);
+    .status-badge.active {
+      color: #2cff8f;
+      background: rgba(44, 255, 143, 0.08);
+      border: 1px solid rgba(44, 255, 143, 0.3);
+    }
+    .status-badge.inactive {
+      color: #ff5a78;
+      background: rgba(255, 90, 120, 0.08);
+      border: 1px solid rgba(255, 90, 120, 0.3);
+    }
+    .mono {
+      font-family: ui-monospace, Menlo, Consolas, monospace;
     }
   </style>
 </head>
 <body>
 
-  <div class="header-section">
-    <div class="top-bar">
-      <i class="fas fa-bars" style="font-size: 20px; cursor: pointer;"></i>
-      <div class="user-profile">
-        <div>
-          <div style="font-weight: bold; font-size: 15px;">مرحباً، <span id="userName">أحمد</span></div>
-          <div style="font-size: 11px; color: var(--gold);"><i class="fas fa-medal"></i> عضو ذهبي</div>
-        </div>
-        <div class="avatar"><i class="fas fa-user"></i></div>
-      </div>
-      <i class="fas fa-bell" style="font-size: 20px; cursor: pointer;"></i>
-    </div>
-    <div style="margin-top: 20px;">
-      <h3 style="margin: 0; font-size: 22px; color: var(--gold);">نظام التسلسل الهرمي</h3>
-      <p style="font-size: 13px; color: var(--text-gray); margin-top: 6px;">ادعُ الآخرين وابنِ فريقك واربح المزيد</p>
-    </div>
-  </div>
-
-  <div class="balance-card">
-    <div class="stats-row">
-      <div class="stat-item" style="border-left: 1px solid rgba(255, 255, 255, 0.08);">
-        <div class="stat-label">الرصيد الحالي</div>
-        <div class="stat-value" id="currentBal">2,350.00</div>
-        <div style="font-size: 11px; color: var(--text-gray);">GOLD-X</div>
-      </div>
-      <div class="stat-item">
-        <div class="stat-label">إجمالي الأرباح</div>
-        <div class="stat-value" id="totalEarn">12,540.00</div>
-        <div style="font-size: 11px; color: var(--text-gray);">GOLD-X</div>
+<div class="wrap">
+  <!-- الشريط العلوي -->
+  <div class="topbar">
+    <div class="brand">
+      <div class="logo">G</div>
+      <div>
+        <div style="font-weight:900; color: var(--gold); font-size: 16px;">لوحة التحكم</div>
+        <div class="muted mono" id="userEmail">جاري التحميل...</div>
       </div>
     </div>
-    <div class="card-actions">
-      <button class="btn-main btn-gold"><i class="fas fa-download"></i> سحب الأرباح</button>
-      <button class="btn-main btn-outline"><i class="fas fa-chart-line"></i> عرض التفاصيل</button>
+    <div>
+      <button class="btn danger" id="logoutBtn">تسجيل الخروج</button>
     </div>
   </div>
 
-  <div class="mini-stats">
-    <div class="mini-card">
-      <i class="fas fa-wallet" style="color: var(--gold);"></i>
-      <span class="val">560.00</span>
-      <span class="lbl">أرباح اليوم</span>
-    </div>
-    <div class="mini-card">
-      <i class="fas fa-sitemap" style="color: var(--gold);"></i>
-      <span class="val">7</span>
-      <span class="lbl">مستويات العمق</span>
-    </div>
-    <div class="mini-card">
-      <i class="fas fa-users" style="color: var(--gold);"></i>
-      <span class="val">23</span>
-      <span class="lbl">المستوى الأول</span>
-    </div>
-    <div class="mini-card">
-      <i class="fas fa-user-friends" style="color: var(--gold);"></i>
-      <span class="val">128</span>
-      <span class="lbl">إجمالي الفريق</span>
-    </div>
+  <!-- أزرار التنقل السريع بين الملفات المذكورة سابقاً -->
+  <div class="nav-grid">
+    <a class="nav-card" href="./subscriptions.html">
+      <div style="font-size: 20px; margin-bottom: 4px;">💳</div>
+      <div>الاشتراكات المتاحة</div>
+    </a>
+    <a class="nav-card" href="./withdraw-request.html">
+      <div style="font-size: 20px; margin-bottom: 4px;">💰</div>
+      <div>طلب سحب جديد</div>
+    </a>
+    <a class="nav-card" href="./withdraw-history.html">
+      <div style="font-size: 20px; margin-bottom: 4px;">📜</div>
+      <div>سجل السحوبات</div>
+    </a>
+    <a class="nav-card" href="./referrals.html">
+      <div style="font-size: 20px; margin-bottom: 4px;">👥</div>
+      <div>قائمة إحالاتي</div>
+    </a>
   </div>
 
-  <div class="services-grid">
-    <div class="service-item">
-      <div class="icon-circle"><i class="fas fa-chart-pie"></i></div>
-      <div class="stat-label">التقارير</div>
+  <!-- شبكة بطاقات عرض الحساب المالي والاشتراك -->
+  <div class="grid">
+    <!-- بطاقة الرصيد الافتراضي المتاح -->
+    <div class="card">
+      <div class="card-title">الرصيد المتاح</div>
+      <div class="muted">الرصيد القابل للسحب والاستخدام الحالي</div>
+      <div class="big-num" style="color: var(--gold);"><span id="balanceTxt">0.00</span> <span style="font-size: 14px; color: #fff;">USDT</span></div>
     </div>
-    <div class="service-item">
-      <div class="icon-circle"><i class="fas fa-dollar-sign"></i></div>
-      <div class="stat-label">الأرباح</div>
-    </div>
-    <div class="service-item">
-      <div class="icon-circle"><i class="fas fa-users-cog"></i></div>
-      <div class="stat-label">فريقي</div>
-    </div>
-    <div class="service-item">
-      <div class="icon-circle"><i class="fas fa-link"></i></div>
-      <div class="stat-label" style="font-size: 11px;">رابط الدعوة</div>
+
+    <!-- بطاقة حالة الاشتراك والنشاط -->
+    <div class="card">
+      <div class="card-title">حالة الحساب والاشتراك</div>
+      <div class="muted">مدى فعالية الاشتراك البرمجي داخل الحساب</div>
+      <div id="statusWrapper">
+        <span class="status-badge inactive" id="statusBadge">جاري الفحص...</span>
+      </div>
     </div>
   </div>
+</div>
 
-  <nav class="bottom-nav">
-    <a href="#" class="nav-item"><i class="fas fa-chart-bar"></i>التقارير</a>
-    <a href="./commissions.html" class="nav-item"><i class="fas fa-wallet"></i>المحفظة</a>
-    <a href="#" class="nav-item active center-nav"><i class="fas fa-home"></i></a>
-    <a href="#" class="nav-item"><i class="fas fa-question-circle"></i>المساعدة</a>
-    <a href="#" class="nav-item"><i class="fas fa-user"></i>الحساب</a>
-  </nav>
+<script src="https://unpkg.com/parse/dist/parse.min.js"></script>
+<script src="./config.js"></script>
+<script>
+  // تهيئة الإعدادات الموحدة لكائن GOLDX المستهدف بقواعد البيانات
+  Parse.initialize(window.GOLDX.PARSE_APP_ID, window.GOLDX.PARSE_JS_KEY);
+  Parse.serverURL = window.GOLDX.PARSE_SERVER_URL;
 
-  <script src="https://unpkg.com/parse/dist/parse.min.js"></script>
-  <script src="./config.js"></script>
-  <script>
-    // استخدام كائن الإعدادات الموحد لضمان الاستمرارية والتطابق الكامل مع بقية صفحات GOLD-X
-    Parse.initialize(window.GOLDX.PARSE_APP_ID, window.GOLDX.PARSE_JS_KEY);
-    Parse.serverURL = window.GOLDX.PARSE_SERVER_URL;
+  const user = Parse.User.current();
+  if(!user) location.href = "../auth/login.html";
 
-    const user = Parse.User.current();
-    if(user) {
-      document.getElementById('userName').textContent = user.get('username').split('@')[0];
-      document.getElementById('currentBal').textContent = (user.get('balance') || 0).toLocaleString();
-      // استعلامات إضافية مستقبلية لجلب الأرباح والفريق من الكلاسات المخصصة
-    } else {
-      window.location.href = "../auth/login.html";
+  // عرض بريد أو اسم المستخدم الفعلي في الهيدر
+  document.getElementById("userEmail").textContent = user.get("email") || user.get("username") || "—";
+
+  function safeNum(n){ return (typeof n === "number" && isFinite(n)) ? n : 0; }
+
+  async function getProfile(){
+    const Profile = Parse.Object.extend("Profile");
+    const q = new Parse.Query(Profile);
+    q.equalTo("user", user);
+    q.limit(1);
+    return await q.first();
+  }
+
+  async function loadDashboardData(){
+    try {
+      const profile = await getProfile();
+      
+      // جلب الحقول البرمجية الدقيقة المعتمدة في ملف طلب السحب
+      const bal = profile ? safeNum(profile.get("virtualBalance")) || safeNum(profile.get("balance")) || 0 : 0;
+      const isActive = !!(profile && profile.get("isActive"));
+
+      // تعيين القيم الفعلية بدون تزييف
+      document.getElementById("balanceTxt").textContent = bal.toFixed(2);
+      
+      const badge = document.getElementById("statusBadge");
+      if(isActive) {
+        badge.className = "status-badge active";
+        badge.textContent = "حساب نشط ومفعل";
+      } else {
+        badge.className = "status-badge inactive";
+        badge.textContent = "غير مفعل - بحاجة للاشتراك";
+      }
+    } catch(e) {
+      console.error("خطأ أثناء جلب بيانات لوحة التحكم:", e);
     }
-  </script>
+  }
+
+  // معالج تسجيل الخروج الموحد لنقل المستخدم لصفحة تسجيل الدخول المباشرة
+  document.getElementById("logoutBtn").onclick = async () => {
+    await Parse.User.logOut();
+    location.href = "../auth/login.html";
+  };
+
+  // تنفيذ جلب البيانات بمجرد تشغيل الواجهة
+  loadDashboardData();
+</script>
 </body>
 </html>
