@@ -141,39 +141,32 @@
     .link-item:hover .arrow {
       transform: translateX(-2px);
     }
-    .mono {
-      font-family: ui-monospace, Menlo, Consolas, monospace;
-    }
   </style>
 </head>
 <body>
 
 <div class="wrap">
-  <!-- شريط المستخدم العلوي النظيف -->
   <div class="topbar">
     <div class="user-profile">
       <div class="avatar" id="userInitial">U</div>
       <div>
-        <div style="font-weight:900; color: #fff; font-size: 15px;" id="usernameTxt">جاري التحميل...</div>
+        <div style="font-weight:900; color: #fff; font-size: 15px;" id="usernameTxt">المستخدم</div>
         <div class="muted" style="font-size: 11px; margin-top: 1px;">عضو المنصة</div>
       </div>
     </div>
     <button class="btn-logout" id="logoutBtn">خروج</button>
   </div>
 
-  <!-- الحساب المالي الحقيقي للمنصة -->
   <div class="main-card">
     <div class="balance-title">الرصيد المتاح الحالي (USDT)</div>
     <div class="balance-num" id="balanceTxt">0.00</div>
     <div>
-      <span class="status-badge inactive" id="statusBadge">جاري الفحص...</span>
+      <span class="status-badge inactive" id="statusBadge">غير نشط - يتطلب اشتراك</span>
     </div>
   </div>
 
-  <!-- روابط واجهات الحساب الحقيقية فقط -->
   <div class="navigation-links">
-    <!-- تم تصحيح مسار رابط الاشتراكات ليتطابق مع بنية ملفك البرمجي الفعلي -->
-    <a class="link-item" href="subscriptions.html">
+    <a class="link-item" href="plans.html">
       <span>💳 خطط الاشتراك وتفعيل الحساب</span>
       <span class="arrow">←</span>
     </a>
@@ -195,42 +188,56 @@
 <script src="https://unpkg.com/parse/dist/parse.min.js"></script>
 <script src="./config.js"></script>
 <script>
-  Parse.initialize(window.GOLDX.PARSE_APP_ID, window.GOLDX.PARSE_JS_KEY);
-  Parse.serverURL = window.GOLDX.PARSE_SERVER_URL;
+  try {
+    if (window.GOLDX && window.GOLDX.PARSE_APP_ID) {
+      Parse.initialize(window.GOLDX.PARSE_APP_ID, window.GOLDX.PARSE_JS_KEY);
+      Parse.serverURL = window.GOLDX.PARSE_SERVER_URL;
+    }
+  } catch(e) {
+    console.error("Parse init error:", e);
+  }
 
   const user = Parse.User.current();
-  if(!user) location.href = "../auth/login.html";
-
-  const name = user.get("username") || "User";
-  document.getElementById("usernameTxt").textContent = name;
-  document.getElementById("userInitial").textContent = name.charAt(0).toUpperCase();
+  if(user) {
+    const name = user.get("username") || "User";
+    document.getElementById("usernameTxt").textContent = name;
+    document.getElementById("userInitial").textContent = name.charAt(0).toUpperCase();
+  } else {
+    location.href = "../auth/login.html";
+  }
 
   function safeNum(n){ return (typeof n === "number" && isFinite(n)) ? n : 0; }
 
   async function getProfile(){
-    const Profile = Parse.Object.extend("Profile");
-    const q = new Parse.Query(Profile);
-    q.equalTo("user", user);
-    q.limit(1);
-    return await q.first();
+    if(!user) return null;
+    try {
+      const Profile = Parse.Object.extend("Profile");
+      const q = new Parse.Query(Profile);
+      q.equalTo("user", user);
+      q.limit(1);
+      return await q.first();
+    } catch(e) {
+      return null;
+    }
   }
 
   async function loadDashboard(){
     try {
       const profile = await getProfile();
-      
-      const bal = profile ? safeNum(profile.get("virtualBalance")) || safeNum(profile.get("balance")) || 0 : 0;
-      const isActive = !!(profile && profile.get("isActive"));
+      if(profile) {
+        const bal = safeNum(profile.get("virtualBalance")) || safeNum(profile.get("balance")) || 0;
+        const isActive = !!profile.get("isActive");
 
-      document.getElementById("balanceTxt").textContent = bal.toFixed(2);
-      
-      const badge = document.getElementById("statusBadge");
-      if(isActive) {
-        badge.className = "status-badge active";
-        badge.textContent = "حساب نشط ومفعل";
-      } else {
-        badge.className = "status-badge inactive";
-        badge.textContent = "غير نشط - يتطلب اشتراك";
+        document.getElementById("balanceTxt").textContent = bal.toFixed(2);
+        
+        const badge = document.getElementById("statusBadge");
+        if(isActive) {
+          badge.className = "status-badge active";
+          badge.textContent = "حساب نشط ومفعل";
+        } else {
+          badge.className = "status-badge inactive";
+          badge.textContent = "غير نشط - يتطلب اشتراك";
+        }
       }
     } catch(e) {
       console.error("Dashboard core logic load error:", e);
@@ -238,7 +245,9 @@
   }
 
   document.getElementById("logoutBtn").onclick = async () => {
-    await Parse.User.logOut();
+    try {
+      await Parse.User.logOut();
+    } catch(e) {}
     location.href = "../auth/login.html";
   };
 
