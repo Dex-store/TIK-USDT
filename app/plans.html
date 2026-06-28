@@ -3,46 +3,173 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>الاشتراكات • TIK-USDT</title>
+  <title>الاشتراكات • GOLD-X</title>
   <style>
-    body{margin:0;font-family:system-ui;background:radial-gradient(1200px 600px at 50% -10%, #1b255a, #060913);color:#eaf0ff}
-    .wrap{max-width:1100px;margin:0 auto;padding:18px}
-    .topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;
-      background:rgba(12,18,45,.75);border:1px solid rgba(255,255,255,.08);border-radius:22px;padding:14px 16px;
-      box-shadow:0 20px 60px rgba(0,0,0,.35);backdrop-filter:blur(10px)}
-    .brand{display:flex;align-items:center;gap:10px}
-    .logo{width:44px;height:44px;border-radius:16px;background:linear-gradient(135deg,#5b8cff,#7c5cff);
-      display:flex;align-items:center;justify-content:center;font-weight:900}
-    .muted{color:#a8b3cf;font-size:13px;line-height:1.7}
-    .btn{padding:11px 14px;border-radius:16px;border:1px solid rgba(255,255,255,.12);
-      background:rgba(255,255,255,.04);color:#eaf0ff;font-weight:800;cursor:pointer;text-decoration:none;display:inline-block}
-    .btn.primary{background:linear-gradient(135deg,#5b8cff,#7c5cff);border-color:transparent}
-    .btn[disabled]{opacity:.5;cursor:not-allowed}
-    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:14px}
-    @media(max-width:900px){.grid{grid-template-columns:1fr}}
-    .card{background:rgba(12,18,45,.75);border:1px solid rgba(255,255,255,.08);border-radius:22px;
-      padding:16px;box-shadow:0 20px 60px rgba(0,0,0,.25);backdrop-filter:blur(10px)}
-    .price{font-size:22px;font-weight:900;margin-top:6px}
-    .pill{display:inline-block;padding:6px 10px;border-radius:999px;border:1px dashed rgba(255,255,255,.16);color:#cfe0ff;font-size:12px;margin-top:10px}
-    input{width:100%;padding:12px;border-radius:16px;border:1px solid rgba(255,255,255,.12);
-      background:rgba(255,255,255,.04);color:#eaf0ff;margin-top:10px;outline:none}
-    .ok{color:#7CFFB2}
-    .err{color:#FF8FA3}
-    .mono{font-family:ui-monospace,Menlo,Consolas,monospace;word-break:break-all}
-    .disabledNote{margin-top:10px;padding:10px;border-radius:16px;border:1px dashed rgba(255,255,255,.14);
-      background:rgba(255,255,255,.02);color:#c7d3ff;font-size:12px;line-height:1.6}
-    .row{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
-    .kpi{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
-    .kpi .box{border:1px solid rgba(255,255,255,.10);border-radius:18px;padding:10px 12px;background:rgba(255,255,255,.03)}
+    :root {
+      --gold: #ffd700;
+      --bg: #0b0c10; /* أسود داكن فخم */
+      --card-bg: #1f2128; /* رمادي داكن لبروز الكروت والخطط */
+      --border-color: rgba(255, 215, 0, 0.15);
+      --text-gray: #a8b3cf;
+    }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, sans-serif;
+      background: radial-gradient(1200px 600px at 50% -10%, #2e2600, var(--bg)); /* تدرج مشع ذهبي خافت وعميق */
+      color: #eaf0ff;
+    }
+    .wrap {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 18px;
+    }
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      background: rgba(31, 33, 40, 0.85);
+      border: 1px solid var(--border-color);
+      border-radius: 22px;
+      padding: 14px 16px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(10px);
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .logo {
+      width: 44px;
+      height: 44px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, var(--gold), #b8860b);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      color: #000;
+    }
+    .muted {
+      color: var(--text-gray);
+      font-size: 13px;
+      line-height: 1.7;
+    }
+    .btn {
+      padding: 11px 14px;
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(255, 255, 255, 0.04);
+      color: #eaf0ff;
+      font-weight: 800;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      transition: 0.3s;
+    }
+    .btn:hover {
+      background: rgba(255, 255, 255, 0.08);
+    }
+    .btn.primary {
+      background: linear-gradient(135deg, var(--gold), #b8860b);
+      border-color: transparent;
+      color: #000;
+    }
+    .btn.primary:hover {
+      background: linear-gradient(135deg, #ffe033, var(--gold));
+      transform: translateY(-1px);
+    }
+    .btn[disabled] {
+      opacity: .4;
+      cursor: not-allowed;
+      background: rgba(255, 255, 255, 0.02) !important;
+      color: var(--text-gray) !important;
+      border-color: rgba(255, 255, 255, 0.05) !important;
+      transform: none !important;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 14px;
+    }
+    @media(max-width:900px){
+      .grid { grid-template-columns: 1fr; }
+    }
+    .card {
+      background: rgba(31, 33, 40, 0.85);
+      border: 1px solid var(--border-color);
+      border-radius: 22px;
+      padding: 18px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(10px);
+    }
+    .price {
+      font-size: 24px;
+      font-weight: 900;
+      margin-top: 6px;
+      color: var(--gold);
+    }
+    .pill {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 999px;
+      border: 1px dashed rgba(255, 215, 0, 0.3);
+      color: var(--gold);
+      font-size: 12px;
+      margin-top: 5px;
+      background: rgba(255, 215, 0, 0.05);
+    }
+    input {
+      width: 100%;
+      padding: 13px;
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: #12141c;
+      color: #eaf0ff;
+      margin-top: 12px;
+      outline: none;
+      box-sizing: border-box;
+      transition: 0.3s;
+    }
+    input:focus {
+      border-color: var(--gold);
+      box-shadow: 0 0 8px rgba(255, 215, 0, 0.2);
+    }
+    .ok { color: #2cff8f; }
+    .err { color: #FF8FA3; }
+    .mono { font-family: ui-monospace, Menlo, Consolas, monospace; word-break: break-all; }
+    .disabledNote {
+      margin-top: 14px;
+      padding: 12px;
+      border-radius: 16px;
+      border: 1px dashed rgba(255, 215, 0, 0.2);
+      background: rgba(255, 215, 0, 0.02);
+      color: #ffe875;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+    .row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 12px; }
+    .kpi { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 12px; }
+    .kpi .box {
+      flex: 1;
+      min-width: 120px;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 18px;
+      padding: 12px;
+      background: rgba(255, 255, 255, 0.02);
+    }
   </style>
 </head>
 <body>
   <div class="wrap">
     <div class="topbar">
       <div class="brand">
-        <div class="logo">T</div>
+        <div class="logo">G</div>
         <div>
-          <div style="font-weight:900">TIK-USDT</div>
+          <div style="font-weight:900; color: var(--gold);">GOLD-X</div>
           <div class="muted">الاشتراكات الشهرية</div>
         </div>
       </div>
@@ -55,25 +182,25 @@
     </div>
 
     <div class="card" style="margin-top:14px">
-      <div style="font-weight:900;font-size:16px">طريقة الدفع</div>
+      <div style="font-weight:900;font-size:16px;color: var(--gold);">طريقة الدفع</div>
       <div class="muted">
         يمكنك الدفع بطريقتين:
-        <br>1) تحويل USDT (ERC-20) ثم إدخال TX Hash.
+        <br>1) تحويل الرصيد اليدوي وإرسال المعاملة ثم إدخال TX Hash.
         <br>2) الاشتراك مباشرة من الرصيد (عمولات الإحالات) إذا كان رصيدك المتاح كافيًا.
       </div>
 
       <div class="kpi">
         <div class="box">
           <div class="muted">رصيدك المتاح</div>
-          <div style="font-weight:900;font-size:18px" id="availTxt">0.00</div>
+          <div style="font-weight:900;font-size:20px;color: var(--gold);" id="availTxt">0.00</div>
         </div>
         <div class="box">
           <div class="muted">رصيد معلّق</div>
-          <div style="font-weight:900;font-size:18px" id="lockedTxt">0.00</div>
+          <div style="font-weight:900;font-size:20px;" id="lockedTxt">0.00</div>
         </div>
       </div>
 
-      <div class="muted" style="margin-top:8px">USDT (رصيد افتراضي)</div>
+      <div class="muted" style="margin-top:8px">GOLD-X (رصيد افتراضي)</div>
 
       <hr style="border:none;border-top:1px solid rgba(255,255,255,.08);margin:14px 0">
 
@@ -85,14 +212,14 @@
       </div>
 
       <div class="disabledNote">
-        ملاحظة: خطة <b>200 USDT</b> غير متاحة حاليًا (مقفولة). سيتم تفعيلها لاحقًا إن رغبت.
+        ملاحظة: خطة <b>200 GOLD-X</b> غير متاحة حاليًا (مقفولة). سيتم تفعيلها لاحقًا إن رغبت.
       </div>
     </div>
 
     <div class="grid" id="plans"></div>
 
     <div class="card" style="margin-top:14px">
-      <div style="font-weight:900">تسجيل TX Hash (بعد الدفع)</div>
+      <div style="font-weight:900; color: var(--gold);">تسجيل TX Hash (بعد الدفع)</div>
       <div class="muted">اختر الخطة أولًا ثم ضع TX Hash.</div>
       <input id="txHash" class="mono" placeholder="TX Hash مثل: 0x....">
       <div class="row">
@@ -112,8 +239,9 @@
   const PLAN_OPTIONS = [10,20,50,100,200];
   const DISABLED_PLANS = [200];
 
-  Parse.initialize(window.TIK.PARSE_APP_ID, window.TIK.PARSE_JS_KEY);
-  Parse.serverURL = window.TIK.PARSE_SERVER_URL;
+  // ربط التهيئة بكائن المنصة الجديد GOLDX
+  Parse.initialize(window.GOLDX.PARSE_APP_ID, window.GOLDX.PARSE_JS_KEY);
+  Parse.serverURL = window.GOLDX.PARSE_SERVER_URL;
 
   const user = Parse.User.current();
   if (!user) location.href = "../auth/login.html";
@@ -131,7 +259,6 @@
     q.equalTo("user", user);
     let b = await q.first();
     if(!b){
-      // will fail if server blocks create; but afterSave user should have created it anyway
       b = new Balances();
       b.set("user", user);
       b.set("available", 0);
@@ -154,7 +281,7 @@
         <div class="card">
           <div class="pill">اشتراك شهري</div>
           <div style="font-weight:900;margin-top:8px">الخطة</div>
-          <div class="price">${p} USDT</div>
+          <div class="price">${p} GOLD-X</div>
 
           <div class="muted">
             ${disabled ? "هذه الخطة غير متاحة الآن." : "اختر طريقة الدفع: تحويل + TX أو من الرصيد."}
@@ -188,7 +315,7 @@
     selectedPlan = p;
     render();
     msg.className="muted";
-    msg.textContent = "تم اختيار خطة (TX): " + p + " USDT";
+    msg.textContent = "تم اختيار خطة (TX): " + p + " GOLD-X";
   };
 
   window.subscribeFromBalance = async (p)=>{
@@ -200,11 +327,10 @@
     try{
       const res = await Parse.Cloud.run("subscribeWithBalance", { planAmount: p });
       msg.className="muted ok";
-      msg.textContent = `✅ تم تفعيل الاشتراك من الرصيد. رصيدك المتاح الآن: ${Number(res.newAvailable).toFixed(2)} USDT`;
+      msg.textContent = `✅ تم تفعيل الاشتراك من الرصيد. رصيدك المتاح الآن: ${Number(res.newAvailable).toFixed(2)} GOLD-X`;
       await loadBalances();
       selectedPlan = null;
       render();
-      // انتقال للداشبورد
       setTimeout(()=>{ location.href="./dashboard.html"; }, 600);
     }catch(e){
       msg.className="muted err";
