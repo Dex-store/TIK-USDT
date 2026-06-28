@@ -19,7 +19,7 @@
       color: #eaf0ff;
     }
     .wrap {
-      max-width: 800px;
+      max-width: 600px;
       margin: 0 auto;
       padding: 24px 18px;
     }
@@ -35,12 +35,25 @@
       box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
       backdrop-filter: blur(10px);
     }
-    .user-info {
+    .user-profile {
       display: flex;
-      flex-direction: column;
+      align-items: center;
+      gap: 12px;
     }
-    .btn {
-      padding: 10px 16px;
+    .avatar {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      border: 2px solid var(--gold);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 215, 0, 0.1);
+      font-weight: bold;
+      color: var(--gold);
+    }
+    .btn-logout {
+      padding: 9px 15px;
       border-radius: 14px;
       border: 1px solid rgba(255, 90, 120, 0.2);
       background: rgba(255, 90, 120, 0.05);
@@ -48,9 +61,10 @@
       font-weight: 800;
       cursor: pointer;
       text-decoration: none;
+      font-size: 13px;
       transition: 0.3s;
     }
-    .btn:hover {
+    .btn-logout:hover {
       background: rgba(255, 90, 120, 0.15);
       border-color: #ff5a78;
     }
@@ -58,7 +72,7 @@
       background: rgba(31, 33, 40, 0.85);
       border: 1px solid var(--border-color);
       border-radius: 24px;
-      padding: 24px;
+      padding: 30px 20px;
       margin-top: 20px;
       box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
       backdrop-filter: blur(10px);
@@ -68,61 +82,64 @@
       color: var(--text-gray);
       font-size: 14px;
       font-weight: 600;
-      letter-spacing: 0.5px;
     }
     .balance-num {
-      font-size: 42px;
+      font-size: 44px;
       font-weight: 900;
       color: var(--gold);
-      margin: 10px 0;
+      margin: 12px 0;
       font-family: ui-monospace, Menlo, Consolas, monospace;
     }
-    .status-pill {
+    .status-badge {
       display: inline-block;
       padding: 6px 16px;
       border-radius: 999px;
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 800;
-      margin-top: 5px;
     }
-    .status-pill.active {
+    .status-badge.active {
       color: #2cff8f;
       background: rgba(44, 255, 143, 0.06);
       border: 1px solid rgba(44, 255, 143, 0.25);
     }
-    .status-pill.inactive {
+    .status-badge.inactive {
       color: #ff5a78;
       background: rgba(255, 90, 120, 0.06);
       border: 1px solid rgba(255, 90, 120, 0.25);
     }
-    .menu-list {
+    .navigation-links {
       margin-top: 20px;
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 12px;
     }
-    .menu-item {
+    .link-item {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      background: rgba(255, 255, 255, 0.02);
+      background: rgba(31, 33, 40, 0.5);
       border: 1px solid rgba(255, 215, 0, 0.05);
-      padding: 16px 20px;
+      padding: 18px 20px;
       border-radius: 18px;
       text-decoration: none;
       color: #eaf0ff;
       font-weight: 700;
       font-size: 15px;
       transition: 0.3s;
+      backdrop-filter: blur(5px);
     }
-    .menu-item:hover {
+    .link-item:hover {
       border-color: var(--gold);
       background: rgba(255, 215, 0, 0.03);
       transform: translateX(-4px);
     }
-    .menu-icon {
-      font-size: 18px;
+    .arrow {
+      font-size: 16px;
       color: var(--gold);
+      transition: 0.3s;
+    }
+    .link-item:hover .arrow {
+      transform: translateX(-2px);
     }
     .mono {
       font-family: ui-monospace, Menlo, Consolas, monospace;
@@ -133,37 +150,40 @@
 
 <div class="wrap">
   <div class="topbar">
-    <div class="user-info">
-      <div style="font-weight:900; color: #fff; font-size: 18px;">لوحة التحكّم</div>
-      <div class="muted mono" id="userEmail" style="font-size: 12px; margin-top: 2px;">جاري التحميل...</div>
+    <div class="user-profile">
+      <div class="avatar" id="userInitial">U</div>
+      <div>
+        <div style="font-weight:900; color: #fff; font-size: 15px;" id="usernameTxt">جاري التحميل...</div>
+        <div class="muted" style="font-size: 11px; margin-top: 1px;">عضو المنصة</div>
+      </div>
     </div>
-    <button class="btn" id="logoutBtn">خروج</button>
+    <button class="btn-logout" id="logoutBtn">خروج</button>
   </div>
 
   <div class="main-card">
-    <div class="balance-title">إجمالي الرصيد المتاح (USDT)</div>
+    <div class="balance-title">الرصيد المتاح الحالي (USDT)</div>
     <div class="balance-num" id="balanceTxt">0.00</div>
-    <div id="statusWrapper">
-      <span class="status-pill inactive" id="statusPill">فحص الحساب...</span>
+    <div>
+      <span class="status-badge inactive" id="statusBadge">جاري الفحص...</span>
     </div>
   </div>
 
-  <div class="menu-list">
-    <a class="menu-item" href="./subscriptions.html">
+  <div class="navigation-links">
+    <a class="link-item" href="./subscriptions.html">
       <span>💳 خطط الاشتراك وتفعيل الحساب</span>
-      <span class="menu-icon">←</span>
+      <span class="arrow">←</span>
     </a>
-    <a class="menu-item" href="./withdraw-request.html">
+    <a class="link-item" href="./withdraw-request.html">
       <span>💰 تقديم طلب سحب جديد</span>
-      <span class="menu-icon">←</span>
+      <span class="arrow">←</span>
     </a>
-    <a class="menu-item" href="./withdraw-history.html">
-      <span>📜 مراجعة سجل السحوبات</span>
-      <span class="menu-icon">←</span>
+    <a class="link-item" href="./withdraw-history.html">
+      <span>📜 عرض سجل السحوبات المالي</span>
+      <span class="arrow">←</span>
     </a>
-    <a class="menu-item" href="./referrals.html">
-      <span>👥 شبكة الإحالات والمستخدمين</span>
-      <span class="menu-icon">←</span>
+    <a class="link-item" href="./referrals.html">
+      <span>👥 إدارة شبكة الإحالات الخاصة بك</span>
+      <span class="arrow">←</span>
     </a>
   </div>
 </div>
@@ -171,15 +191,17 @@
 <script src="https://unpkg.com/parse/dist/parse.min.js"></script>
 <script src="./config.js"></script>
 <script>
-  // ضبط اتصال قاعدة البيانات بـ GOLDX
+  // إعدادات قواعد البيانات الموحدة
   Parse.initialize(window.GOLDX.PARSE_APP_ID, window.GOLDX.PARSE_JS_KEY);
   Parse.serverURL = window.GOLDX.PARSE_SERVER_URL;
 
   const user = Parse.User.current();
   if(!user) location.href = "../auth/login.html";
 
-  // تعيين البريد الفعلي
-  document.getElementById("userEmail").textContent = user.get("email") || user.get("username") || "—";
+  // تعيين بيانات المستخدم العلوي الحقيقية
+  const name = user.get("username") || "User";
+  document.getElementById("usernameTxt").textContent = name;
+  document.getElementById("userInitial").textContent = name.charAt(0).toUpperCase();
 
   function safeNum(n){ return (typeof n === "number" && isFinite(n)) ? n : 0; }
 
@@ -195,22 +217,22 @@
     try {
       const profile = await getProfile();
       
-      // قراءة الحقول المالية الحقيقية المتطابقة مع طلب السحب
+      // قراءة القيم المالية الحقيقية المتطابقة مع بقية كود المنصة
       const bal = profile ? safeNum(profile.get("virtualBalance")) || safeNum(profile.get("balance")) || 0 : 0;
       const isActive = !!(profile && profile.get("isActive"));
 
       document.getElementById("balanceTxt").textContent = bal.toFixed(2);
       
-      const pill = document.getElementById("statusPill");
+      const badge = document.getElementById("statusBadge");
       if(isActive) {
-        pill.className = "status-pill active";
-        pill.textContent = "حساب نشط ومفعل";
+        badge.className = "status-badge active";
+        badge.textContent = "حساب نشط ومفعل";
       } else {
-        pill.className = "status-pill inactive";
-        pill.textContent = "الحساب غير نشط - يتطلب اشتراك";
+        badge.className = "status-badge inactive";
+        badge.textContent = "غير نشط - يتطلب اشتراك";
       }
     } catch(e) {
-      console.error("Error loading dashboard:", e);
+      console.error("Dashboard core logic load error:", e);
     }
   }
 
