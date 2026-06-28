@@ -3,27 +3,129 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>تسجيل الدخول • TIK-USDT</title>
+  <title>تسجيل الدخول • GOLD-X</title>
   <style>
-    body{margin:0;font-family:system-ui;background:radial-gradient(1200px 600px at 50% -10%, #1b255a, #060913);color:#eaf0ff}
-    .wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
-    .card{width:100%;max-width:520px;background:rgba(12,18,45,.75);border:1px solid rgba(255,255,255,.08);
-      border-radius:28px;padding:22px;box-shadow:0 20px 60px rgba(0,0,0,.4);backdrop-filter:blur(10px)}
-    .top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
-    .logo{width:46px;height:46px;border-radius:16px;background:linear-gradient(135deg,#5b8cff,#7c5cff);
-      display:flex;align-items:center;justify-content:center;font-weight:900}
-    h2{margin:10px 0 6px}
-    .note{color:#a8b3cf;font-size:13px;line-height:1.8}
-    input{width:100%;padding:14px 14px;border-radius:16px;border:1px solid rgba(255,255,255,.12);
-      background:rgba(255,255,255,.04);color:#eaf0ff;margin-top:10px;outline:none}
-    .row{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
-    .btn{padding:13px 16px;border-radius:16px;border:1px solid rgba(255,255,255,.12);
-      background:rgba(255,255,255,.04);color:#eaf0ff;font-weight:800;cursor:pointer;text-decoration:none;display:inline-block}
-    .btn.primary{background:linear-gradient(135deg,#5b8cff,#7c5cff);border-color:transparent}
-    .links{margin-top:14px;display:flex;gap:12px;flex-wrap:wrap}
-    a{color:#9fb0ff;text-decoration:none}
-    .ok{color:#7CFFB2}
-    .err{color:#FF8FA3}
+    :root {
+      --gold: #ffd700;
+      --bg: #0b0c10; /* أسود داكن فخم */
+      --card-bg: #1f2128; /* رمادي داكن جداً لبروز البطاقة */
+    }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, sans-serif;
+      background: radial-gradient(1200px 600px at 50% -10%, #2e2600, var(--bg)); /* تدرج مشع بلون ذهبي خافت جداً وعميق */
+      color: #eaf0ff;
+    }
+    .wrap {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    .card {
+      width: 100%;
+      max-width: 520px;
+      background: rgba(31, 33, 40, 0.85);
+      border: 1px solid rgba(255, 215, 0, 0.15);
+      border-radius: 28px;
+      padding: 22px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(10px);
+    }
+    .top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .logo {
+      width: 46px;
+      height: 46px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, var(--gold), #b8860b);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      color: #000;
+    }
+    h2 {
+      margin: 20px 0 6px;
+      color: var(--gold);
+    }
+    .note {
+      color: #a8b3cf;
+      font-size: 13px;
+      line-height: 1.8;
+    }
+    input {
+      width: 100%;
+      padding: 14px;
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: #12141c;
+      color: #eaf0ff;
+      margin-top: 12px;
+      outline: none;
+      transition: 0.3s;
+    }
+    input:focus {
+      border-color: var(--gold);
+      box-shadow: 0 0 8px rgba(255, 215, 0, 0.2);
+    }
+    .row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 16px;
+    }
+    .btn {
+      padding: 13px 20px;
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(255, 255, 255, 0.04);
+      color: #eaf0ff;
+      font-weight: 800;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      transition: 0.3s;
+    }
+    .btn:hover {
+      background: rgba(255, 255, 255, 0.08);
+    }
+    .btn.primary {
+      background: linear-gradient(135deg, var(--gold), #b8860b);
+      border-color: transparent;
+      color: #000;
+    }
+    .btn.primary:hover {
+      background: linear-gradient(135deg, #ffe033, var(--gold));
+      transform: translateY(-1px);
+    }
+    .links {
+      margin-top: 20px;
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    a {
+      color: var(--gold);
+      text-decoration: none;
+      font-size: 14px;
+      transition: 0.3s;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+    .ok {
+      color: #2cff8f;
+    }
+    .err {
+      color: #FF8FA3;
+    }
   </style>
 </head>
 <body>
@@ -31,9 +133,9 @@
     <div class="card">
       <div class="top">
         <div style="display:flex;align-items:center;gap:10px">
-          <div class="logo">T</div>
+          <div class="logo">G</div>
           <div>
-            <div style="font-weight:900">TIK-USDT</div>
+            <div style="font-weight:900; color: var(--gold);">GOLD-X</div>
             <div class="note">تسجيل الدخول</div>
           </div>
         </div>
@@ -60,16 +162,15 @@
     </div>
   </div>
 
-  <!-- Parse SDK + config -->
   <script src="https://unpkg.com/parse/dist/parse.min.js"></script>
   <script src="../app/config.js"></script>
 
   <script>
-    // تهيئة Parse
-    Parse.initialize(window.TIK.PARSE_APP_ID, window.TIK.PARSE_JS_KEY);
-    Parse.serverURL = window.TIK.PARSE_SERVER_URL;
+    // تهيئة Parse بالهوية الجديدة للمنصة
+    Parse.initialize(window.GOLDX.PARSE_APP_ID, window.GOLDX.PARSE_JS_KEY);
+    Parse.serverURL = window.GOLDX.PARSE_SERVER_URL;
 
-    // لو المستخدم مسجل دخول بالفعل → ارسله للوحة التحكم
+    // لو المستخدم مسجل دخول بالفعل ← ارسله للوحة التحكم
     if (Parse.User.current()) {
       location.href = "../app/dashboard.html";
     }
