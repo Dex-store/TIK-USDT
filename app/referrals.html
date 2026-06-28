@@ -123,7 +123,7 @@
     </div>
     
     <div class="ref-input-wrapper">
-      <input id="refLinkInput" readonly value="جاري توليد الرابط الحقيقي...">
+      <input id="refLinkInput" readonly value="جاري توليد الرابط...">
       <button class="btn" id="copyLinkBtn" style="white-space: nowrap;">📋 نسخ الرابط</button>
     </div>
     <div id="copyMsg" class="msg" style="display:none;"></div>
@@ -148,7 +148,6 @@
 <script src="https://unpkg.com/parse/dist/parse.min.js"></script>
 <script src="./config.js"></script>
 <script>
-  // إعدادات اتصال الباكيند
   try {
     if (window.GOLDX && window.GOLDX.PARSE_APP_ID) {
       Parse.initialize(window.GOLDX.PARSE_APP_ID, window.GOLDX.PARSE_JS_KEY);
@@ -163,18 +162,20 @@
     location.href = "../auth/login.html";
   }
 
-  // آلية إنتاج رابط الإحالة المضمون دون فراغات
+  // دالة توليد الرابط المصلحة والمطابقة تماماً لبنية جيت هب المرفوعة
   function generateReferralLink() {
     if(!user) return;
     
-    // الفحص الجذري: استخدام الـ username، وإذا كان فارغاً نستخدم الـ Object ID الثابت للحساب كوداً للإحالة
     const refCode = user.get("username") || user.id;
     
-    // استخراج رابط الدومين الرئيسي الفعلي تلقائياً وديناميكياً
+    // جلب الرابط الحالي بدقة
     const currentUrl = window.location.href;
-    const baseUrl = currentUrl.substring(0, currentUrl.indexOf("/app/"));
     
-    const fullRefLink = `${baseUrl}/auth/register.html?ref=${refCode}`;
+    // قص الجزء الخاص بـ /app/referrals.html والحصول على رابط المجلد الرئيسي النظيف
+    const baseDir = currentUrl.substring(0, currentUrl.lastIndexOf("/app/"));
+    
+    // دمج المسار بطريقة تمنع تكرار المائلات الزائدة لتلافي خطأ 404
+    const fullRefLink = `${baseDir}/auth/register.html?ref=${refCode}`;
     document.getElementById("refLinkInput").value = fullRefLink;
   }
 
@@ -183,7 +184,6 @@
     try {
       const refCode = user.get("username") || user.id;
 
-      // البحث في قاعدة البيانات عن الحسابات المستدعاة بواسطة هذا الكود المعين
       const userQuery = new Parse.Query(Parse.User);
       userQuery.equalTo("referredBy", refCode);
       const referredUsers = await userQuery.find();
@@ -202,7 +202,6 @@
     }
   }
 
-  // منطق عمل زر نسخ الرابط للمحفظة
   document.getElementById("copyLinkBtn").onclick = async () => {
     const input = document.getElementById("refLinkInput");
     const msg = document.getElementById("copyMsg");
@@ -219,7 +218,6 @@
     }
   };
 
-  // تشغيل العمليات فور تحميل الصفحة
   if (user) {
     generateReferralLink();
     loadReferralStats();
