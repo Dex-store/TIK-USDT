@@ -19,142 +19,110 @@
       color: #eaf0ff;
     }
     .wrap {
-      max-width: 1000px;
+      max-width: 800px;
       margin: 0 auto;
-      padding: 18px;
+      padding: 24px 18px;
     }
     .topbar {
       display: flex;
       justify-content: space-between;
       align-items: center;
       gap: 12px;
-      flex-wrap: wrap;
       background: rgba(31, 33, 40, 0.85);
       border: 1px solid var(--border-color);
       border-radius: 22px;
-      padding: 14px 16px;
+      padding: 14px 20px;
       box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
       backdrop-filter: blur(10px);
     }
-    .brand {
+    .user-info {
       display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .logo {
-      width: 40px;
-      height: 40px;
-      border-radius: 14px;
-      background: linear-gradient(135deg, var(--gold), #b8860b);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 900;
-      color: #000;
-      font-size: 18px;
+      flex-direction: column;
     }
     .btn {
-      padding: 11px 14px;
-      border-radius: 16px;
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      background: rgba(255, 255, 255, 0.04);
-      color: #eaf0ff;
+      padding: 10px 16px;
+      border-radius: 14px;
+      border: 1px solid rgba(255, 90, 120, 0.2);
+      background: rgba(255, 90, 120, 0.05);
+      color: #ff5a78;
       font-weight: 800;
       cursor: pointer;
       text-decoration: none;
-      display: inline-block;
       transition: 0.3s;
     }
     .btn:hover {
-      background: rgba(255, 255, 255, 0.08);
-      border-color: var(--gold);
-    }
-    .btn.danger {
-      background: rgba(255, 90, 120, 0.05);
-      border-color: rgba(255, 90, 120, 0.2);
-      color: #ff5a78;
-    }
-    .btn.danger:hover {
-      background: rgba(255, 90, 120, 0.12);
+      background: rgba(255, 90, 120, 0.15);
       border-color: #ff5a78;
     }
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 14px;
-      margin-top: 14px;
-    }
-    @media(max-width: 768px) {
-      .grid { grid-template-columns: 1fr; }
-    }
-    .card {
+    .main-card {
       background: rgba(31, 33, 40, 0.85);
       border: 1px solid var(--border-color);
-      border-radius: 22px;
-      padding: 20px;
+      border-radius: 24px;
+      padding: 24px;
+      margin-top: 20px;
       box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
       backdrop-filter: blur(10px);
+      text-align: center;
     }
-    .card-title {
+    .balance-title {
+      color: var(--text-gray);
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+    .balance-num {
+      font-size: 42px;
       font-weight: 900;
-      font-size: 16px;
       color: var(--gold);
-      margin-bottom: 4px;
-    }
-    .big-num {
-      font-size: 28px;
-      font-weight: 900;
-      margin-top: 8px;
+      margin: 10px 0;
       font-family: ui-monospace, Menlo, Consolas, monospace;
     }
-    .nav-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
+    .status-pill {
+      display: inline-block;
+      padding: 6px 16px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 800;
+      margin-top: 5px;
+    }
+    .status-pill.active {
+      color: #2cff8f;
+      background: rgba(44, 255, 143, 0.06);
+      border: 1px solid rgba(44, 255, 143, 0.25);
+    }
+    .status-pill.inactive {
+      color: #ff5a78;
+      background: rgba(255, 90, 120, 0.06);
+      border: 1px solid rgba(255, 90, 120, 0.25);
+    }
+    .menu-list {
+      margin-top: 20px;
+      display: flex;
+      flex-direction: column;
       gap: 10px;
-      margin-top: 14px;
     }
-    @media(max-width: 768px) {
-      .nav-grid { grid-template-columns: repeat(2, 1fr); }
-    }
-    .nav-card {
-      background: rgba(255, 215, 0, 0.02);
-      border: 1px solid rgba(255, 215, 0, 0.08);
+    .menu-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 215, 0, 0.05);
+      padding: 16px 20px;
       border-radius: 18px;
-      padding: 16px;
-      text-align: center;
       text-decoration: none;
       color: #eaf0ff;
-      font-weight: 800;
-      font-size: 14px;
+      font-weight: 700;
+      font-size: 15px;
       transition: 0.3s;
     }
-    .nav-card:hover {
-      background: rgba(255, 215, 0, 0.06);
+    .menu-item:hover {
       border-color: var(--gold);
-      transform: translateY(-2px);
+      background: rgba(255, 215, 0, 0.03);
+      transform: translateX(-4px);
     }
-    .muted {
-      color: var(--text-gray);
-      font-size: 13px;
-      line-height: 1.7;
-    }
-    .status-badge {
-      display: inline-block;
-      padding: 4px 12px;
-      border-radius: 999px;
-      font-weight: 900;
-      font-size: 12px;
-      margin-top: 8px;
-    }
-    .status-badge.active {
-      color: #2cff8f;
-      background: rgba(44, 255, 143, 0.08);
-      border: 1px solid rgba(44, 255, 143, 0.3);
-    }
-    .status-badge.inactive {
-      color: #ff5a78;
-      background: rgba(255, 90, 120, 0.08);
-      border: 1px solid rgba(255, 90, 120, 0.3);
+    .menu-icon {
+      font-size: 18px;
+      color: var(--gold);
     }
     .mono {
       font-family: ui-monospace, Menlo, Consolas, monospace;
@@ -164,71 +132,53 @@
 <body>
 
 <div class="wrap">
-  <!-- الشريط العلوي -->
   <div class="topbar">
-    <div class="brand">
-      <div class="logo">G</div>
-      <div>
-        <div style="font-weight:900; color: var(--gold); font-size: 16px;">لوحة التحكم</div>
-        <div class="muted mono" id="userEmail">جاري التحميل...</div>
-      </div>
+    <div class="user-info">
+      <div style="font-weight:900; color: #fff; font-size: 18px;">لوحة التحكّم</div>
+      <div class="muted mono" id="userEmail" style="font-size: 12px; margin-top: 2px;">جاري التحميل...</div>
     </div>
-    <div>
-      <button class="btn danger" id="logoutBtn">تسجيل الخروج</button>
+    <button class="btn" id="logoutBtn">خروج</button>
+  </div>
+
+  <div class="main-card">
+    <div class="balance-title">إجمالي الرصيد المتاح (USDT)</div>
+    <div class="balance-num" id="balanceTxt">0.00</div>
+    <div id="statusWrapper">
+      <span class="status-pill inactive" id="statusPill">فحص الحساب...</span>
     </div>
   </div>
 
-  <!-- أزرار التنقل السريع بين الملفات المذكورة سابقاً -->
-  <div class="nav-grid">
-    <a class="nav-card" href="./subscriptions.html">
-      <div style="font-size: 20px; margin-bottom: 4px;">💳</div>
-      <div>الاشتراكات المتاحة</div>
+  <div class="menu-list">
+    <a class="menu-item" href="./subscriptions.html">
+      <span>💳 خطط الاشتراك وتفعيل الحساب</span>
+      <span class="menu-icon">←</span>
     </a>
-    <a class="nav-card" href="./withdraw-request.html">
-      <div style="font-size: 20px; margin-bottom: 4px;">💰</div>
-      <div>طلب سحب جديد</div>
+    <a class="menu-item" href="./withdraw-request.html">
+      <span>💰 تقديم طلب سحب جديد</span>
+      <span class="menu-icon">←</span>
     </a>
-    <a class="nav-card" href="./withdraw-history.html">
-      <div style="font-size: 20px; margin-bottom: 4px;">📜</div>
-      <div>سجل السحوبات</div>
+    <a class="menu-item" href="./withdraw-history.html">
+      <span>📜 مراجعة سجل السحوبات</span>
+      <span class="menu-icon">←</span>
     </a>
-    <a class="nav-card" href="./referrals.html">
-      <div style="font-size: 20px; margin-bottom: 4px;">👥</div>
-      <div>قائمة إحالاتي</div>
+    <a class="menu-item" href="./referrals.html">
+      <span>👥 شبكة الإحالات والمستخدمين</span>
+      <span class="menu-icon">←</span>
     </a>
-  </div>
-
-  <!-- شبكة بطاقات عرض الحساب المالي والاشتراك -->
-  <div class="grid">
-    <!-- بطاقة الرصيد الافتراضي المتاح -->
-    <div class="card">
-      <div class="card-title">الرصيد المتاح</div>
-      <div class="muted">الرصيد القابل للسحب والاستخدام الحالي</div>
-      <div class="big-num" style="color: var(--gold);"><span id="balanceTxt">0.00</span> <span style="font-size: 14px; color: #fff;">USDT</span></div>
-    </div>
-
-    <!-- بطاقة حالة الاشتراك والنشاط -->
-    <div class="card">
-      <div class="card-title">حالة الحساب والاشتراك</div>
-      <div class="muted">مدى فعالية الاشتراك البرمجي داخل الحساب</div>
-      <div id="statusWrapper">
-        <span class="status-badge inactive" id="statusBadge">جاري الفحص...</span>
-      </div>
-    </div>
   </div>
 </div>
 
 <script src="https://unpkg.com/parse/dist/parse.min.js"></script>
 <script src="./config.js"></script>
 <script>
-  // تهيئة الإعدادات الموحدة لكائن GOLDX المستهدف بقواعد البيانات
+  // ضبط اتصال قاعدة البيانات بـ GOLDX
   Parse.initialize(window.GOLDX.PARSE_APP_ID, window.GOLDX.PARSE_JS_KEY);
   Parse.serverURL = window.GOLDX.PARSE_SERVER_URL;
 
   const user = Parse.User.current();
   if(!user) location.href = "../auth/login.html";
 
-  // عرض بريد أو اسم المستخدم الفعلي في الهيدر
+  // تعيين البريد الفعلي
   document.getElementById("userEmail").textContent = user.get("email") || user.get("username") || "—";
 
   function safeNum(n){ return (typeof n === "number" && isFinite(n)) ? n : 0; }
@@ -241,38 +191,35 @@
     return await q.first();
   }
 
-  async function loadDashboardData(){
+  async function loadDashboard(){
     try {
       const profile = await getProfile();
       
-      // جلب الحقول البرمجية الدقيقة المعتمدة في ملف طلب السحب
+      // قراءة الحقول المالية الحقيقية المتطابقة مع طلب السحب
       const bal = profile ? safeNum(profile.get("virtualBalance")) || safeNum(profile.get("balance")) || 0 : 0;
       const isActive = !!(profile && profile.get("isActive"));
 
-      // تعيين القيم الفعلية بدون تزييف
       document.getElementById("balanceTxt").textContent = bal.toFixed(2);
       
-      const badge = document.getElementById("statusBadge");
+      const pill = document.getElementById("statusPill");
       if(isActive) {
-        badge.className = "status-badge active";
-        badge.textContent = "حساب نشط ومفعل";
+        pill.className = "status-pill active";
+        pill.textContent = "حساب نشط ومفعل";
       } else {
-        badge.className = "status-badge inactive";
-        badge.textContent = "غير مفعل - بحاجة للاشتراك";
+        pill.className = "status-pill inactive";
+        pill.textContent = "الحساب غير نشط - يتطلب اشتراك";
       }
     } catch(e) {
-      console.error("خطأ أثناء جلب بيانات لوحة التحكم:", e);
+      console.error("Error loading dashboard:", e);
     }
   }
 
-  // معالج تسجيل الخروج الموحد لنقل المستخدم لصفحة تسجيل الدخول المباشرة
   document.getElementById("logoutBtn").onclick = async () => {
     await Parse.User.logOut();
     location.href = "../auth/login.html";
   };
 
-  // تنفيذ جلب البيانات بمجرد تشغيل الواجهة
-  loadDashboardData();
+  loadDashboard();
 </script>
 </body>
 </html>
